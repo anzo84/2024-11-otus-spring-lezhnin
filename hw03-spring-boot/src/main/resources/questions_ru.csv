@@ -2,3 +2,5 @@
 Есть ли жизнь на Марсе?;Это науке пока не известно%true|Конечно. Красные (НЛО) это с Марса. А зеленые (НЛО) с Венеры%false|Точно нет%false
 Как нужно загружать ресурс из jar в Java?;ClassLoader#geResourceAsStream или ClassPathResource#getInputStream%true|ClassLoader#geResource#getFile + FileReader%false|Wingardium Leviosa%false
 Какой предпочтительный способ реакции на исключения?;@SneakyThrow%false|e.printStackTrace()%false|Проброс дальше с предварительным оборачиванием в бизнес-исключение (например, QuestionReadException)%true|Игнорирование исключения%false
+Какой компонент используется для компиляции, отладки и выполнения Java-программ?;JRE%false|JIT%false|JDK%true|JVM%false
+Какой из этих пакетов содержит исключение Stack Overflow в Java?;java.io%false|java.system%false|java.lang%true|java.util%false

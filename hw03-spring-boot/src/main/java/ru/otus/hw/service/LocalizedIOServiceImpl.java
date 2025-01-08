@@ -1,15 +1,20 @@
 package ru.otus.hw.service;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
 public class LocalizedIOServiceImpl implements LocalizedIOService {
 
     private final LocalizedMessagesService localizedMessagesService;
 
     private final IOService ioService;
+
+    public LocalizedIOServiceImpl(@Qualifier("localizedMessagesService") LocalizedMessagesService messagesService,
+                                  @Qualifier("streamsIOService") IOService ioService) {
+        this.localizedMessagesService = messagesService;
+        this.ioService = ioService;
+    }
 
     @Override
     public void printLine(String s) {
@@ -64,9 +69,9 @@ public class LocalizedIOServiceImpl implements LocalizedIOService {
     @Override
     public int readIntForRangeWithPromptLocalized(int min, int max, String promptCode, String errorMessageCode) {
         return ioService.readIntForRangeWithPrompt(min, max,
-                localizedMessagesService.getMessage(promptCode),
-                localizedMessagesService.getMessage(errorMessageCode)
-                );
+            localizedMessagesService.getMessage(promptCode),
+            localizedMessagesService.getMessage(errorMessageCode)
+        );
     }
 
     @Override
