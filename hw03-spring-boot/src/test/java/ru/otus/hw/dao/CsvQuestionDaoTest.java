@@ -18,20 +18,20 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class CsvQuestionDaoTest {
 
-    QuestionDao subject;
+    private QuestionDao questionDao;
 
     @Mock
-    TestFileNameProvider fileNameProvider;
+    private TestFileNameProvider fileNameProvider;
 
     @BeforeEach
     public void setUp() {
         when(fileNameProvider.getTestFileName()).thenReturn("questions.csv");
-        subject = new CsvQuestionDao(fileNameProvider);
+        questionDao = new CsvQuestionDao(fileNameProvider);
     }
 
     @Test
     public void testFindAll() {
-        List<Question> questions = subject.findAll();
+        List<Question> questions = questionDao.findAll();
         assertThat(questions)
             .hasSize(4)
             .map(x -> x.answers().size())

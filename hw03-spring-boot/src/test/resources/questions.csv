@@ -1,4 +1,4 @@
-# Добавить сюда своих вопросов. Эту строку надо пропустить при настройке CsvToBean (withSkipLines)
+# Тестовые вопросы. Эту строку надо пропустить при настройке CsvToBean (withSkipLines)
 Question 1;Q1-A1%true|Q1-A2%false|Q1-A3%false
 Question 2;Q2-A1%false|Q2-A2%true|Q2-A3%false|Q2-A4%false
 Question 3;Q3-A1%false|Q3-A2%false|Q3-A3%true
