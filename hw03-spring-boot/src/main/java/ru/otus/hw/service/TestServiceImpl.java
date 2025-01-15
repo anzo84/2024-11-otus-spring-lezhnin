@@ -15,12 +15,6 @@ public class TestServiceImpl implements TestService {
 
     public static final String ANSWER_FORMAT = "%d) %s";
 
-    public static final String PLEASE_ANSWER_THE_QUESTIONS_BELOW = "Please answer the questions below%n";
-
-    public static final String PLEASE_ENTER_THE_ANSWER_NUMBER = "Please enter the answer number";
-
-    public static final String INPUT_ERROR_ENTER = "Input error, enter response number from %d to %d";
-
     private final LocalizedIOService ioService;
 
     private final QuestionDao questionDao;
@@ -28,7 +22,7 @@ public class TestServiceImpl implements TestService {
     @Override
     public TestResult executeTestFor(Student student) {
         ioService.printLine("");
-        ioService.printFormattedLine(PLEASE_ANSWER_THE_QUESTIONS_BELOW);
+        ioService.printLineLocalized("TestService.answer.the.questions");
         var questions = questionDao.findAll();
         var testResult = new TestResult(student);
 
@@ -36,8 +30,9 @@ public class TestServiceImpl implements TestService {
             printQuestion(question);
             int min = 1;
             int max = question.answers().size();
-            int answerNumber = ioService.readIntForRangeWithPrompt(min, max, PLEASE_ENTER_THE_ANSWER_NUMBER,
-                String.format(INPUT_ERROR_ENTER, min, max));
+            int answerNumber = ioService.readIntForRangeWithPromptLocalized(min, max,
+                "TestService.please.enter.the.answer.number",
+                "TestService.input.error.enter.response.number.from.to");
             var isAnswerValid = question.answers().get(answerNumber - 1).isCorrect();
             testResult.applyAnswer(question, isAnswerValid);
         }

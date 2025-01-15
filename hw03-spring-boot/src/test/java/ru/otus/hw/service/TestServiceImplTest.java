@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,8 +30,7 @@ public class TestServiceImplTest {
     private TestService testService;
 
     @MockBean
-    @Qualifier("streamsIOService")
-    private IOService ioService;
+    private LocalizedIOService ioService;
 
     @MockBean
     private AppProperties appProperties;
@@ -44,15 +42,15 @@ public class TestServiceImplTest {
 
         when(appProperties.getTestFileName()).thenReturn("questions.csv");
         when(appProperties.getRightAnswersCountToPass()).thenReturn(3);
-        when(ioService.readIntForRangeWithPrompt(anyInt(), anyInt(), anyString(), anyString())).thenReturn(1);
+        when(ioService.readIntForRangeWithPromptLocalized(anyInt(), anyInt(), anyString(), anyString())).thenReturn(1);
 
         testService.executeTestFor(student);
 
-        verify(ioService, times(1)).printFormattedLine(printLineCaptor.capture());
+        verify(ioService, times(1)).printLineLocalized(printLineCaptor.capture());
         verify(ioService, times(17)).printLine(printLineCaptor.capture());
         assertThat(printLineCaptor.getAllValues())
             .isNotEmpty()
-            .containsSequence("Please answer the questions below%n", "",
+            .containsSequence("TestService.answer.the.questions", "",
                 "Question 1", "1) Q1-A1", "2) Q1-A2", "3) Q1-A3",
                 "Question 2", "1) Q2-A1", "2) Q2-A2", "3) Q2-A3", "4) Q2-A4",
                 "Question 3", "1) Q3-A1", "2) Q3-A2", "3) Q3-A3",
