@@ -1,33 +1,20 @@
 package ru.otus.hw.dao;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.hw.config.TestFileNameProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.otus.hw.domain.Answer;
 import ru.otus.hw.domain.Question;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
-
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class CsvQuestionDaoTest {
 
+    @Autowired
     private QuestionDao questionDao;
-
-    @Mock
-    private TestFileNameProvider fileNameProvider;
-
-    @BeforeEach
-    public void setUp() {
-        when(fileNameProvider.getTestFileName()).thenReturn("questions.csv");
-        questionDao = new CsvQuestionDao(fileNameProvider);
-    }
 
     @Test
     public void testFindAll() {

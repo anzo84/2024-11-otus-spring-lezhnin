@@ -1,0 +1,11 @@
+spring:
+  shell:
+    interactive:
+      enabled: false
+    script:
+      enabled: false
+test:
+  rightAnswersCountToPass: 3
+  locale: test
+  fileNameByLocaleTag:
+    test: questions.csv
