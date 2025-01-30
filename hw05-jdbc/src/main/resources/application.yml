@@ -12,6 +12,6 @@ spring:
       path: /h2
       settings.trace: false
       settings.web-allow-others: false
-  liquibase:
-    enabled: true
-    drop-first: false
+  shell:
+    history:
+      enabled: false
