@@ -113,3 +113,36 @@ databaseChangeLog:
                     foreignKeyName: books_genres__genres_fk
                     references: genres (id)
                     deleteCascade: true
+  - changeSet:
+      id: 1738934904437-1
+      comment: Создание таблицы с комментариями к книгам
+      author: anton.lezhnin@x5.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comments
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  generationType: always
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: content
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: comments__books_fk
+                    references: books (id)
+                    deleteCascade: true

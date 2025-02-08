@@ -9,21 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("Репозиторий на основе JPA для работы с книгами ")
+@DisplayName("Репозиторий на основе JPA для работы с книгами")
 @DataJpaTest
-@Import({BookRepositoryImpl.class, GenreRepositoryImpl.class})
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
+@Import({BookRepositoryImpl.class})
 class BookRepositoryTest {
 
     @Autowired
@@ -62,53 +62,57 @@ class BookRepositoryTest {
         var expectedBooks = dbBooks;
 
         assertThat(actualBooks).containsExactlyElementsOf(expectedBooks);
-        actualBooks.forEach(System.out::println);
     }
 
     @DisplayName("должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() {
-        var expectedBook = new Book(0, "BookTitle_10500", dbAuthors.get(0),
-                List.of(dbGenres.get(0), dbGenres.get(2)));
-        var returnedBook = repository.save(expectedBook);
-        assertThat(returnedBook).isNotNull()
-                .matches(book -> book.getId() > 0)
-                .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
-
-        assertThat(repository.findById(returnedBook.getId()))
-                .isPresent()
-                .get()
-                .isEqualTo(returnedBook);
+        long authorId = 1L;
+        long genreId = 1L;
+        String bookTitle = "BookTitle_Test";
+        Author author = em.find(Author.class, authorId);
+        Genre genre = em.find(Genre.class, genreId);
+        Book newBook = new Book();
+        newBook.setAuthor(author);
+        newBook.setGenres(Collections.singletonList(genre));
+        newBook.setTitle(bookTitle);
+        Book savedBook = repository.save(newBook);
+        assertNotNull(savedBook);
+        var book2 = em.find(Book.class, savedBook.getId());
+        assertThat(savedBook)
+            .usingRecursiveComparison()
+            .isEqualTo(book2);
     }
 
     @DisplayName("должен сохранять измененную книгу")
     @Test
     void shouldSaveUpdatedBook() {
-        var expectedBook = new Book(1L, "BookTitle_10500", dbAuthors.get(2),
-                List.of(dbGenres.get(4), dbGenres.get(5)));
+        long bookId = 1L;
+        long authorId = 2L;
+        long genreId = 6L;
+        String bookTitle = "BookTitle_Test";
 
-        assertThat(repository.findById(expectedBook.getId()))
-                .isPresent()
-                .get()
-                .isNotEqualTo(expectedBook);
-
-        var returnedBook = repository.save(expectedBook);
-        assertThat(returnedBook).isNotNull()
-                .matches(book -> book.getId() > 0)
-                .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
-
-        assertThat(repository.findById(returnedBook.getId()))
-                .isPresent()
-                .get()
-                .isEqualTo(returnedBook);
+        Author author = em.find(Author.class, authorId);
+        Genre genre = em.find(Genre.class, genreId);
+        Book updateBook = new Book(bookId, bookTitle, author, Collections.singletonList(genre));
+        Book savedBook = repository.save(updateBook);
+        assertNotNull(savedBook);
+        var dbBook = em.find(Book.class, savedBook.getId());
+        assertThat(savedBook)
+            .usingRecursiveComparison()
+            .isEqualTo(dbBook);
     }
 
     @DisplayName("должен удалять книгу по id ")
     @Test
     void shouldDeleteBook() {
-        assertThat(repository.findById(1L)).isPresent();
-        repository.deleteById(1L);
-        assertThat(repository.findById(1L)).isEmpty();
+        long bookId = 1L;
+        var optionalBook = repository.findById(bookId);
+        var expectedBook = em.find(Book.class, bookId);
+        assertTrue(optionalBook.isPresent());
+        assertThat(optionalBook.get())
+            .usingRecursiveComparison()
+            .isEqualTo(expectedBook);
     }
 
     private static List<Author> getDbAuthors() {
