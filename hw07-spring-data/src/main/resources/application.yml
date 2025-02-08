@@ -10,8 +10,8 @@ spring:
       ddl-auto: none
     properties:
       hibernate:
-        format_sql: false
-    show-sql: true
+        format_sql: true
+    show-sql: false
     database: h2
   shell:
     history:
