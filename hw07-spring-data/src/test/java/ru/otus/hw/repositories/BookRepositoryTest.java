@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class BookRepositoryTest {
 
     @Autowired
-    private TestEntityManager em;
+    private TestEntityManager testEntityManager;
 
     @Autowired
     private BookRepository repository;
@@ -68,15 +68,15 @@ class BookRepositoryTest {
         long authorId = 1L;
         long genreId = 1L;
         String bookTitle = "BookTitle_Test";
-        Author author = em.find(Author.class, authorId);
-        Genre genre = em.find(Genre.class, genreId);
+        Author author = testEntityManager.find(Author.class, authorId);
+        Genre genre = testEntityManager.find(Genre.class, genreId);
         Book newBook = new Book();
         newBook.setAuthor(author);
         newBook.setGenres(Collections.singletonList(genre));
         newBook.setTitle(bookTitle);
         Book savedBook = repository.save(newBook);
         assertNotNull(savedBook);
-        var book2 = em.find(Book.class, savedBook.getId());
+        var book2 = testEntityManager.find(Book.class, savedBook.getId());
         assertThat(savedBook)
             .usingRecursiveComparison()
             .isEqualTo(book2);
@@ -90,12 +90,12 @@ class BookRepositoryTest {
         long genreId = 6L;
         String bookTitle = "BookTitle_Test";
 
-        Author author = em.find(Author.class, authorId);
-        Genre genre = em.find(Genre.class, genreId);
+        Author author = testEntityManager.find(Author.class, authorId);
+        Genre genre = testEntityManager.find(Genre.class, genreId);
         Book updateBook = new Book(bookId, bookTitle, author, Collections.singletonList(genre));
         Book savedBook = repository.save(updateBook);
         assertNotNull(savedBook);
-        var dbBook = em.find(Book.class, savedBook.getId());
+        var dbBook = testEntityManager.find(Book.class, savedBook.getId());
         assertThat(savedBook)
             .usingRecursiveComparison()
             .isEqualTo(dbBook);
@@ -106,7 +106,7 @@ class BookRepositoryTest {
     void shouldDeleteBook() {
         long bookId = 1L;
         var optionalBook = repository.findById(bookId);
-        var expectedBook = em.find(Book.class, bookId);
+        var expectedBook = testEntityManager.find(Book.class, bookId);
         assertTrue(optionalBook.isPresent());
         assertThat(optionalBook.get())
             .usingRecursiveComparison()

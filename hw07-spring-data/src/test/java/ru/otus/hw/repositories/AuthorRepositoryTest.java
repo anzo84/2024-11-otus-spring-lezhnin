@@ -19,7 +19,7 @@ public class AuthorRepositoryTest {
     private AuthorRepository repository;
 
     @Autowired
-    private TestEntityManager em;
+    private TestEntityManager testEntityManager;
 
     @DisplayName("должен найти всех авторов")
     @Test
@@ -32,7 +32,7 @@ public class AuthorRepositoryTest {
     @Test
     void shouldFindAuthorById() {
         long id = 1L;
-        Author expected = em.find(Author.class, id);
+        Author expected = testEntityManager.find(Author.class, id);
         Optional<Author> actual = repository.findById(id);
         assertThat(actual)
             .isNotEmpty()

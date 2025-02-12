@@ -3,7 +3,6 @@ package ru.otus.hw.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.converters.CommentConverter;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.BookRepository;
@@ -18,8 +17,6 @@ public class CommentServiceImpl implements CommentService {
     private final BookRepository bookRepository;
 
     private final CommentRepository commentRepository;
-
-    private final CommentConverter commentConverter;
 
     @Transactional(readOnly = true)
     @Override
