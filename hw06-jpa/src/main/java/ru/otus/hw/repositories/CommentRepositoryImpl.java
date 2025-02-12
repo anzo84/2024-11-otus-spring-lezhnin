@@ -19,11 +19,12 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Optional<Comment> findById(long id) {
-        return Optional.ofNullable(entityManager.createQuery("FROM Comment WHERE id = :id", Comment.class)
+        return entityManager.createQuery("FROM Comment WHERE id = :id", Comment.class)
             .setParameter("id", id)
             .setHint(EntityGraph.EntityGraphType.FETCH.getKey(),
                 entityManager.getEntityGraph(Comment.COMMENT_BOOKS))
-            .getSingleResult());
+            .getResultStream()
+            .findFirst();
     }
 
     @Override

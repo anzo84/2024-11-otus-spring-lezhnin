@@ -1,6 +1,5 @@
 package ru.otus.hw.repositories;
 
-import jakarta.persistence.NoResultException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.Comment;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -88,7 +88,7 @@ class CommentRepositoryTest {
     @DisplayName("должен вернуть исключение при обновлении комментария с неизвестной книгой")
     @Test
     void shouldThrowThenUpdateCommentWithUnknownBook() {
-        assertThrows(NoResultException.class, () -> {
+        assertThrows(NoSuchElementException.class, () -> {
             var comment = new Comment(100L, "New test comment", bookRepository.findById(100L).get());
             comment.setContent("Updated comment content");
             repository.save(comment);

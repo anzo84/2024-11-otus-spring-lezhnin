@@ -19,11 +19,12 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Optional<Book> findById(long id) {
-        return Optional.ofNullable(entityManager.createQuery("FROM Book WHERE id = :id", Book.class)
+        return entityManager.createQuery("FROM Book WHERE id = :id", Book.class)
             .setParameter("id", id)
             .setHint(EntityGraph.EntityGraphType.FETCH.getKey(),
                 entityManager.getEntityGraph(Book.BOOKS_AUTHOR_GENRES_GRAPH))
-            .getSingleResult());
+            .getResultStream()
+            .findFirst();
     }
 
     @Override
