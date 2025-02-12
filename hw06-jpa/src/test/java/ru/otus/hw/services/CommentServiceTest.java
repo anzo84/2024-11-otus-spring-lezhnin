@@ -67,9 +67,8 @@ class CommentServiceTest {
     @Order(4)
     @DisplayName("должен бросить исключение при попытке добавить комментарий для несуществующей книги")
     public void shouldThrowExceptionForInsertThenUnknownBook() {
-        Exception e = assertThrows(EntityNotFoundException.class, () -> {
-            commentService.addComment("new comment", 100L);
-        });
+        Exception e = assertThrows(EntityNotFoundException.class,
+            () -> commentService.addComment("new comment", 100L));
         assertThat(e.getMessage()).isEqualTo("Book with id 100 not found");
     }
 
@@ -87,9 +86,8 @@ class CommentServiceTest {
     @Order(6)
     @DisplayName("должен бросить исключение при попытке обновить несуществующий комментарий")
     public void shouldThrowExceptionForUpdateThenUnknownComment() {
-        Exception e = assertThrows(EntityNotFoundException.class, () -> {
-            commentService.updateComment(100L, "Updated comment");
-        });
+        Exception e = assertThrows(EntityNotFoundException.class,
+            () -> commentService.updateComment(100L, "Updated comment"));
         assertThat(e.getMessage()).isEqualTo("Comment with id 100 not found");
     }
 

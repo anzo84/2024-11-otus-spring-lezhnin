@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class CommentRepositoryTest {
 
     @Autowired
-    private TestEntityManager em;
+    private TestEntityManager testEntityManager;
 
     @Autowired
     private CommentRepository repository;
@@ -32,7 +32,7 @@ class CommentRepositoryTest {
     @Test
     void shouldFindCommentById() {
         long id = 1L;
-        var expected = em.find(Comment.class, id);
+        var expected = testEntityManager.find(Comment.class, id);
         var actual = repository.findById(id);
         assertThat(actual)
             .isNotEmpty()
@@ -54,14 +54,14 @@ class CommentRepositoryTest {
     @Test
     void shouldDeleteCommentById() {
         repository.deleteById(1L);
-        var comment = em.find(Comment.class, 1L);
+        var comment = testEntityManager.find(Comment.class, 1L);
         assertThat(comment).isNull();
     }
 
     @DisplayName("должен добавить комментарий")
     @Test
     void shouldInsertComment() {
-        var book = bookRepository.findById(1L).get();
+        var book = bookRepository.findById(1L).orElseThrow();
         var comment = new Comment(0, "New test comment", book);
         repository.save(comment);
 
@@ -75,11 +75,11 @@ class CommentRepositoryTest {
     @DisplayName("должен обновить комментарий")
     @Test
     void shouldUpdateComment() {
-        var comment = repository.findById(1L).get();
+        var comment = repository.findById(1L).orElseThrow();
         comment.setContent("Updated comment content");
         repository.save(comment);
 
-        var actualComment = em.find(Comment.class, 1L);
+        var actualComment = testEntityManager.find(Comment.class, 1L);
         assertThat(actualComment)
             .isNotNull()
             .hasFieldOrPropertyWithValue("content", "Updated comment content");
@@ -89,7 +89,7 @@ class CommentRepositoryTest {
     @Test
     void shouldThrowThenUpdateCommentWithUnknownBook() {
         assertThrows(NoSuchElementException.class, () -> {
-            var comment = new Comment(100L, "New test comment", bookRepository.findById(100L).get());
+            var comment = new Comment(100L, "New test comment", bookRepository.findById(100L).orElseThrow());
             comment.setContent("Updated comment content");
             repository.save(comment);
         });

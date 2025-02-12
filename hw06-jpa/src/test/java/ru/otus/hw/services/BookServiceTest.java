@@ -90,9 +90,8 @@ class BookServiceTest {
     @Order(5)
     @DisplayName("должен бросить исключение при попытке создать книгу с неизвестным автором")
     public void shouldThrowExceptionForInsertThenUnknownAuthor() {
-        Exception e = assertThrows(EntityNotFoundException.class, () -> {
-            bookService.insert("BookTitleNew", 100L, Set.of(1L, 2L));
-        });
+        Exception e = assertThrows(EntityNotFoundException.class,
+            () -> bookService.insert("BookTitleNew", 100L, Set.of(1L, 2L)));
         assertThat(e.getMessage()).isEqualTo("Author with id 100 not found");
     }
 
@@ -100,9 +99,8 @@ class BookServiceTest {
     @Order(6)
     @DisplayName("должен бросить исключение при попытке создать книгу с NULL набором жанров")
     public void shouldThrowExceptionForInsertThenNullGenres() {
-        Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            bookService.insert("BookTitleNew", 1L, null);
-        });
+        Exception e = assertThrows(IllegalArgumentException.class,
+            () -> bookService.insert("BookTitleNew", 1L, null));
         assertThat(e.getMessage()).isEqualTo("Genres ids must not be null");
     }
 
@@ -110,9 +108,8 @@ class BookServiceTest {
     @Order(7)
     @DisplayName("должен бросить исключение при попытке создать книгу с пустым набором жанров")
     public void shouldThrowExceptionForInsertThenEmptyGenres() {
-        Exception e = assertThrows(IllegalArgumentException.class, () -> {
-            bookService.insert("BookTitleNew", 1L, Set.of());
-        });
+        Exception e = assertThrows(IllegalArgumentException.class,
+            () -> bookService.insert("BookTitleNew", 1L, Set.of()));
         assertThat(e.getMessage()).isEqualTo("Genres ids must not be null");
     }
 
@@ -120,9 +117,8 @@ class BookServiceTest {
     @Order(8)
     @DisplayName("должен бросить исключение при попытке создать книгу с неизвестным жанром")
     public void shouldThrowExceptionForInsertThenUnknownGenreId() {
-        Exception e = assertThrows(EntityNotFoundException.class, () -> {
-            bookService.insert("BookTitleNew", 1L, Set.of(100L));
-        });
+        Exception e = assertThrows(EntityNotFoundException.class,
+            () -> bookService.insert("BookTitleNew", 1L, Set.of(100L)));
         assertThat(e.getMessage()).isEqualTo("One or all genres with ids [100] not found");
     }
 
