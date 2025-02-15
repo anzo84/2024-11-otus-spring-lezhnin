@@ -1,5 +1,0 @@
-databaseChangeLog:
-  - logicalFilePath: db.changelog-master.yaml
-  - includeAll:
-      path: db/changelog/milestones
-      errorIfMissingOrEmpty: true

@@ -1,18 +1,22 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-  sql:
-    init:
-      mode: always
-      data-locations: data.sql
-      schema-locations: schema.sql
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-    show-sql: false
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/otus-hw08-test
   shell:
     interactive:
       enabled: false
-  liquibase:
-    enabled: false
+  autoconfigure:
+    exclude: org.springframework.shell.boot.StandardCommandsAutoConfiguration
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local

@@ -2,7 +2,6 @@ package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.BookRepository;
@@ -18,32 +17,30 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
-    @Transactional(readOnly = true)
     @Override
-    public List<Comment> findByBookId(long bookId) {
-        return commentRepository.findByBookId(bookId);
+    public List<Comment> findByBookId(String bookId) {
+        var book = bookRepository.findById(bookId)
+            .orElseThrow(() -> new EntityNotFoundException("Book with id %s not found".formatted(bookId)));
+        return commentRepository.findByBook(book);
     }
 
-    @Transactional
     @Override
-    public Comment updateComment(long id, String content) {
+    public Comment updateComment(String id, String content) {
         var comment = commentRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Comment with id %d not found".formatted(id)));
+            .orElseThrow(() -> new EntityNotFoundException("Comment with id %s not found".formatted(id)));
         comment.setContent(content);
         return commentRepository.save(comment);
     }
 
-    @Transactional
     @Override
-    public Comment addComment(String content, long bookId) {
+    public Comment addComment(String content, String bookId) {
         var book = bookRepository.findById(bookId)
-            .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(bookId)));
-        return commentRepository.save(new Comment(0L, content, book));
+            .orElseThrow(() -> new EntityNotFoundException("Book with id %s not found".formatted(bookId)));
+        return commentRepository.save(Comment.builder().book(book).content(content).build());
     }
 
-    @Transactional
     @Override
-    public void deleteComment(long id) {
+    public void deleteComment(String id) {
         commentRepository.deleteById(id);
     }
 }
