@@ -8,6 +8,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Comment;
 
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DisplayName("Интегро тест сервиса комментариев")
 @Import({BookServiceImpl.class, CommentServiceImpl.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class CommentServiceTest {
 
     @Autowired
@@ -31,28 +33,28 @@ class CommentServiceTest {
         assertThat(commentService.findByBookId("1"))
             .extracting(Comment::getId, Comment::getContent)
             .containsExactlyInAnyOrder(
-                tuple("1", "Comment 1_1"),
-                tuple("2", "Comment 1_2")
+                tuple("1", "Comment-1"),
+                tuple("4", "Comment-4")
             );
     }
 
     @Test
     @Order(2)
-    @DisplayName("должен вернуть пустой список в случае поиска комментариев для не существующей книги")
+    @DisplayName("должен выбросить исключение в случае поиска комментариев для не существующей книги")
     public void shouldReturnEmptyListThenUnknownBook() {
-        assertThat(commentService.findByBookId("100"))
-            .isNotNull()
-            .isEmpty();
+        Exception e = assertThrows(EntityNotFoundException.class,
+            () -> commentService.findByBookId("100"));
+        assertThat(e.getMessage()).isEqualTo("Book with id 100 not found");
     }
 
     @Test
     @Order(3)
     @DisplayName("должен добавить новый комментарий для книги")
     public void shouldInsertCommentForBook() {
-        commentService.addComment("Comment 1_3", "1");
+        commentService.addComment("Comment-7", "1");
         assertThat(commentService.findByBookId("1"))
             .map(Comment::getContent)
-            .containsExactly("Comment-1", "Comment 1_2", "Comment 1_3");
+            .containsExactly("Comment-1", "Comment-4", "Comment-7");
     }
 
     @Test
@@ -71,7 +73,7 @@ class CommentServiceTest {
         commentService.updateComment("1", "Updated comment");
         assertThat(commentService.findByBookId("1"))
             .map(Comment::getContent)
-            .containsExactly("Updated comment", "Comment 1_2", "Comment 1_3");
+            .containsExactly("Updated comment", "Comment-4", "Comment-7");
     }
 
     @Test
@@ -90,7 +92,7 @@ class CommentServiceTest {
         commentService.deleteComment("1");
         assertThat(commentService.findByBookId("1"))
             .map(Comment::getContent)
-            .containsExactly("Comment 1_2", "Comment 1_3");
+            .containsExactly("Comment-4", "Comment-7");
     }
 
 }

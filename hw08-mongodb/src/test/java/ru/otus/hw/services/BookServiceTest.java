@@ -8,6 +8,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DisplayName("Интегро тест сервиса книг")
 @Import({BookServiceImpl.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class BookServiceTest {
 
     @Autowired
@@ -39,9 +41,9 @@ class BookServiceTest {
             .usingRecursiveComparison()
             .isEqualTo(
                 Optional.of(
-                    new Book("1", "BookTitle_1",
-                        new Author("1", "Author_1"),
-                        List.of(new Genre("1", "Genre_1"), new Genre("2", "Genre_2")))));
+                    new Book("1", "Book-1",
+                        new Author("2", "Author-2"),
+                        List.of(new Genre("1", "Genre-1"), new Genre("2", "Genre-2")))));
     }
 
     @Test
@@ -60,7 +62,7 @@ class BookServiceTest {
         assertThat(books)
             .isNotEmpty()
             .map(Book::getTitle)
-            .contains("BookTitle_1", "BookTitle_2", "BookTitle_3");
+            .contains("Book-1", "Book-2", "Book-3");
     }
 
     @Test
@@ -76,8 +78,8 @@ class BookServiceTest {
             .isEqualTo(
                 Optional.of(
                     new Book(savedBook.getId(), "BookTitleNew",
-                        new Author("1", "Author_1"),
-                        List.of(new Genre("1", "Genre_1"), new Genre("2", "Genre_2")))));
+                        new Author("1", "Author-1"),
+                        List.of(new Genre("1", "Genre-1"), new Genre("2", "Genre-2")))));
     }
 
     @Test

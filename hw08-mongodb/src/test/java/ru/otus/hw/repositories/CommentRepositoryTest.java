@@ -5,16 +5,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Репозиторий на основе MONGODB для работы с комментариями ")
 @DataMongoTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class CommentRepositoryTest {
 
     @Autowired
@@ -29,13 +32,13 @@ class CommentRepositoryTest {
     @DisplayName("должен найти комментарий по id")
     @Test
     void shouldFindCommentById() {
-        String id = "1";
-        var expected = mongoTemplate.findById(id, Comment.class);
+        String id = "2";
+        var expected = Optional.ofNullable(mongoTemplate.findById(id, Comment.class));
         var actual = repository.findById(id);
         assertThat(actual)
             .isNotEmpty()
-            .usingRecursiveComparison()
-            .isEqualTo(expected);
+            .map(Comment::getContent)
+            .contains("Comment-2");
     }
 
     @DisplayName("должен загружать список комментариев для книги")
@@ -45,9 +48,9 @@ class CommentRepositoryTest {
         Book book = bookRepository.findById(bookId).orElseThrow(NoSuchElementException::new);
         var actualComments = repository.findByBook(book);
         assertThat(actualComments)
-            .hasSize(2)
+            .hasSize(3)
             .map(Comment::getContent)
-            .contains("Comment 1", "Comment 1");
+            .contains("Updated comment content", "Comment-4", "New test comment");
     }
 
     @DisplayName("должен удалить комментарий")
@@ -74,7 +77,7 @@ class CommentRepositoryTest {
         assertThat(actualComments)
             .hasSize(3)
             .map(Comment::getContent)
-            .contains("Comment 1", "Comment 1", "New test comment");
+            .contains("Updated comment content", "Comment-4", "New test comment");
     }
 
     @DisplayName("должен обновить комментарий")

@@ -23,12 +23,11 @@
         <checkstyle.version>10.15.0</checkstyle.version>
         <gson.version>2.10.1</gson.version>
         <mongock.version>4.3.8</mongock.version>
+        <flapdoodle.version>4.7.0</flapdoodle.version>
         <snakeyaml.version>2.0</snakeyaml.version>
         <checkstyle.config.url>
             https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml
         </checkstyle.config.url>
-        <de.flapdoodle.embed.mongo.version.spring30x>4.7.0</de.flapdoodle.embed.mongo.version.spring30x>
-        <de.flapdoodle.embed.mongo.version>4.18.1</de.flapdoodle.embed.mongo.version>
         <guava.version>32.0.0-jre</guava.version>
     </properties>
 
@@ -71,14 +70,14 @@
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo.spring30x</artifactId>
-            <version>4.7.0</version>
+            <version>${flapdoodle.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
-            <version>4.18.1</version>
+            <version>${flapdoodle.version}</version>
             <scope>test</scope>
         </dependency>
 

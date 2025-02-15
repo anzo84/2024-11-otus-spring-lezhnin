@@ -1,19 +1,24 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/otus-hw08-test
+      port: 27017
+      database: test
+      host: localhost
   shell:
     interactive:
       enabled: false
-  autoconfigure:
-    exclude: org.springframework.shell.boot.StandardCommandsAutoConfiguration
+    noninteractive:
+      enabled: false
+    command:
+      version:
+        enabled: false
 de:
   flapdoodle:
     mongodb:
       embedded:
         version: 4.0.2
 mongock:
-  runner-type: "InitializingBean"
+  runner-type: "ApplicationRunner"
   change-logs-scan-package:
     - ru.otus.hw.changelog
   mongo-db:

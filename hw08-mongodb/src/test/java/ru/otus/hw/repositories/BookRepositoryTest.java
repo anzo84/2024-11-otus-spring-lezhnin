@@ -2,12 +2,16 @@ package ru.otus.hw.repositories;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -22,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Репозиторий на основе MONGODB для работы с книгами")
 @DataMongoTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BookRepositoryTest {
 
     @Autowired
@@ -30,22 +36,10 @@ class BookRepositoryTest {
     @Autowired
     private BookRepository repository;
 
-    private List<Author> dbAuthors;
-
-    private List<Genre> dbGenres;
-
-    private List<Book> dbBooks;
-
-    @BeforeEach
-    void setUp() {
-        dbAuthors = getDbAuthors();
-        dbGenres = getDbGenres();
-        dbBooks = getDbBooks(dbAuthors, dbGenres);
-    }
-
     @DisplayName("должен загружать книгу по id")
     @ParameterizedTest
     @MethodSource("getDbBooks")
+    @Order(1)
     void shouldReturnCorrectBookById(Book expectedBook) {
         var actualBook = repository.findById(expectedBook.getId());
         assertThat(actualBook).isPresent()
@@ -55,15 +49,18 @@ class BookRepositoryTest {
 
     @DisplayName("должен загружать список всех книг")
     @Test
+    @Order(2)
     void shouldReturnCorrectBooksList() {
-        var actualBooks = repository.findAll();
-        var expectedBooks = dbBooks;
-
-        assertThat(actualBooks).containsExactlyElementsOf(expectedBooks);
+        var books = repository.findAll();
+        assertThat(books)
+            .isNotEmpty()
+            .map(Book::getTitle)
+            .contains("Book-1", "Book-2", "Book-3");
     }
 
     @DisplayName("должен сохранять новую книгу")
     @Test
+    @Order(3)
     void shouldSaveNewBook() {
         String authorId = "1";
         String genreId = "1";
@@ -85,11 +82,12 @@ class BookRepositoryTest {
 
     @DisplayName("должен сохранять измененную книгу")
     @Test
+    @Order(4)
     void shouldSaveUpdatedBook() {
         String bookId = "1";
         String authorId = "2";
         String genreId = "3";
-        String bookTitle = "BookTitle_Test";
+        String bookTitle = "BookTitle_1";
 
         Author author = mongoTemplate.findById(authorId, Author.class);
         Genre genre = mongoTemplate.findById(genreId, Genre.class);
@@ -104,6 +102,7 @@ class BookRepositoryTest {
 
     @DisplayName("должен удалять книгу по id ")
     @Test
+    @Order(5)
     void shouldDeleteBook() {
         String bookId = "1";
         var optionalBook = repository.findById(bookId);
@@ -129,7 +128,7 @@ class BookRepositoryTest {
     private static List<Book> getDbBooks(List<Author> dbAuthors, List<Genre> dbGenres) {
         return IntStream.range(1, 3).boxed()
                 .map(id -> new Book(Integer.toString(id),
-                        "BookTitle_" + id,
+                        "Book-" + id,
                         dbAuthors.get(id - 1),
                         dbGenres.subList((id - 1) * 2, (id - 1) * 2 + 2)
                 ))

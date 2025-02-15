@@ -60,8 +60,8 @@ public class DatabaseChangelog {
     @ChangeSet(order = "004", id = "addComments", author = "anton.lezhnin@x5.ru")
     public void addComments(CommentRepository commentRepository, BookRepository bookRepository) {
         Book book1 = bookRepository.findById("1").get();
-        Book book2 = bookRepository.findById("1").get();
-        Book book3 = bookRepository.findById("1").get();
+        Book book2 = bookRepository.findById("2").get();
+        Book book3 = bookRepository.findById("3").get();
 
         commentRepository.insert(List.of(
             new Comment("1", "Comment-1", book1),
