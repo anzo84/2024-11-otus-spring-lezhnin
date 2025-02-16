@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="overflow-x:hidden;">
+    <div class="sidebar">
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-accordion="false"
+                data-widget="treeview" role="menu">
+                <th:block th:insert="~{import/nav::menuItem(#{common.home},'/home','fas fa-house', '')}"/>
+                <th:block th:insert="~{import/nav::menuItem(#{genre.title},'/genre','fas fa-folder-tree', '')}"/>
+                <th:block th:insert="~{import/nav::menuItem(#{author.title},'/author','fas fa-people-group', '')}"/>
+                <th:block th:insert="~{import/nav::menuItem(#{book.title},'/book','fas fa-book', '')}"/>
+                <th:block th:insert="~{import/nav::menuItem(#{comment.title},'/comment','fas fa-comments', '')}"/>
+            </ul>
+        </nav>
+    </div>
+</aside>
