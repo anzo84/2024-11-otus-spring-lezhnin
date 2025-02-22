@@ -1,16 +1,16 @@
 package ru.otus.hw.domain.service;
 
-import ru.otus.hw.persistence.model.CommentEntity;
+import ru.otus.hw.domain.model.Comment;
 
 import java.util.List;
 
 public interface CommentService {
 
-    List<CommentEntity> findByBookId(long bookId);
+    List<Comment> findByBookId(long bookId);
 
-    CommentEntity updateComment(long id, String content);
+    Comment findById(long id);
 
-    CommentEntity addComment(String content, long bookId);
+    Comment save(Comment comment);
 
     void deleteComment(long id);
 

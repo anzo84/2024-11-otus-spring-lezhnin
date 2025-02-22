@@ -13,12 +13,13 @@ import ru.otus.hw.domain.service.GenreService;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Controller
 @RequiredArgsConstructor
 public class GenreController {
 
-    public static final Map<String, String> GENRE_LIST_BREADCRUMBS = Map.of("genre.list", "genre");
+    public static final Map<String, String> GENRE_LIST_BREADCRUMBS = Map.of("genre.list", "/genre");
 
     private final GenreService genreService;
 
@@ -30,7 +31,7 @@ public class GenreController {
 
     @GetMapping("genre/save")
     public String saveGenre(@RequestParam Optional<Long> id, Model model) {
-        Genre genre = id.map(genreService::findById).flatMap(x -> x).orElse(new Genre());
+        Genre genre = id.map(genreService::findById).flatMap(Function.identity()).orElse(new Genre());
         model.addAttribute("genre", genre);
         model.addAttribute("breadcrumbs", GENRE_LIST_BREADCRUMBS);
         return "genre-save";
@@ -39,11 +40,9 @@ public class GenreController {
     @PostMapping("genre/save")
     public String saveGenre(Model model, @Valid Genre genre, BindingResult result) {
         model.addAttribute("breadcrumbs", GENRE_LIST_BREADCRUMBS);
-
         if (result.hasErrors()) {
             return "genre-save";
         }
-
         genreService.save(genre);
         return "redirect:/genre";
     }

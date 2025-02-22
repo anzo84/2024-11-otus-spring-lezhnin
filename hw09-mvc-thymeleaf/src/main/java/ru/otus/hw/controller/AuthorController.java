@@ -13,12 +13,13 @@ import ru.otus.hw.domain.service.AuthorService;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Controller
 @RequiredArgsConstructor
 public class AuthorController {
 
-    public static final Map<String, String> AUTHOR_LIST_BREADCRUMBS = Map.of("author.list", "author");
+    public static final Map<String, String> AUTHOR_LIST_BREADCRUMBS = Map.of("author.list", "/author");
 
     private final AuthorService authorService;
 
@@ -30,7 +31,7 @@ public class AuthorController {
 
     @GetMapping("author/save")
     public String saveAuthor(@RequestParam Optional<Long> id, Model model) {
-        Author author = id.map(authorService::findById).flatMap(x -> x).orElse(new Author());
+        Author author = id.map(authorService::findById).flatMap(Function.identity()).orElse(new Author());
         model.addAttribute("author", author);
         model.addAttribute("breadcrumbs", AUTHOR_LIST_BREADCRUMBS);
         return "author-save";

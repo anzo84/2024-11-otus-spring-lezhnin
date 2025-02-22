@@ -1,19 +1,21 @@
 package ru.otus.hw.domain.service;
 
-import ru.otus.hw.persistence.model.BookEntity;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import ru.otus.hw.domain.exception.EntityNotFoundException;
+import ru.otus.hw.domain.model.Book;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public interface BookService {
-    Optional<BookEntity> findById(long id);
 
-    List<BookEntity> findAll();
+    Optional<Book> findById(long id);
 
-    BookEntity insert(String title, long authorId, Set<Long> genresIds);
+    List<Book> findAll();
 
-    BookEntity update(long id, String title, long authorId, Set<Long> genresIds);
+    Book save(@Valid @NotNull(message = "{book.notEmpty}") Book book) throws EntityNotFoundException,
+        IllegalArgumentException;
 
     void deleteById(long id);
 
