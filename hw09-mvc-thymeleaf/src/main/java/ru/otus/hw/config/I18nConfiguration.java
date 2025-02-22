@@ -28,7 +28,8 @@ public class I18nConfiguration {
             "classpath:i18n/genre",
             "classpath:i18n/book",
             "classpath:i18n/genre",
-            "classpath:i18n/author");
+            "classpath:i18n/author",
+            "classpath:i18n/comment");
         return messageSource;
     }
 
