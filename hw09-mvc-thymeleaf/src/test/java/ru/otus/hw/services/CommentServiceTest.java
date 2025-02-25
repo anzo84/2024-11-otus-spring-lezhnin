@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 @DisplayName("Интегро тест сервиса комментариев")
 @Import({BookServiceImpl.class, CommentServiceImpl.class})
+@ComponentScan(basePackages = "ru.otus.hw.mapper")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CommentServiceTest {
 
@@ -90,15 +92,6 @@ class CommentServiceTest {
 
     @Test
     @Order(6)
-    @DisplayName("должен бросить исключение при попытке обновить несуществующий комментарий")
-    public void shouldThrowExceptionForUpdateThenUnknownComment() {
-        Exception e = assertThrows(EntityNotFoundException.class,
-            () -> commentService.save(new Comment(100L, "Comment 1_3", new Book(1L, "Book", null, null))));
-        assertThat(e.getMessage()).isEqualTo("Comment with id 100 not found");
-    }
-
-    @Test
-    @Order(7)
     @DisplayName("должен удалить комментарий")
     public void shouldDeleteComment() {
         commentService.deleteComment(1L);

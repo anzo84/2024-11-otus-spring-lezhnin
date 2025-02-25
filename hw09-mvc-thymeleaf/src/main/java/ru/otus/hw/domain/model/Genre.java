@@ -3,11 +3,13 @@ package ru.otus.hw.domain.model;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Genre {
 
     private Long id;

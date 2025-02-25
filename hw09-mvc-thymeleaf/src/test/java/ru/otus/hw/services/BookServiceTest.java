@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 @DisplayName("Интегро тест сервиса книг")
 @Import({BookServiceImpl.class})
+@ComponentScan(basePackages = "ru.otus.hw.mapper")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BookServiceTest {
 
@@ -107,7 +109,7 @@ class BookServiceTest {
     public void shouldThrowExceptionForInsertThenNullGenres() {
         Exception e = assertThrows(IllegalArgumentException.class,
             () -> bookService.save(new Book(null, "BookTitleNew", getPreparedAuthor1(), null)));
-        assertThat(e.getMessage()).isEqualTo("Genres ids must not be null");
+        assertThat(e.getMessage()).isEqualTo("Genres ids must not be empty");
     }
 
     @Test
@@ -116,7 +118,7 @@ class BookServiceTest {
     public void shouldThrowExceptionForInsertThenEmptyGenres() {
         Exception e = assertThrows(IllegalArgumentException.class,
             () -> bookService.save(new Book(null, "BookTitleNew", getPreparedAuthor1(), List.of())));
-        assertThat(e.getMessage()).isEqualTo("Genres ids must not be null");
+        assertThat(e.getMessage()).isEqualTo("Genres ids must not be empty");
     }
 
     @Test

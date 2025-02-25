@@ -1,7 +1,10 @@
 package ru.otus.hw.repositories;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -17,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Репозиторий на основе JPA для работы с комментариями ")
 @DataJpaTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CommentRepositoryTest {
 
     @Autowired
@@ -30,6 +34,7 @@ class CommentRepositoryTest {
 
     @DisplayName("должен найти комментарий по id")
     @Test
+    @Order(1)
     void shouldFindCommentById() {
         long id = 1L;
         var expected = testEntityManager.find(CommentEntity.class, id);
@@ -42,6 +47,7 @@ class CommentRepositoryTest {
 
     @DisplayName("должен загружать список комментариев для книги")
     @Test
+    @Order(2)
     void shouldFindCommentListByBookId() {
         var actualComments = repository.findByBookId(1L);
         assertThat(actualComments)
@@ -52,6 +58,7 @@ class CommentRepositoryTest {
 
     @DisplayName("должен удалить комментарий")
     @Test
+    @Order(3)
     void shouldDeleteCommentById() {
         repository.deleteById(1L);
         var comment = testEntityManager.find(CommentEntity.class, 1L);
@@ -60,10 +67,12 @@ class CommentRepositoryTest {
 
     @DisplayName("должен добавить комментарий")
     @Test
+    @Order(4)
     void shouldInsertComment() {
         var book = bookRepository.findById(1L).orElseThrow();
-        var comment = new CommentEntity(1L, "New test comment", book);
+        var comment = new CommentEntity(null, "New test comment", book);
         repository.save(comment);
+        repository.flush();
 
         var actualComments = repository.findByBookId(1L);
         assertThat(actualComments)
@@ -74,6 +83,7 @@ class CommentRepositoryTest {
 
     @DisplayName("должен обновить комментарий")
     @Test
+    @Order(5)
     void shouldUpdateComment() {
         var comment = repository.findById(1L).orElseThrow();
         comment.setContent("Updated comment content");
@@ -87,6 +97,7 @@ class CommentRepositoryTest {
 
     @DisplayName("должен вернуть исключение при обновлении комментария с неизвестной книгой")
     @Test
+    @Order(6)
     void shouldThrowThenUpdateCommentWithUnknownBook() {
         assertThrows(NoSuchElementException.class, () -> {
             var comment = new CommentEntity(100L, "New test comment", bookRepository.findById(100L).get());
