@@ -63,7 +63,7 @@ public class BookController {
     @GetMapping("/book/delete")
     public RedirectView remove(@RequestParam Optional<Long> id) {
         id.ifPresent(bookService::deleteById);
-        return new RedirectView("book");
+        return new RedirectView("/book");
     }
 
 }

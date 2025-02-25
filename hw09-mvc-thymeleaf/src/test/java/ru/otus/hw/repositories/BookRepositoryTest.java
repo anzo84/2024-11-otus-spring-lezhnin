@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Репозиторий на основе JPA для работы с книгами")
 @DataJpaTest
-class BookEntityRepositoryTest {
+class BookRepositoryTest {
 
     @Autowired
     private TestEntityManager testEntityManager;

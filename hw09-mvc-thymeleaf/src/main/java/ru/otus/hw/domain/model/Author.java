@@ -1,9 +1,11 @@
 package ru.otus.hw.domain.model;
 
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class Author {
 
     private Long id;

@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Репозиторий на основе JPA для работы с комментариями ")
 @DataJpaTest
-class CommentEntityRepositoryTest {
+class CommentRepositoryTest {
 
     @Autowired
     private TestEntityManager testEntityManager;

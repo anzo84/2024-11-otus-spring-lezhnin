@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.domain.exception.EntityNotFoundException;
+import ru.otus.hw.domain.model.Book;
 import ru.otus.hw.domain.model.Comment;
 import ru.otus.hw.mapper.CommentMapper;
 import ru.otus.hw.persistence.model.BookEntity;
@@ -32,16 +33,16 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.map(commentRepository.findByBookId(bookId));
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public Comment findById(long id) {
-        return commentMapper.map(commentRepository.findById(id).orElseThrow(() ->
-            new EntityNotFoundException("Comment with id %d not found", id)));
+    public Optional<Comment> findById(long id) {
+        return commentRepository.findById(id).map(commentMapper::map);
     }
 
     @Transactional
     @Override
     public Comment save(@Valid @NotNull(message = "{comment.notEmpty}") Comment comment) {
-        long bookId = Optional.ofNullable(comment.getBook()).map(BookEntity::getId)
+        long bookId = Optional.ofNullable(comment.getBook()).map(Book::getId)
             .orElseThrow(() -> new IllegalArgumentException("Book id is null"));
         BookEntity book = bookRepository.findById(bookId)
             .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found", bookId));

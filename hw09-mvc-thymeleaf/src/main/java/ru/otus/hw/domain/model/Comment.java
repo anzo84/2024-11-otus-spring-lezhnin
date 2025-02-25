@@ -1,11 +1,12 @@
 package ru.otus.hw.domain.model;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.otus.hw.persistence.model.BookEntity;
 
 @Data
+@AllArgsConstructor
 public class Comment {
 
     private Long id;
@@ -13,6 +14,6 @@ public class Comment {
     @Size(min = 1, max = 255, message = "{comment.contentSizeValid}")
     private String content;
 
-    @NotEmpty(message = "{comment.bookNotEmpty}")
-    private BookEntity book;
+    @NotNull(message = "{comment.bookNotEmpty}")
+    private Book book;
 }

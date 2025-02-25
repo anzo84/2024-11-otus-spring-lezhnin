@@ -7,26 +7,26 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.domain.service.AuthorService;
-import ru.otus.hw.domain.service.AuthorServiceImpl;
-import ru.otus.hw.persistence.model.AuthorEntity;
+import ru.otus.hw.domain.model.Genre;
+import ru.otus.hw.domain.service.GenreService;
+import ru.otus.hw.domain.service.GenreServiceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
-@DisplayName("Интегро тест сервиса авторов")
-@Import({AuthorServiceImpl.class})
-class AuthorEntityServiceTest {
+@DisplayName("Интегро тест сервиса жанров")
+@Import({GenreServiceImpl.class})
+class GenreServiceTest {
 
     @Autowired
-    private AuthorService authorService;
+    private GenreService genreService;
 
     @Test
     public void shouldReturnAllGenres() {
-        /* assertThat(authorService.findAll())
+        assertThat(genreService.findAll())
             .isNotEmpty()
-            .map(AuthorEntity::getFullName)
-            .contains("Author_1", "Author_2", "Author_3"); */
+            .map(Genre::getName)
+            .contains("Genre_1", "Genre_2", "Genre_3", "Genre_4", "Genre_5", "Genre_6");
     }
 }
