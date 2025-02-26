@@ -1,0 +1,19 @@
+spring:
+  data:
+    mongodb:
+      port: 27017
+      database: otus-hw08
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+  shell:
+    history:
+      enabled: false
+logging:
+  level:
+    root: info
