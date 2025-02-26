@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--/* Блок пункта меню
+    title - текст ссылки
+    path - путь страницы
+    imgClass - стиль изображения пункта меню
+ */-->
+<th:block th:fragment="menuItem(title, path, imgClass, itemClass)">
+    <li class="nav-item" th:classappend="${itemClass}">
+        <a th:class="${#requestURI == path} ? 'nav-link active' : 'nav-link'"
+           th:href="@{${path}}" >
+            <i th:class="'nav-icon '+${imgClass}"></i>
+            <p th:text="${title}"></p>
+        </a>
+    </li>
+</th:block>
+
+
+<!--/* Блок хлебные крошки
+    title - текст
+ */-->
+<th:block th:fragment="contentHeader(title)">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 th:text="${title}"></h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/" th:text="#{common.home}"></a></li>
+                        <li class="breadcrumb-item active" th:text="${title}"></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>
+
+<th:block th:fragment="contentHeaderBreadCrumb(title, breadCrumb)">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 th:text="${title}"></h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/" th:text="#{common.home}"></a></li>
+                        <th:block th:each="item: ${breadCrumb}">
+                            <li class="breadcrumb-item"><a th:href="${item.value}" th:text="${#messages.msg(item.key)}"></a></li>
+                        </th:block>
+                        <li class="breadcrumb-item active" th:text="${title}"></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>
+
+<!--/* Блок ячейка dashboard
+    title - Заголовок
+    description - Описание
+    fontawesomeName - fontawesome класс изображения
+    backGroundClass - bootstrap класс стиля карточек (bg-primary,bg-secondary,bg-success,bg-danger,bg-warning,bg-info,
+                                                      bg-light,bg-dark,bg-white)
+    path - Путь перехода
+ */-->
+<th:block th:fragment="dashboardItem(title, description, fontawesomeName, backGroundClass, path)">
+    <div class="col-lg-3 col-6">
+        <div th:class="'small-box '+${backGroundClass}">
+            <div class="inner">
+                <h3 th:text="${title}"></h3>
+                <p th:text="${description}"></p>
+            </div>
+            <div class="icon">
+                <i th:class="'fas '+${fontawesomeName}"></i>
+            </div>
+            <a class="small-box-footer" th:href="@{${path}}">
+                <span th:text="#{common.goTo}"></span>
+                <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+</th:block>
+
+<!--/* Блок ячейка таблицы справочника с кнопками редактировать
+    name - подпуть для сущности
+    id - идентификатор объекта
+ */-->
+<th:block th:fragment="editDeleteCell(name, id)">
+    <a class="btn btn-primary" role="button" th:href="${'/' + name + '/save?id='+id}">
+        <span th:text="#{common.edit}"></span></a>
+    <a class="btn btn-danger" role="button" th:href="${'/' + name + '/delete?id='+id}">
+        <span th:text="#{common.delete}"></span></a>
+</th:block>
+
+<!--/* Блок кнопка создания сущности
+    link - путь перехода
+    caption - текст кнопки
+ */-->
+<th:block th:fragment="newObjBtn(link, caption)">
+    <a class="btn btn-success my-2" role="button" th:href="${link}">
+        <span th:text="${caption}"></span>
+    </a>
+</th:block>
+
+</body>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html layout:decorate="~{import/root-layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      lang="ru"
+      th:with="title=${comment.id == null}?#{comment.add}:#{comment.update}">
+<!-- @thymesVar id="comment" type="ru.otus.hw.domain.model.Comment"-->
+<!-- @thymesVar id="breadcrumbs" type="java.util.Map<String,String>"-->
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section th:replace="~{import/nav::contentHeaderBreadCrumb(${title}, ${breadcrumbs})}"></section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div th:if="${#fields.errors('comment.*').size() > 0}" class="alert alert-warning">
+                        <strong th:text="#{common.warning}"></strong>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('comment.*')}" th:text="${err}"/>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title" th:text="${comment.id == null}?#{comment.new}:#{comment.change}"></h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" method="post" th:action="@{/comment/save}" th:object="${comment}">
+                            <input th:field="*{id}" type="hidden"/>
+                            <input name="book" id="book" th:field="*{book.id}" type="hidden"/>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="bookTitle" th:text="#{comment.book}"></label>
+                                    <input class="form-control" id="bookTitle" type="text" th:value="|${comment.book.title} (${comment.book.author.fullName})|" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="content" th:text="#{comment.text}"></label>
+                                    <input class="form-control" id="content"
+                                           th:placeholder="#{comment.text}"
+                                           type="text" th:field="*{content}" required>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button class="btn btn-primary" type="submit"
+                                        th:text="${comment.id == null}?#{common.add}:#{common.save}"></button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
