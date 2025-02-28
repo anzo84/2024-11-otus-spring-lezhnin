@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html layout:decorate="~{import/root-layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      lang="ru"
+      th:with="title=${book.id == null}?#{book.add}:#{book.update}">
+<!-- @thymesVar id="book" type="ru.otus.hw.domain.model.Book"-->
+<!-- @thymesVar id="breadcrumbs" type="java.util.Map<String,String>"-->
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section th:replace="~{import/nav::contentHeaderBreadCrumb(${title}, ${breadcrumbs})}"></section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div th:if="${#fields.errors('book.*').size() > 0}" class="alert alert-warning">
+                        <strong th:text="#{common.warning}"></strong>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('book.*')}" th:text="${err}"/>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title" th:text="${book.id == null}?#{book.new}:#{book.change}"></h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" method="post" th:action="@{/book/save}" th:object="${book}">
+                            <input th:field="*{id}" type="hidden"/>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="title" th:text="#{book.bookTitle}"></label>
+                                    <input class="form-control" id="title"
+                                           th:placeholder="#{book.enterTitle}"
+                                           type="text" th:field="*{title}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="author" th:text="#{book.author}"></label>
+                                    <select class="form-control select2" id="author" name="author" th:field="*{author.id}"
+                                            data-theme="bootstrap4" required>
+                                        <option th:value="${null}" th:text="#{common.notSelected}"></option>
+                                        <option th:each="ath : ${authors}" th:value="${ath.id}" th:text="${ath.fullName}"></option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="genres" th:text="#{book.genres}"></label>
+                                    <select class="form-control select2" id="genres" multiple="multiple" required
+                                            data-theme="bootstrap4" th:attr="data-placeholder=#{book.selectGenre}"
+                                            name="genres" th:field="*{genres}" data-allow-clear="true">
+                                        <option th:each="gn : ${allgenres}" th:value="${{gn}}" th:text="${gn.name}"></option>
+                                    </select>
+                                </div>
+
+
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button class="btn btn-primary" type="submit"
+                                        th:text="${book.id == null}?#{common.add}:#{common.save}"></button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script layout:fragment="script">
+    $(document).ready(function (){
+        $(".select2").select2()
+    });
+</script>
+</body>
+</html>
