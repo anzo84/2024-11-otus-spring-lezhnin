@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html layout:decorate="~{import/root-layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{author.title}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section th:replace="~{import/nav::contentHeader(#{author.title})}"></section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <th:block th:insert="~{import/nav::newObjBtn('/author/save', #{author.add})}"/>
+                            <h5 class="py-3" th:if="${#lists.isEmpty(authors)}" th:text="#{author.empty}"></h5>
+                            <table class="table table-bordered" th:if="${#lists.size(authors)>0}">
+                                <thead>
+                                <tr>
+                                    <th scope="col" style="width: 10px">#</th>
+                                    <th scope="col" class="w-100" th:text="#{author.authorFullName}"></th>
+                                    <th scope="col" class="w-auto"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="ath, iter : ${authors}">
+                                    <td th:text="${iter.count}"></td>
+                                    <td th:text="${ath.fullName}"></td>
+                                    <td class="text-nowrap" th:insert="~{import/nav::editDeleteCell('author', ${ath.id})}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

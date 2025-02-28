@@ -1,0 +1,7 @@
+${AnsiColor.GREEN}     ___      ${AnsiColor.DEFAULT}.__   __.  ________    ______     ___    _  _
+${AnsiColor.GREEN}    /   \     ${AnsiColor.DEFAULT}|  \ |  | |       /   /  __  \   / _ \  | || |
+${AnsiColor.GREEN}   /  ^  \    ${AnsiColor.DEFAULT}|   \|  | `---/  /   |  |  |  | | (_) | | || |_
+${AnsiColor.GREEN}  /  /_\  \   ${AnsiColor.DEFAULT}|  . `  |    /  /    |  |  |  |  > _ <  |__   _|
+${AnsiColor.GREEN} /  _____  \  ${AnsiColor.DEFAULT}|  |\   |   /  /----.|  `--'  | | (_) |    | |
+${AnsiColor.GREEN}/__/     \__\ ${AnsiColor.DEFAULT}|__| \__|  /________| \______/   \___/     |_|
+-------- ${application.title} ${AnsiColor.BRIGHT_YELLOW}${application.version}${AnsiColor.DEFAULT} --------

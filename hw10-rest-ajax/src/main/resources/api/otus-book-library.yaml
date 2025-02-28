@@ -1,0 +1,759 @@
+openapi: 3.1.0
+info:
+  title: API для библиотеки
+  description: API для управления авторами, жанрами, книгами, комментариями и метриками
+  version: 1.0.0
+tags:
+  - name: Authors
+    description: Операции для работы с авторами
+  - name: Genres
+    description: Операции для работы с жанрами
+  - name: Books
+    description: Операции для работы с книгами
+  - name: Comments
+    description: Операции для работы с комментариями
+  - name: Metrics
+    description: Операции для работы с метриками
+paths:
+  /authors/{id}:
+    get:
+      tags:
+        - Authors
+      summary: Получить автора по ID
+      description: Возвращает автора по его идентификатору.
+      operationId: getAuthorById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор автора
+      responses:
+        '200':
+          description: Автор найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '404':
+          description: Автор не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Автор с ID 123 не найден
+    put:
+      tags:
+        - Authors
+      summary: Обновить автора
+      description: Обновляет существующего автора.
+      operationId: updateAuthor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор автора
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAuthorRequest'
+      responses:
+        '200':
+          description: Автор успешно сохранен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Некорректные данные автора
+    delete:
+      tags:
+        - Authors
+      summary: Удалить автора по ID
+      description: Удаляет автора по его идентификатору.
+      operationId: deleteAuthor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор автора
+      responses:
+        '204':
+          description: Автор успешно удален
+        '404':
+          description: Автор не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Автор с ID 123 не найден
+  /authors:
+    get:
+      tags:
+        - Authors
+      summary: Получить всех авторов
+      description: Возвращает список всех авторов.
+      operationId: getAllAuthors
+      responses:
+        '200':
+          description: Список авторов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+    post:
+      tags:
+        - Authors
+      summary: Создать автора
+      description: Создает нового автора.
+      operationId: createAuthor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+      responses:
+        '200':
+          description: Автор успешно сохранен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Некорректные данные автора
+
+  /genres/{id}:
+    get:
+      tags:
+        - Genres
+      summary: Получить жанр по ID
+      description: Возвращает жанр по его идентификатору.
+      operationId: getGenreById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор жанра
+      responses:
+        '200':
+          description: Жанр найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        '404':
+          description: Жанр не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Жанр с ID 123 не найден
+    put:
+      tags:
+        - Genres
+      summary: Обновить жанр
+      description: Обновляет существующий жанр.
+      operationId: updateGenre
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор жанра
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGenreRequest'
+      responses:
+        '200':
+          description: Жанр успешно сохранен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        '400':
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Некорректные данные жанра
+    delete:
+      tags:
+        - Genres
+      summary: Удалить жанр по ID
+      description: Удаляет жанр по его идентификатору.
+      operationId: deleteGenre
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор жанра
+      responses:
+        '204':
+          description: Жанр успешно удален
+        '404':
+          description: Жанр не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Жанр с ID 123 не найден
+  /genres:
+    get:
+      tags:
+        - Genres
+      summary: Получить все жанры
+      description: Возвращает список всех жанров.
+      operationId: getAllGenres
+      responses:
+        '200':
+          description: Список жанров
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genre'
+    post:
+      tags:
+        - Genres
+      summary: Создать жанр
+      description: Создает новый жанр.
+      operationId: createGenre
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genre'
+      responses:
+        '200':
+          description: Жанр успешно сохранен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        '400':
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Некорректные данные жанра
+
+  /books/{id}:
+    get:
+      tags:
+        - Books
+      summary: Получить книгу по ID
+      description: Возвращает книгу по ее идентификатору.
+      operationId: getBookById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор книги
+      responses:
+        '200':
+          description: Книга найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Книга не найдена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Книга с ID 123 не найдена
+    put:
+      tags:
+        - Books
+      summary: Обновить книгу
+      description: Обновляет существующую книгу.
+      operationId: updateBook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор книги
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBookRequest'
+      responses:
+        '200':
+          description: Книга успешно сохранена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Некорректные данные книги
+    delete:
+      tags:
+        - Books
+      summary: Удалить книгу по ID
+      description: Удаляет книгу по ее идентификатору.
+      operationId: deleteBook
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор книги
+      responses:
+        '204':
+          description: Книга успешно удалена
+        '404':
+          description: Книга не найдена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Книга с ID 123 не найдена
+  /books:
+    get:
+      tags:
+        - Books
+      summary: Получить все книги
+      description: Возвращает список всех книг.
+      operationId: getAllBooks
+      responses:
+        '200':
+          description: Список книг
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    post:
+      tags:
+        - Books
+      summary: Создать книгу
+      description: Создает новую книгу.
+      operationId: createBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Книга успешно сохранена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Некорректные данные книги
+
+  /comments/{id}:
+    get:
+      tags:
+        - Comments
+      summary: Получить комментарий по ID
+      description: Возвращает комментарий по его идентификатору.
+      operationId: getCommentById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор комментария
+      responses:
+        '200':
+          description: Комментарий найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '404':
+          description: Комментарий не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Комментарий с ID 123 не найден
+    put:
+      tags:
+        - Comments
+      summary: Обновить комментарий
+      description: Обновляет существующий комментарий.
+      operationId: updateComment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор комментария
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCommentRequest'
+      responses:
+        '200':
+          description: Комментарий успешно сохранен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Некорректные данные комментария
+    delete:
+      tags:
+        - Comments
+      summary: Удалить комментарий по ID
+      description: Удаляет комментарий по его идентификатору.
+      operationId: deleteComment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Идентификатор комментария
+      responses:
+        '204':
+          description: Комментарий успешно удален
+        '404':
+          description: Комментарий не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Комментарий с ID 123 не найден
+  /comments:
+    get:
+      tags:
+        - Comments
+      summary: Получить все комментарии
+      description: Возвращает список всех комментариев.
+      operationId: getAllComments
+      responses:
+        '200':
+          description: Список комментариев
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+    post:
+      tags:
+        - Comments
+      summary: Создать комментарий
+      description: Создает новый комментарий.
+      operationId: createComment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '200':
+          description: Комментарий успешно сохранен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: Некорректный запрос
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Некорректные данные комментария
+
+  /metrics:
+    get:
+      tags:
+        - Metrics
+      summary: Получить метрики
+      description: Возвращает список метрик (количество книг, авторов, жанров и комментариев).
+      operationId: getMetrics
+      responses:
+        '200':
+          description: Список метрик
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Metric'
+
+components:
+  schemas:
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор автора
+          example: 1
+        fullName:
+          type: string
+          description: Полное имя автора
+          minLength: 1
+          maxLength: 255
+          example: Лев Толстой
+      required:
+        - fullName
+    UpdateAuthorRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+          description: Полное имя автора
+          minLength: 1
+          maxLength: 255
+          example: Лев Толстой
+      required:
+        - fullName
+
+    Genre:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор жанра
+          example: 1
+        name:
+          type: string
+          description: Название жанра
+          minLength: 1
+          maxLength: 255
+          example: Фантастика
+      required:
+        - name
+    UpdateGenreRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Название жанра
+          minLength: 1
+          maxLength: 255
+          example: Фантастика
+      required:
+        - name
+
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор книги
+          example: 1
+        title:
+          type: string
+          description: Название книги
+          minLength: 1
+          maxLength: 255
+          example: 1984
+        author:
+          $ref: '#/components/schemas/Author'
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+          description: Список жанров книги
+      required:
+        - title
+        - author
+        - genres
+    UpdateBookRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Название книги
+          minLength: 1
+          maxLength: 255
+          example: 1984
+        author:
+          $ref: '#/components/schemas/Author'
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+          description: Список жанров книги
+      required:
+        - title
+        - author
+        - genres
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор комментария
+          example: 1
+        content:
+          type: string
+          description: Содержание комментария
+          minLength: 1
+          maxLength: 255
+          example: Отличная книга!
+        book:
+          $ref: '#/components/schemas/Book'
+      required:
+        - content
+        - book
+    UpdateCommentRequest:
+      type: object
+      properties:
+        content:
+          type: string
+          description: Содержание комментария
+          minLength: 1
+          maxLength: 255
+          example: Отличная книга!
+        book:
+          $ref: '#/components/schemas/Book'
+      required:
+        - content
+        - book
+
+    Metric:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Название метрики
+          enum:
+            - bookCount
+            - authorCount
+            - genreCount
+            - commentCount
+          example: bookCount
+        value:
+          type: integer
+          description: Значение метрики
+          example: 42
+      required:
+        - name
+        - value
