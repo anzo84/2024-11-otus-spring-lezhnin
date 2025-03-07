@@ -1,0 +1,10 @@
+include mixines
+aside.main-sidebar.sidebar-dark-primary.elevation-4(style="overflow-x:hidden;")
+    .sidebar
+        nav.mt-2
+            ul.nav.nav-pills.nav-sidebar.flex-column(data-accordion="false", data-widget="treeview", role="menu")
+                +menuItem('Главная', '/home', true, 'fa-house')
+                +menuItem('Жанры', '/genre', false, 'fa-folder-tree')
+                +menuItem('Авторы', '/author', false, 'fa-people-group')
+                +menuItem('Книги', '/book', false, 'fa-book')
+                +menuItem('Комментарии', '/comment', false, 'fa-comments')

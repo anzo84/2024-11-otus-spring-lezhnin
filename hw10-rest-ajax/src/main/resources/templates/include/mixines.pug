@@ -1,0 +1,97 @@
+//-
+    Блок пункта меню
+    title - текст ссылки
+    path - путь страницы
+    imgClass - стиль изображения пункта меню
+    active - признак активного пункта меню
+mixin menuItem(title, path, active, imgClass)
+    li.nav-item
+        a.nav-link(class=active ? "active" : "")
+            i.nav-icon.fas(class=imgClass)
+            p= title
+
+//-
+    Блок ячейка dashboard
+    title - Заголовок
+    description - Описание
+    fontawesomeName - fontawesome класс изображения
+    backGroundClass - bootstrap класс стиля карточек (bg-primary,bg-secondary,bg-success,bg-danger,bg-warning,bg-info,
+                                                      bg-light,bg-dark,bg-white)
+    path - Путь перехода
+mixin dashboardItem(title, description, fontawesomeName, backGroundClass, path)
+    .col-lg-3.col-6
+        .small-box(class=backGroundClass)
+            .inner
+                h3= title
+                p= description
+            .icon
+                i.fas(class=fontawesomeName)
+            a.small-box-footer(href=path)
+                span Перейти
+                i.fas.fa-arrow-circle-right
+
+mixin actionDialogButton(dialogId, action, captionAndTitle, param)
+    button.btn.btn-success.my-2(
+        id=`actionBtn-${dialogId}`
+        type="button"
+        data-toggle="modal"
+        data-target=`#${dialogId}`
+        data-action=action
+        data-title=captionAndTitle
+        data-param=param
+    )
+        span
+            if block
+                block
+            else
+                = captionAndTitle
+//-
+    Вывод информации о пустом списке сущностей
+mixin emptyInfo(emptyId)
+    h5.py-3(id=emptyId)
+        if block
+            block
+        else
+            | EMPTY
+
+mixin cardRow
+    div.row
+        div.col-md-12
+            div.card
+                div.card-body
+                    if block
+                        block
+
+mixin tableItems(bodyId, editCaption, deleteCaption, editAction, deleteAction)
+    table.table.table-bordered
+        thead
+            tr
+                if block
+                    block
+        tbody(id=bodyId
+            data-edit-title=editCaption
+            data-delete-title=deleteCaption
+            data-edit-action=editAction
+            data-delete-action=deleteAction)
+
+mixin modalDialog(dialogId, saveAction, closeTitle, saveTitle)
+    .modal.fade(id=dialogId tabindex="-1" aria-labelledby=`${dialogId}Label` aria-hidden="true")
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    h5.modal-title(id=`${dialogId}Label`) Modal dialog
+                    button(type="button" class="close" data-dismiss="modal" aria-label=closeTitle)
+                        span(aria-hidden=true) &times;
+                .modal-body
+                    if block
+                        block
+                    else
+                        p(id=`${dialogId}Content`) Empty dialog
+                .modal-footer
+                    button(type="button" class="btn btn-secondary" data-dismiss="modal")= closeTitle
+                    button(id=`${dialogId}Close` type="button" class="btn btn-primary" data-action=saveAction)= saveTitle
+    script.
+        $('#'+"#{dialogId}").on('show.bs.modal', function (e) {
+        let title = $("#"+e.relatedTarget.id).data("title");
+        $('#'+"#{dialogId}Label").text(title);
+        });
