@@ -1,10 +1,7 @@
 include mixines
-aside.main-sidebar.sidebar-dark-primary.elevation-4(style="overflow-x:hidden;")
-    .sidebar
-        nav.mt-2
-            ul.nav.nav-pills.nav-sidebar.flex-column(data-accordion="false", data-widget="treeview", role="menu")
-                +menuItem('Главная', '/home', true, 'fa-house')
-                +menuItem('Жанры', '/genre', false, 'fa-folder-tree')
-                +menuItem('Авторы', '/author', false, 'fa-people-group')
-                +menuItem('Книги', '/book', false, 'fa-book')
-                +menuItem('Комментарии', '/comment', false, 'fa-comments')
++menu
+    +menuItem($.msg('common.home'), '/home', 'fa-house')
+    +menuItem($.msg('genre.title'), '/genre', 'fa-folder-tree')
+    +menuItem($.msg('author.title'), '/author', 'fa-people-group')
+    +menuItem($.msg('book.title'), '/book', 'fa-book')
+    +menuItem($.msg('comment.title'), '/comment', 'fa-comments')

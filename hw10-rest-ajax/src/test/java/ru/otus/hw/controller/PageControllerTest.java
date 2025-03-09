@@ -9,9 +9,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(GenreController.class)
+@WebMvcTest(PageController.class)
 @DisplayName("Тесты контроллера раздела 'Жанры'")
-public class GenreControllerTest {
+public class PageControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

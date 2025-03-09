@@ -2,18 +2,11 @@ include include/mixines
 extends include/layout
 block content
     script(src="/js/genre.bundle.js")
-    section.content
-        .container-fluid
-            +cardRow
-                +actionDialogButton('saveDialog', 'newGenreAction', 'Добавить новый жанр')
-                +emptyInfo('emptyInfo') Список жанров пуст
-                +tableItems('genreList', 'Редактировать жанр', 'Удалить жанр', 'editGenreAction', 'deleteGenreAction')
-                    th(scope="col" style="width: 14px") #
-                    th.w-100(scope="col") Название жанра
-                    th.w-auto(scope="col")
-    +modalDialog('saveDialog', 'saveGenreAction', 'Закрыть', 'Сохранить изменения')
-        form(role="form")
-            input#genreId(type="hidden")
-            .form-group
-                label(for="genreName") Название жанра
-                input.form-control#genreName(type="text" placeholder="Введите название жанра" required=true)
+    +gridPanel
+        +greenBtn('saveDialog', 'newGenreAction', $.msg("genre.add"))
+        +empty('emptyInfo')= $.msg("genre.empty")
+        +grid('genreList', $.msg("genre.update"), $.msg("genre.delete"), 'editGenreAction', 'deleteGenreAction')
+            +column100= $.msg("genre.genreName")
+    +formDialog('saveDialog', 'saveGenreAction', $.msg("common.close"), $.msg("common.save"))
+        +formHidden('genreId')
+        +formField('genreName', $.msg("genre.genreName"), $.msg("genre.enterName"))

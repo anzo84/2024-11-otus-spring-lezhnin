@@ -3,8 +3,10 @@ const webpack = require('webpack'); // Добавьте эту строку
 
 module.exports = {
     entry: {
+        home: './src/main/js/home.js',
         book: './src/main/js/book.js',
-        genre: './src/main/js/genre.js'
+        genre: './src/main/js/genre.js',
+        author: './src/main/js/author.js'
     },
     output: {
         filename: '[name].bundle.js',

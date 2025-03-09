@@ -18,8 +18,8 @@ import 'admin-lte/dist/js/adminlte.min.js';
 import '@fortawesome/fontawesome-free/js/all.min.js';
 import 'select2/dist/js/select2.full.min'
 
-import updateGenreRequest from "otus-book-library/src/model/UpdateGenreRequest";
-import genre from "otus-book-library/src/model/Genre";
+import updateAuthorRequest from "otus-book-library/src/model/UpdateAuthorRequest";
+import author from "otus-book-library/src/model/Author";
 
 // Инициализация AdminLTE
 $(function () {
@@ -27,13 +27,13 @@ $(function () {
 });
 
 const OtusBookLibraryApiClient = require('api__');
-const api = new OtusBookLibraryApiClient.GenresApi();
+const api = new OtusBookLibraryApiClient.AuthorsApi();
 
-async function reloadGenreList(tableBodyId, editDialogId) {
+async function reloadAuthorList(tableBodyId, editDialogId) {
     try {
         let tableBody = $("#" + tableBodyId);
-        const genres = await api.getAllGenres();
-        if (Array.isArray(genres) && genres.length === 0) {
+        const authors = await api.getAllAuthors();
+        if (Array.isArray(authors) && authors.length === 0) {
             $('#emptyInfo').show();
             tableBody.parent().hide();
         } else {
@@ -42,7 +42,7 @@ async function reloadGenreList(tableBodyId, editDialogId) {
             tableBody.empty();
 
             let i = 1;
-            genres.forEach(genre => {
+            authors.forEach(author => {
                 const newRow = $("<tr>");
                 const buttonEdit = $("<button>")
                     .attr("id", "edit" + tableBodyId + i)
@@ -51,7 +51,7 @@ async function reloadGenreList(tableBodyId, editDialogId) {
                     .attr("data-target", "#" + editDialogId)
                     .attr("data-action", tableBody.data("edit-action"))
                     .attr("data-title", tableBody.data("edit-title"))
-                    .attr("data-param", genre.id)
+                    .attr("data-param", author.id)
                     .attr("title", tableBody.data("edit-title"))
                     .addClass("btn btn-primary")
                     .append($("<span>")
@@ -63,14 +63,14 @@ async function reloadGenreList(tableBodyId, editDialogId) {
                     .attr("role", "button")
                     .attr("title", tableBody.data("delete-title"))
                     .attr("data-action", tableBody.data("delete-action"))
-                    .attr("data-param", genre.id)
+                    .attr("data-param", author.id)
                     .append($("<span>")
                         .addClass("fas")
                         .addClass("fa-trash-can"));
 
                 newRow.append(
                     $("<td>").text(i++),
-                    $("<td>").text(genre.name),
+                    $("<td>").text(author.fullName),
                     $("<td>")
                         .addClass("text-nowrap p-1")
                         .append(buttonEdit)
@@ -85,7 +85,7 @@ async function reloadGenreList(tableBodyId, editDialogId) {
 }
 
 function reload() {
-    reloadGenreList("genreList", "saveDialog").then();
+    reloadAuthorList("authorList", "saveDialog").then();
 }
 
 $(document).ready(function () {
@@ -94,33 +94,33 @@ $(document).ready(function () {
 
 $('body').on('click', 'button', function () {
     let action = $(this).data("action");
-    if (action === "deleteGenreAction") {
-        api.deleteGenre(Number.parseInt($(this).data("param")))
+    if (action === "deleteAuthorAction") {
+        api.deleteAuthor(Number.parseInt($(this).data("param")))
             .then(() => {
                 reload();
             });
-    } else if (action === "editGenreAction") {
+    } else if (action === "editAuthorAction") {
         const id = Number.parseInt($(this).data("param"));
-        api.getGenreById(id).then(genre => {
-            $('#genreId').val(id);
-            $('#genreName').val(genre.name);
+        api.getAuthorById(id).then(author => {
+            $('#authorId').val(id);
+            $('#authorFullName').val(author.fullName);
         });
-    } else if (action === "newGenreAction") {
-        $('#genreId').val(0);
-        $('#genreName').val("");
-    } else if (action === "saveGenreAction") {
-        let id = Number.parseInt($('#genreId').val());
-        let name = $('#genreName').val();
+    } else if (action === "newAuthorAction") {
+        $('#authorId').val(0);
+        $('#authorFullName').val("");
+    } else if (action === "saveAuthorAction") {
+        let id = Number.parseInt($('#authorId').val());
+        let name = $('#authorFullName').val();
         const request = id === 0
-            ? api.createGenre(new genre(name))
-            : api.updateGenre(id, new updateGenreRequest(name));
+            ? api.createAuthor(new author(name))
+            : api.updateAuthor(id, new updateAuthorRequest(name));
         request
             .then(() => {
                 reload();
                 $('#saveDialog').modal('hide');
             })
             .catch(error => {
-                console.error("Ошибка при сохранении жанра:", error);
+                console.error("Ошибка при сохранении автора:", error);
                 alert(error);
             });
     }

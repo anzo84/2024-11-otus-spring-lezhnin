@@ -755,6 +755,7 @@ components:
           example: bookCount
         value:
           type: integer
+          format: int64
           description: Значение метрики
           example: 42
       required:
