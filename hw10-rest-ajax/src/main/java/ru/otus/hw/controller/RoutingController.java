@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequiredArgsConstructor
-public class PageController {
+public class RoutingController {
 
     @GetMapping("home")
     public String homePage() {
@@ -20,21 +20,21 @@ public class PageController {
 
     @GetMapping("genre")
     public String genreList() {
-        return "genre-list";
+        return "genre";
     }
 
     @GetMapping("author")
     public String authorList() {
-        return "author-list";
+        return "author";
     }
 
     @GetMapping("book")
     public String bookList() {
-        return "book-list";
+        return "book";
     }
 
     @GetMapping("comment")
     public String commentList() {
-        return "comment-list";
+        return "comment";
     }
 }
