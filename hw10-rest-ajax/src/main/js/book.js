@@ -12,7 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'admin-lte/dist/css/adminlte.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'select2/dist/css/select2.min.css';
-import 'select2-theme-bootstrap4/dist/select2-bootstrap.min.css';
+import '@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css'
 import 'admin-lte/dist/js/adminlte.min.js';
 import '@fortawesome/fontawesome-free/js/all.min.js';
 import './style.css';
@@ -120,7 +120,9 @@ function loadGenres() {
 }
 
 $(document).ready(function () {
-    $(".select2").select2();
+    $(".select2").select2({
+        dropdownParent: $('#saveDialog')
+    });
     reload();
     loadAuthors();
     loadGenres();
@@ -138,24 +140,17 @@ $('body').on('click', 'button', function () {
         booksApi.getBookById(id).then(book => {
             $('#bookId').val(book.id);
             $('#bookTitle').val(book.title);
-            $('#bookAuthor').val(book.author.id).trigger('change');
-
-            let bookGenres = $("#bookGenres");
-            bookGenres.val("");
-            book.genres.forEach(genre => {
-                $('#bookGenres option[value="' + genre.id + '"]').prop('selected', true);
-            });
-            bookGenres.trigger('change');
+            $('#bookAuthor').val(book.author.id).change();
+            $("#bookGenres").val(book.genres.map(g => g.id)).change();
         });
     } else if (action === "newBookAction") {
         $("#bookId").val(0);
-        $("#bookTitle, #bookAuthor, #bookGenres").val("").trigger('change');
+        $("#bookTitle, #bookAuthor, #bookGenres").val("").change();
     } else if (action === "saveBookAction") {
         const id = Number.parseInt($('#bookId').val());
         const title = $('#bookTitle').val();
-        const author = {"id": $('#bookAuthor').val(), "fullName":"_"};
-        const genres = $('#bookGenres').val().map(i => ({ id : i, name : "_" }));
-
+        const author = {"id": $('#bookAuthor').val(), "fullName": "_"};
+        const genres = $('#bookGenres').val().map(i => ({id: i, name: "_"}));
         const request = id === 0
             ? booksApi.createBook(new book(title, author, genres))
             : booksApi.updateBook(id, new updateBookRequest(title, author, genres));

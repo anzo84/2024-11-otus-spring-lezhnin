@@ -3,12 +3,13 @@ extends include/layout
 block content
     script(src="/js/comment.bundle.js")
     +gridPanel
-        form(role="form" id=)
-            label(for="book")= $.msg("comment.selectBook")
-            select.form-control.select2(required,
-                id="book",
-                data-theme="bootstrap4",
-                data-not-selected=$.msg("common.notSelected"))
+        form(role="form" id="selectBookForm")
+            .form-group
+                label(for="book")= $.msg("comment.selectBook")
+                select.form-control.select2(required,
+                    id="book",
+                    data-theme="bootstrap4",
+                    data-not-selected=$.msg("common.notSelected"))
         +empty('emptyBooksInfo')= $.msg("comment.bookListEmpty")
         +empty('emptyCommentsInfo')= $.msg("comment.empty")
         +greenBtn('saveDialog', 'newCommentAction', $.msg("comment.add"))

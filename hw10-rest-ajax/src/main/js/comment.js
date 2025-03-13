@@ -12,7 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'admin-lte/dist/css/adminlte.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'select2/dist/css/select2.min.css';
-import 'select2-theme-bootstrap4/dist/select2-bootstrap.min.css';
+import '@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css'
 import 'admin-lte/dist/js/adminlte.min.js';
 import '@fortawesome/fontawesome-free/js/all.min.js';
 import './style.css';
@@ -37,13 +37,14 @@ function loadBooks() {
 
         $('#emptyCommentsInfo').hide();
         $('#commentList').parent().hide();
+        $('#actionBtn-saveDialog').hide();
 
         if (Array.isArray(books) && books.length === 0) {
             $('#emptyBooksInfo').show();
-            $('#actionBtn-saveDialog').hide();
+            $('#selectBookForm').hide();
         } else {
             $('#emptyBooksInfo').hide();
-            $('#actionBtn-saveDialog').show();
+            $('#selectBookForm').show();
             books.forEach(book => {
                 bookSelect
                     .append($("<option>")
@@ -54,7 +55,14 @@ function loadBooks() {
     });
 
     bookSelect.on("change", function () {
-        reloadCommentList(this.value, "commentList", "saveDialog").then();
+        if (this.value === "0") {
+            $('#actionBtn-saveDialog').hide();
+            $('#emptyBooksInfo').hide();
+            $("#commentList").parent().hide();
+        } else {
+            $('#actionBtn-saveDialog').show();
+            reloadCommentList(this.value, "commentList", "saveDialog").then();
+        }
     });
 }
 
@@ -125,7 +133,7 @@ $('body').on('click', 'button', function () {
     if (action === "deleteCommentAction") {
         commentsApi.deleteComment(Number.parseInt($(this).data("param")))
             .then(() => {
-                $("#book").trigger('change');
+                $("#book").change();
             });
     } else if (action === "editCommentAction") {
         const id = Number.parseInt($(this).data("param"));
@@ -145,7 +153,7 @@ $('body').on('click', 'button', function () {
                 : commentsApi.updateComment(id, new updateCommentRequest(content, book));
             request
                 .then(() => {
-                    $("#book").trigger('change');
+                    $("#book").change();
                     $('#saveDialog').modal('hide');
                 })
                 .catch(error => {
