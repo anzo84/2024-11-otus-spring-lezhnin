@@ -7,7 +7,8 @@ module.exports = {
         home: './src/main/js/home.js',
         book: './src/main/js/book.js',
         genre: './src/main/js/genre.js',
-        author: './src/main/js/author.js'
+        author: './src/main/js/author.js',
+        comment: './src/main/js/comment.js'
     },
     output: {
         filename: '[name].bundle.js',
