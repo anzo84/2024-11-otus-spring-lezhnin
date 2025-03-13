@@ -4,27 +4,16 @@ import $ from 'jquery';
 window.$ = $;
 window.jQuery = $;
 
-// Импорт Bootstrap
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-// Импорт AdminLTE
 import 'admin-lte/dist/css/adminlte.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'select2/dist/css/select2.min.css'
 import './style.css';
-
 import 'admin-lte/dist/js/adminlte.min.js';
 import '@fortawesome/fontawesome-free/js/all.min.js';
-import 'select2/dist/js/select2.full.min'
 
 import updateGenreRequest from "otus-book-library/src/model/UpdateGenreRequest";
 import genre from "otus-book-library/src/model/Genre";
-
-// Инициализация AdminLTE
-$(function () {
-    $('[data-widget="pushmenu"]').PushMenu('toggle')
-});
 
 const OtusBookLibraryApiClient = require('api__');
 const api = new OtusBookLibraryApiClient.GenresApi();

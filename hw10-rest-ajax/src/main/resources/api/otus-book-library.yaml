@@ -544,9 +544,17 @@ paths:
     get:
       tags:
         - Comments
-      summary: Получить все комментарии
-      description: Возвращает список всех комментариев.
+      summary: Получить все комментарии для книги
+      description: Возвращает список комментариев для книги
       operationId: getAllComments
+      parameters:
+        - name: bookId
+          in: query
+          description: Идентификатор книги для фильтрации комментариев
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
           description: Список комментариев

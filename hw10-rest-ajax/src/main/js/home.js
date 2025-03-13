@@ -12,11 +12,6 @@ import './style.css';
 import 'admin-lte/dist/js/adminlte.min.js';
 import '@fortawesome/fontawesome-free/js/all.min.js';
 
-// Инициализация AdminLTE
-$(function () {
-    $('[data-widget="pushmenu"]').PushMenu('toggle')
-});
-
 const OtusBookLibraryApiClient = require('api__');
 const api = new OtusBookLibraryApiClient.MetricsApi();
 

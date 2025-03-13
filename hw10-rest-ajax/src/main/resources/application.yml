@@ -1,3 +1,8 @@
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
 spring:
   datasource:
     driverClassName: org.h2.Driver
@@ -27,8 +32,3 @@ logging:
     root: info
     org.springframework.web: trace
     liquibase: warn
-server:
-  port: 8080
-  error:
-    whitelabel:
-      enabled: false

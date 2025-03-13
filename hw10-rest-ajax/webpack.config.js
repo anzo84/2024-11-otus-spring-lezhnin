@@ -3,6 +3,7 @@ const webpack = require('webpack'); // Добавьте эту строку
 
 module.exports = {
     entry: {
+        error: './src/main/js/error.js',
         home: './src/main/js/home.js',
         book: './src/main/js/book.js',
         genre: './src/main/js/genre.js',

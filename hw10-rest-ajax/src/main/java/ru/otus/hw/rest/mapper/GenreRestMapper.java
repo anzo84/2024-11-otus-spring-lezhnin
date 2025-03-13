@@ -15,5 +15,4 @@ public interface GenreRestMapper {
     ru.otus.hw.domain.model.Genre map(GenreDto genre);
 
     List<ru.otus.hw.domain.model.Genre> map(List<GenreDto> genres);
-
 }
