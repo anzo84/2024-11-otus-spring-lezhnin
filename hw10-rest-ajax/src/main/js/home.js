@@ -12,7 +12,7 @@ import './style.css';
 import 'admin-lte/dist/js/adminlte.min.js';
 import '@fortawesome/fontawesome-free/js/all.min.js';
 
-const OtusBookLibraryApiClient = require('api__');
+const OtusBookLibraryApiClient = require('otus-book-library');
 const api = new OtusBookLibraryApiClient.MetricsApi();
 
 async function reloadMetrics() {

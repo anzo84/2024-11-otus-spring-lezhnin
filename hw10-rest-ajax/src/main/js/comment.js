@@ -20,7 +20,7 @@ import './style.css';
 import updateCommentRequest from "otus-book-library/src/model/UpdateCommentRequest";
 import comment from "otus-book-library/src/model/Comment";
 
-const OtusCommentLibraryApiClient = require('api__');
+const OtusCommentLibraryApiClient = require('otus-book-library');
 const commentsApi = new OtusCommentLibraryApiClient.CommentsApi();
 const booksApi = new OtusCommentLibraryApiClient.BooksApi();
 

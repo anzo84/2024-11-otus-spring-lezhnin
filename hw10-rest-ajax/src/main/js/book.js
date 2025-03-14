@@ -20,7 +20,7 @@ import './style.css';
 import updateBookRequest from "otus-book-library/src/model/UpdateBookRequest";
 import book from "otus-book-library/src/model/Book";
 
-const OtusBookLibraryApiClient = require('api__');
+const OtusBookLibraryApiClient = require('otus-book-library');
 const booksApi = new OtusBookLibraryApiClient.BooksApi();
 const genresApi = new OtusBookLibraryApiClient.GenresApi();
 const authorsApi = new OtusBookLibraryApiClient.AuthorsApi();

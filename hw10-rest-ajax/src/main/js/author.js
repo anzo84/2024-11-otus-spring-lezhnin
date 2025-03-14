@@ -15,7 +15,7 @@ import '@fortawesome/fontawesome-free/js/all.min.js';
 import updateAuthorRequest from "otus-book-library/src/model/UpdateAuthorRequest";
 import author from "otus-book-library/src/model/Author";
 
-const OtusBookLibraryApiClient = require('api__');
+const OtusBookLibraryApiClient = require('otus-book-library');
 const api = new OtusBookLibraryApiClient.AuthorsApi();
 
 async function reloadAuthorList(tableBodyId, editDialogId) {

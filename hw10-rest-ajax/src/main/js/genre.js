@@ -15,7 +15,7 @@ import '@fortawesome/fontawesome-free/js/all.min.js';
 import updateGenreRequest from "otus-book-library/src/model/UpdateGenreRequest";
 import genre from "otus-book-library/src/model/Genre";
 
-const OtusBookLibraryApiClient = require('api__');
+const OtusBookLibraryApiClient = require('otus-book-library');
 const api = new OtusBookLibraryApiClient.GenresApi();
 
 async function reloadGenreList(tableBodyId, editDialogId) {

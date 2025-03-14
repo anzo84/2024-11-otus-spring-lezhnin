@@ -18,7 +18,7 @@
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@ttskch/select2-bootstrap4-theme": "^1.5.2",
     "admin-lte": "^3.2.0",
-    "api__": "file:src/main/js/otus-book-library",
+    "otus-book-library": "file:src/main/js/otus-book-library",
     "bootstrap": "^4.6.0",
     "jquery": "^3.7.1",
     "jquery-ui": "^1.14.1",

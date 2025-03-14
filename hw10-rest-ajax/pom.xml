@@ -28,7 +28,7 @@
         <liquibase-core.version>4.31.0</liquibase-core.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <lombok.version>1.18.36</lombok.version>
-        <openapi-generator-maven-plugin.version>7.10.0</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>7.12.0</openapi-generator-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -264,7 +264,8 @@
                                 <generateSupportingFiles>false</generateSupportingFiles>
                                 <library>spring-boot</library>
                                 <serializationLibrary>jackson</serializationLibrary>
-                                <useJakartaEe>true</useJakartaEe>
+                                <useBeanValidation>true</useBeanValidation>
+                                <useSpringBoot3>true</useSpringBoot3>
                             </configOptions>
                         </configuration>
                     </execution>
@@ -280,7 +281,9 @@
                             <configOptions>
                                 <usePromises>true</usePromises>
                                 <useES6>true</useES6>
+                                <projectName>otus-book-library</projectName>
                                 <moduleName>OtusBookLibraryApiClient</moduleName>
+                                <skipDefaultUserAgent>true</skipDefaultUserAgent>
                             </configOptions>
                         </configuration>
                     </execution>
