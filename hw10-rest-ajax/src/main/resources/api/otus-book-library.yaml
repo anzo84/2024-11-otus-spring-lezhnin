@@ -34,22 +34,18 @@ paths:
             format: int64
           description: Идентификатор автора
       responses:
-        '200':
+        200:
           description: Автор найден
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Author'
-        '404':
-          description: Автор не найден
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Автор с ID 123 не найден
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     put:
       tags:
         - Authors
@@ -71,22 +67,18 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateAuthorRequest'
       responses:
-        '200':
+        200:
           description: Автор успешно сохранен
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Author'
-        '400':
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Некорректные данные автора
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
         - Authors
@@ -102,18 +94,14 @@ paths:
             format: int64
           description: Идентификатор автора
       responses:
-        '204':
+        204:
           description: Автор успешно удален
-        '404':
-          description: Автор не найден
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Автор с ID 123 не найден
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
   /authors:
     get:
       tags:
@@ -122,7 +110,7 @@ paths:
       description: Возвращает список всех авторов.
       operationId: getAllAuthors
       responses:
-        '200':
+        200:
           description: Список авторов
           content:
             application/json:
@@ -130,6 +118,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Author'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     post:
       tags:
         - Authors
@@ -143,22 +133,18 @@ paths:
             schema:
               $ref: '#/components/schemas/Author'
       responses:
-        '200':
+        200:
           description: Автор успешно сохранен
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Author'
-        '400':
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Некорректные данные автора
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /genres/{id}:
     get:
@@ -176,22 +162,18 @@ paths:
             format: int64
           description: Идентификатор жанра
       responses:
-        '200':
+        200:
           description: Жанр найден
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Genre'
-        '404':
-          description: Жанр не найден
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Жанр с ID 123 не найден
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     put:
       tags:
         - Genres
@@ -213,22 +195,18 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateGenreRequest'
       responses:
-        '200':
+        200:
           description: Жанр успешно сохранен
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Genre'
-        '400':
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Некорректные данные жанра
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
         - Genres
@@ -244,18 +222,14 @@ paths:
             format: int64
           description: Идентификатор жанра
       responses:
-        '204':
+        204:
           description: Жанр успешно удален
-        '404':
-          description: Жанр не найден
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Жанр с ID 123 не найден
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
   /genres:
     get:
       tags:
@@ -264,7 +238,7 @@ paths:
       description: Возвращает список всех жанров.
       operationId: getAllGenres
       responses:
-        '200':
+        200:
           description: Список жанров
           content:
             application/json:
@@ -272,6 +246,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Genre'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     post:
       tags:
         - Genres
@@ -285,22 +261,18 @@ paths:
             schema:
               $ref: '#/components/schemas/Genre'
       responses:
-        '200':
+        200:
           description: Жанр успешно сохранен
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Genre'
-        '400':
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Некорректные данные жанра
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /books/{id}:
     get:
@@ -318,22 +290,18 @@ paths:
             format: int64
           description: Идентификатор книги
       responses:
-        '200':
+        200:
           description: Книга найдена
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
-        '404':
-          description: Книга не найдена
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Книга с ID 123 не найдена
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     put:
       tags:
         - Books
@@ -355,22 +323,18 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateBookRequest'
       responses:
-        '200':
+        200:
           description: Книга успешно сохранена
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
-        '400':
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Некорректные данные книги
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
         - Books
@@ -386,18 +350,14 @@ paths:
             format: int64
           description: Идентификатор книги
       responses:
-        '204':
+        204:
           description: Книга успешно удалена
-        '404':
-          description: Книга не найдена
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Книга с ID 123 не найдена
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
   /books:
     get:
       tags:
@@ -406,7 +366,7 @@ paths:
       description: Возвращает список всех книг.
       operationId: getAllBooks
       responses:
-        '200':
+        200:
           description: Список книг
           content:
             application/json:
@@ -414,6 +374,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     post:
       tags:
         - Books
@@ -427,22 +389,18 @@ paths:
             schema:
               $ref: '#/components/schemas/Book'
       responses:
-        '200':
+        200:
           description: Книга успешно сохранена
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
-        '400':
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Некорректные данные книги
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /comments/{id}:
     get:
@@ -460,22 +418,18 @@ paths:
             format: int64
           description: Идентификатор комментария
       responses:
-        '200':
+        200:
           description: Комментарий найден
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
-        '404':
-          description: Комментарий не найден
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Комментарий с ID 123 не найден
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     put:
       tags:
         - Comments
@@ -497,22 +451,18 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateCommentRequest'
       responses:
-        '200':
+        200:
           description: Комментарий успешно сохранен
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
-        '400':
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Некорректные данные комментария
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
         - Comments
@@ -528,18 +478,14 @@ paths:
             format: int64
           description: Идентификатор комментария
       responses:
-        '204':
+        204:
           description: Комментарий успешно удален
-        '404':
-          description: Комментарий не найден
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Комментарий с ID 123 не найден
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
   /comments:
     get:
       tags:
@@ -556,7 +502,7 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        200:
           description: Список комментариев
           content:
             application/json:
@@ -564,6 +510,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Comment'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     post:
       tags:
         - Comments
@@ -577,22 +529,18 @@ paths:
             schema:
               $ref: '#/components/schemas/Comment'
       responses:
-        '200':
+        200:
           description: Комментарий успешно сохранен
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
-        '400':
-          description: Некорректный запрос
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Некорректные данные комментария
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /metrics:
     get:
@@ -610,8 +558,30 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Metric'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
 components:
+  responses:
+    #400
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    #404
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    #500
+    InternalServerError:
+      description: Internal Server Error
   schemas:
     Author:
       type: object
@@ -769,3 +739,10 @@ components:
       required:
         - name
         - value
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Описание ошибки

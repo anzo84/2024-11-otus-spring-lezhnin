@@ -264,8 +264,8 @@
                                 <generateSupportingFiles>false</generateSupportingFiles>
                                 <library>spring-boot</library>
                                 <serializationLibrary>jackson</serializationLibrary>
-                                <useBeanValidation>true</useBeanValidation>
                                 <useSpringBoot3>true</useSpringBoot3>
+                                <useBeanValidation>false</useBeanValidation>
                             </configOptions>
                         </configuration>
                     </execution>

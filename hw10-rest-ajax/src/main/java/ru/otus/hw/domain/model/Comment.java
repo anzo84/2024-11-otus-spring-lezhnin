@@ -14,6 +14,7 @@ public class Comment {
     private Long id;
 
     @Size(min = 1, max = 255, message = "{comment.contentSizeValid}")
+    @NotNull(message = "{comment.contentNotEmpty}")
     private String content;
 
     @NotNull(message = "{comment.bookNotEmpty}")

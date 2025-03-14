@@ -17,6 +17,7 @@ public class Book {
     private Long id;
 
     @Size(min = 1, max = 255, message = "{book.titleSizeValid}")
+    @NotNull(message = "{book.titleNotEmpty}")
     private String title;
 
     @NotNull(message = "{book.authorNotEmpty}")
