@@ -1,30 +1,9 @@
-import 'popper.js';
 import $ from 'jquery';
-import select2 from 'select2';
-
-select2($);
-
-window.$ = $;
-window.jQuery = $;
-
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'admin-lte/dist/css/adminlte.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'select2/dist/css/select2.min.css';
-import '@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css'
-import 'admin-lte/dist/js/adminlte.min.js';
-import '@fortawesome/fontawesome-free/js/all.min.js';
-import './style.css';
+import {genresApi, booksApi, authorsApi} from './include/apiClient';
+import {reloadTable, showAlert} from "./include/common";
 
 import modifyBook from "otus-book-library/src/model/ModifyBook";
 import book from "otus-book-library/src/model/Book";
-import {showAlert, reloadTable} from "./include/common";
-
-const OtusBookLibraryApiClient = require('otus-book-library');
-const booksApi = new OtusBookLibraryApiClient.BooksApi();
-const genresApi = new OtusBookLibraryApiClient.GenresApi();
-const authorsApi = new OtusBookLibraryApiClient.AuthorsApi();
 
 async function reloadBookList(tableBodyId, editDialogId) {
     try {

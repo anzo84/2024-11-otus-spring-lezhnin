@@ -1,29 +1,12 @@
-import 'popper.js';
 import $ from 'jquery';
 import select2 from 'select2';
-
 select2($);
-
-window.$ = $;
-window.jQuery = $;
-
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'admin-lte/dist/css/adminlte.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'select2/dist/css/select2.min.css';
-import '@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css'
-import 'admin-lte/dist/js/adminlte.min.js';
-import '@fortawesome/fontawesome-free/js/all.min.js';
-import './style.css';
-
-import modifyComment from "otus-book-library/src/model/ModifyComment";
-import comment from "otus-book-library/src/model/Comment";
+import {commentsApi, booksApi} from './include/apiClient';
 import {reloadTable, showAlert} from "./include/common";
+import modifyComment from "otus-book-library/src/model/ModifyComment";
 
-const OtusCommentLibraryApiClient = require('otus-book-library');
-const commentsApi = new OtusCommentLibraryApiClient.CommentsApi();
-const booksApi = new OtusCommentLibraryApiClient.BooksApi();
+import comment from "otus-book-library/src/model/Comment";
+window.$ = $;
 
 function loadBooks() {
     const bookSelect = $("#book");
