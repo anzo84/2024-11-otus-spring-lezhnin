@@ -10,7 +10,7 @@ import '@fortawesome/fontawesome-free/js/all.min.js';
 
 import modifyGenre from "otus-book-library/src/model/ModifyGenre";
 import genre from "otus-book-library/src/model/Genre";
-import {createDeleteButton, createEditButton, showAlert} from "./include/common";
+import {reloadTable, showAlert} from "./include/common";
 
 window.$ = $;
 window.jQuery = $;
@@ -20,33 +20,10 @@ const api = new OtusBookLibraryApiClient.GenresApi();
 
 async function reloadGenreList(tableBodyId, editDialogId) {
     try {
-        let tableBody = $("#" + tableBodyId);
         const genres = await api.getAllGenres();
-        if (Array.isArray(genres) && genres.length === 0) {
-            $('#emptyInfo').show();
-            tableBody.parent().hide();
-        } else {
-            $('#emptyInfo').hide();
-            tableBody.parent().show();
-            tableBody.empty();
-
-            let i = 1;
-            genres.forEach(genre => {
-                const newRow = $("<tr>");
-                const buttonEdit = createEditButton(editDialogId, tableBody, genre.id);
-                const buttonDelete = createDeleteButton(tableBody, genre.id);
-
-                newRow.append(
-                    $("<td>").text(i++),
-                    $("<td>").text(genre.name),
-                    $("<td>")
-                        .addClass("text-nowrap p-1")
-                        .append(buttonEdit)
-                        .append(buttonDelete)
-                );
-                tableBody.append(newRow);
-            });
-        }
+        reloadTable(tableBodyId, editDialogId, genres, [
+            genre => genre.name
+        ]);
     } catch (err) {
         console.error("Ошибка:", err);
     }

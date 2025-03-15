@@ -33,3 +33,32 @@ export function showAlert(error) {
         error.body.map(x => x.message).join(";<br>\n") : alert.data("def-message");
     alert.show().html(msg);
 }
+
+export function reloadTable(tableBodyId, editDialogId, data, columns) {
+    const tableBody = $("#" + tableBodyId);
+    if (Array.isArray(data) && data.length === 0) {
+        $('#emptyInfo').show();
+        tableBody.parent().hide();
+    } else {
+        $('#emptyInfo').hide();
+        tableBody.parent().show();
+        tableBody.empty();
+
+        let i = 1;
+        data.forEach(item => {
+            const newRow = $("<tr>");
+            const buttonEdit = createEditButton(editDialogId, tableBody, item.id);
+            const buttonDelete = createDeleteButton(tableBody, item.id);
+
+            const cells = columns.map(column => $("<td>").text(column(item)));
+            cells.push(
+                $("<td>")
+                    .addClass("text-nowrap p-1")
+                    .append(buttonEdit)
+                    .append(buttonDelete)
+            );
+            newRow.append($("<td>").text(i++)).append(...cells);
+            tableBody.append(newRow);
+        });
+    }
+}

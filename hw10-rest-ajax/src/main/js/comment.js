@@ -19,7 +19,7 @@ import './style.css';
 
 import modifyComment from "otus-book-library/src/model/ModifyComment";
 import comment from "otus-book-library/src/model/Comment";
-import {createDeleteButton, createEditButton, showAlert} from "./include/common";
+import {reloadTable, showAlert} from "./include/common";
 
 const OtusCommentLibraryApiClient = require('otus-book-library');
 const commentsApi = new OtusCommentLibraryApiClient.CommentsApi();
@@ -68,35 +68,10 @@ function loadBooks() {
 
 async function reloadCommentList(bookId, tableBodyId, editDialogId) {
     try {
-        let tableBody = $("#" + tableBodyId);
         const comments = await commentsApi.getAllComments(bookId);
-        $('#emptyBooksInfo').hide();
-
-        if (Array.isArray(comments) && comments.length === 0) {
-            $('#emptyCommentsInfo').show();
-            tableBody.parent().hide();
-        } else {
-            $('#emptyCommentsInfo').hide();
-            tableBody.parent().show();
-            tableBody.empty();
-
-            let i = 1;
-            comments.forEach(comment => {
-                const newRow = $("<tr>");
-                const buttonEdit = createEditButton(editDialogId, tableBody, comment.id);
-                const buttonDelete = createDeleteButton(tableBody, comment.id);
-
-                newRow.append(
-                    $("<td>").text(i++),
-                    $("<td>").text(comment.content),
-                    $("<td>")
-                        .addClass("text-nowrap p-1")
-                        .append(buttonEdit)
-                        .append(buttonDelete)
-                );
-                tableBody.append(newRow);
-            });
-        }
+        reloadTable(tableBodyId, editDialogId, comments, [
+            comment => comment.content
+        ]);
     } catch (err) {
         console.error("Ошибка:", err);
     }

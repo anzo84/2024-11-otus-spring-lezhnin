@@ -14,40 +14,17 @@ import '@fortawesome/fontawesome-free/js/all.min.js';
 
 import modifyAuthor from "otus-book-library/src/model/ModifyAuthor";
 import author from "otus-book-library/src/model/Author";
-import {createDeleteButton, createEditButton, showAlert} from "./include/common";
+import {reloadTable, showAlert} from "./include/common";
 
 const OtusBookLibraryApiClient = require('otus-book-library');
 const api = new OtusBookLibraryApiClient.AuthorsApi();
 
 async function reloadAuthorList(tableBodyId, editDialogId) {
     try {
-        let tableBody = $("#" + tableBodyId);
         const authors = await api.getAllAuthors();
-        if (Array.isArray(authors) && authors.length === 0) {
-            $('#emptyInfo').show();
-            tableBody.parent().hide();
-        } else {
-            $('#emptyInfo').hide();
-            tableBody.parent().show();
-            tableBody.empty();
-
-            let i = 1;
-            authors.forEach(author => {
-                const newRow = $("<tr>");
-                const buttonEdit = createEditButton(editDialogId, tableBody, author.id);
-                const buttonDelete = createDeleteButton(tableBody, author.id);
-
-                newRow.append(
-                    $("<td>").text(i++),
-                    $("<td>").text(author.fullName),
-                    $("<td>")
-                        .addClass("text-nowrap p-1")
-                        .append(buttonEdit)
-                        .append(buttonDelete)
-                );
-                tableBody.append(newRow);
-            });
-        }
+        reloadTable(tableBodyId, editDialogId, authors, [
+            author => author.fullName
+        ]);
     } catch (err) {
         console.error("Ошибка:", err);
     }

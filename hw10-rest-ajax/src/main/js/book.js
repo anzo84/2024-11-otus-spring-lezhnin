@@ -19,7 +19,7 @@ import './style.css';
 
 import modifyBook from "otus-book-library/src/model/ModifyBook";
 import book from "otus-book-library/src/model/Book";
-import {createDeleteButton, createEditButton, showAlert} from "./include/common";
+import {showAlert, reloadTable} from "./include/common";
 
 const OtusBookLibraryApiClient = require('otus-book-library');
 const booksApi = new OtusBookLibraryApiClient.BooksApi();
@@ -28,37 +28,12 @@ const authorsApi = new OtusBookLibraryApiClient.AuthorsApi();
 
 async function reloadBookList(tableBodyId, editDialogId) {
     try {
-        let tableBody = $("#" + tableBodyId);
         const books = await booksApi.getAllBooks();
-        if (Array.isArray(books) && books.length === 0) {
-            $('#emptyInfo').show();
-            tableBody.parent().hide();
-        } else {
-            $('#emptyInfo').hide();
-            tableBody.parent().show();
-            tableBody.empty();
-
-            let i = 1;
-            books.forEach(book => {
-                const newRow = $("<tr>");
-                const buttonEdit = createEditButton(editDialogId, tableBody, book.id);
-                const buttonDelete = createDeleteButton(tableBody, book.id);
-
-                const genres = book.genres.map(genre => genre.name).join(', ');
-
-                newRow.append(
-                    $("<td>").text(i++),
-                    $("<td>").text(book.title),
-                    $("<td>").text(book.author.fullName),
-                    $("<td>").text(genres),
-                    $("<td>")
-                        .addClass("text-nowrap p-1")
-                        .append(buttonEdit)
-                        .append(buttonDelete)
-                );
-                tableBody.append(newRow);
-            });
-        }
+        reloadTable(tableBodyId, editDialogId, books, [
+            book => book.title,
+            book => book.author.fullName,
+            book => book.genres.map(genre => genre.name).join(', ')
+        ]);
     } catch (err) {
         console.error("Ошибка:", err);
     }

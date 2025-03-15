@@ -96,6 +96,7 @@ mixin formDialog(dialogId, saveAction, closeTitle, saveTitle)
     script.
         $('#'+"#{dialogId}").on('show.bs.modal', function (e) {
             $(this).find("form").trigger("reset");
+            $(this).find("input[type=hidden]").val(0);
             $(this).find(".alert").hide();
             $(this).find("select").val(null).trigger('change');
             $('#'+"#{dialogId}Label").text($(e.relatedTarget).data("title"));
