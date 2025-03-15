@@ -55,7 +55,7 @@ public class BookServiceImpl implements BookService {
             throw new IllegalArgumentException("Genres ids must not be empty");
         }
         var author = authorRepository.findById(Optional.ofNullable(book.getAuthor())
-                .map(Author::getId).orElseThrow(() -> new IllegalArgumentException("Author must not be empty")))
+                .map(Author::getId).orElseThrow(() -> new IllegalArgumentException("author.notEmpty")))
             .orElseThrow(() -> new EntityNotFoundException(
                 "Author with id %d not found",book.getAuthor().getId()));
         BookEntity entity = book.getId() == null ? new BookEntity() :

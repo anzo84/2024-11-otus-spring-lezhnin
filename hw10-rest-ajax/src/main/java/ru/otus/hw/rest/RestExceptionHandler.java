@@ -51,6 +51,14 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<List<ErrorDto>> handleIllegalArgumentException(
+        IllegalArgumentException ex, WebRequest request) {
+        List<ErrorDto> errors = List.of (new ErrorDto().message(
+            messageSource.getMessage(ex.getMessage(), null, request.getLocale())));
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
     private ErrorDto toErrorDto(FieldError fieldError) {
         return new ErrorDto().message(messageSource.getMessage(fieldError, Locale.getDefault()));
     }

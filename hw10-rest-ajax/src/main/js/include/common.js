@@ -30,6 +30,6 @@ export function createDeleteButton(tableBody, dataParam) {
 export function showAlert(error) {
     const alert = $('#alert');
     const msg = error.status === 400 ?
-        error.body.map(x => x.message).join(",") : alert.data("def-message");
-    alert.show().text(msg);
+        error.body.map(x => x.message).join(";<br>\n") : alert.data("def-message");
+    alert.show().html(msg);
 }

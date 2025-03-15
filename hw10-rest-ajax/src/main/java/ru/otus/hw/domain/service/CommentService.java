@@ -1,5 +1,7 @@
 package ru.otus.hw.domain.service;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import ru.otus.hw.domain.model.Comment;
 
 import java.util.List;
@@ -11,7 +13,7 @@ public interface CommentService {
 
     Optional<Comment> findById(long id);
 
-    Comment save(Comment comment);
+    Comment save(@Valid @NotNull(message = "{comment.notEmpty}") Comment comment);
 
     void deleteComment(long id);
 

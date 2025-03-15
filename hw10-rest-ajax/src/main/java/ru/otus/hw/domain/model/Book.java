@@ -1,5 +1,6 @@
 package ru.otus.hw.domain.model;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,4 +26,9 @@ public class Book {
 
     @NotEmpty(message = "{book.genreListNotEmpty}")
     private List<Genre> genres;
+
+    @AssertTrue(message = "{author.notEmpty}")
+    private boolean isAuthorValid() {
+        return author != null && author.getId() != null;
+    }
 }
