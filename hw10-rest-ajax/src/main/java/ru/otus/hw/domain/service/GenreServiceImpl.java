@@ -52,4 +52,9 @@ public class GenreServiceImpl implements GenreService {
     public void delete(Long id) {
         genreRepository.deleteById(id);
     }
+
+    @Override
+    public List<Genre> getGenresByIds(List<Long> ids) {
+        return genreMapper.map(genreRepository.findAllByIdIn(ids));
+    }
 }

@@ -10,7 +10,7 @@ import ru.otus.hw.domain.service.BookService;
 import ru.otus.hw.rest.api.BooksApi;
 import ru.otus.hw.rest.mapper.BookRestMapper;
 import ru.otus.hw.rest.model.BookDto;
-import ru.otus.hw.rest.model.UpdateBookRequestDto;
+import ru.otus.hw.rest.model.ModifyBookDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +48,7 @@ public class BookRestController implements BooksApi {
     }
 
     @Override
-    public ResponseEntity<BookDto> updateBook(Long id, UpdateBookRequestDto updateBookRequestDto) {
+    public ResponseEntity<BookDto> updateBook(Long id, ModifyBookDto updateBookRequestDto) {
         BookDto book = new BookDto();
         book.setId(id);
         book.setTitle(updateBookRequestDto.getTitle());

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import ru.otus.hw.domain.exception.EntityNotFoundException;
 import ru.otus.hw.domain.model.Author;
 import ru.otus.hw.domain.model.Book;
@@ -23,6 +24,7 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 
 @RequiredArgsConstructor
 @Service
+@Validated
 public class BookServiceImpl implements BookService {
 
     private final BookMapper bookMapper;

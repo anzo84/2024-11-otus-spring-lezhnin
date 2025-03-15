@@ -10,7 +10,7 @@ import ru.otus.hw.domain.service.AuthorService;
 import ru.otus.hw.rest.api.AuthorsApi;
 import ru.otus.hw.rest.mapper.AuthorRestMapper;
 import ru.otus.hw.rest.model.AuthorDto;
-import ru.otus.hw.rest.model.UpdateAuthorRequestDto;
+import ru.otus.hw.rest.model.ModifyAuthorDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +48,7 @@ public class AuthorRestController implements AuthorsApi {
     }
 
     @Override
-    public ResponseEntity<AuthorDto> updateAuthor(Long id, UpdateAuthorRequestDto updateAuthorRequestDto) {
+    public ResponseEntity<AuthorDto> updateAuthor(Long id, ModifyAuthorDto updateAuthorRequestDto) {
         AuthorDto authorDto = new AuthorDto();
         authorDto.setId(id);
         authorDto.setFullName(updateAuthorRequestDto.getFullName());

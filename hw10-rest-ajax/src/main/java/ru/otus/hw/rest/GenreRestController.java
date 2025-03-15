@@ -9,7 +9,7 @@ import ru.otus.hw.domain.service.GenreService;
 import ru.otus.hw.rest.api.GenresApi;
 import ru.otus.hw.rest.mapper.GenreRestMapper;
 import ru.otus.hw.rest.model.GenreDto;
-import ru.otus.hw.rest.model.UpdateGenreRequestDto;
+import ru.otus.hw.rest.model.ModifyGenreDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +47,12 @@ public class GenreRestController implements GenresApi {
     }
 
     @Override
-    public ResponseEntity<GenreDto> updateGenre(Long id, UpdateGenreRequestDto updateGenreRequest) {
+    public ResponseEntity<List<GenreDto>> getGenresByIds(List<Long> ids) {
+        return GenresApi.super.getGenresByIds(ids);
+    }
+
+    @Override
+    public ResponseEntity<GenreDto> updateGenre(Long id, ModifyGenreDto updateGenreRequest) {
         GenreDto genre = new GenreDto();
         genre.setId(id);
         genre.setName(updateGenreRequest.getName());

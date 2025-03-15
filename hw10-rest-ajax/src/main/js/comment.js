@@ -17,8 +17,9 @@ import 'admin-lte/dist/js/adminlte.min.js';
 import '@fortawesome/fontawesome-free/js/all.min.js';
 import './style.css';
 
-import updateCommentRequest from "otus-book-library/src/model/UpdateCommentRequest";
+import modifyComment from "otus-book-library/src/model/ModifyComment";
 import comment from "otus-book-library/src/model/Comment";
+import {createDeleteButton, createEditButton, showAlert} from "./include/common";
 
 const OtusCommentLibraryApiClient = require('otus-book-library');
 const commentsApi = new OtusCommentLibraryApiClient.CommentsApi();
@@ -56,8 +57,7 @@ function loadBooks() {
 
     bookSelect.on("change", function () {
         if (this.value === "0") {
-            $('#actionBtn-saveDialog').hide();
-            $('#emptyBooksInfo').hide();
+            $('#actionBtn-saveDialog, #emptyBooksInfo').hide();
             $("#commentList").parent().hide();
         } else {
             $('#actionBtn-saveDialog').show();
@@ -83,29 +83,8 @@ async function reloadCommentList(bookId, tableBodyId, editDialogId) {
             let i = 1;
             comments.forEach(comment => {
                 const newRow = $("<tr>");
-                const buttonEdit = $("<button>")
-                    .attr("id", "edit" + tableBodyId + i)
-                    .attr("role", "button")
-                    .attr("data-toggle", "modal")
-                    .attr("data-target", "#" + editDialogId)
-                    .attr("data-action", tableBody.data("edit-action"))
-                    .attr("data-title", tableBody.data("edit-title"))
-                    .attr("data-param", comment.id)
-                    .attr("title", tableBody.data("edit-title"))
-                    .addClass("btn btn-primary")
-                    .append($("<span>")
-                        .addClass("fas")
-                        .addClass("fa-pen-to-square"));
-
-                const buttonDelete = $("<button>")
-                    .addClass("btn btn-danger ml-1")
-                    .attr("role", "button")
-                    .attr("title", tableBody.data("delete-title"))
-                    .attr("data-action", tableBody.data("delete-action"))
-                    .attr("data-param", comment.id)
-                    .append($("<span>")
-                        .addClass("fas")
-                        .addClass("fa-trash-can"));
+                const buttonEdit = createEditButton(editDialogId, tableBody, comment.id);
+                const buttonDelete = createDeleteButton(tableBody, comment.id);
 
                 newRow.append(
                     $("<td>").text(i++),
@@ -141,25 +120,19 @@ $('body').on('click', 'button', function () {
             $('#commentId').val(comment.id);
             $('#commentContent').val(comment.content);
         });
-    } else if (action === "newCommentAction") {
-        $("#commentId").val(0);
-        $('#commentContent').val("");
     } else if (action === "saveCommentAction") {
         const id = Number.parseInt($('#commentId').val());
         const content = $('#commentContent').val();
         booksApi.getBookById($("#book").val()).then(book => {
             const request = id === 0
                 ? commentsApi.createComment(new comment(content, book))
-                : commentsApi.updateComment(id, new updateCommentRequest(content, book));
+                : commentsApi.updateComment(id, new modifyComment(content, book));
             request
                 .then(() => {
                     $("#book").change();
                     $('#saveDialog').modal('hide');
                 })
-                .catch(error => {
-                    console.error("Ошибка при сохранении книги:", error);
-                    alert(error);
-                });
+                .catch(error => showAlert(error));
         });
     }
 });

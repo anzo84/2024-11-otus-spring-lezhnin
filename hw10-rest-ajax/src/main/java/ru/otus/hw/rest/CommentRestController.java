@@ -9,7 +9,7 @@ import ru.otus.hw.domain.service.CommentService;
 import ru.otus.hw.rest.api.CommentsApi;
 import ru.otus.hw.rest.mapper.CommentRestMapper;
 import ru.otus.hw.rest.model.CommentDto;
-import ru.otus.hw.rest.model.UpdateCommentRequestDto;
+import ru.otus.hw.rest.model.ModifyCommentDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +47,7 @@ public class CommentRestController implements CommentsApi {
     }
 
     @Override
-    public ResponseEntity<CommentDto> updateComment(Long id, UpdateCommentRequestDto updateCommentRequestDto) {
+    public ResponseEntity<CommentDto> updateComment(Long id, ModifyCommentDto updateCommentRequestDto) {
         CommentDto comment = new CommentDto();
         comment.setId(id);
         comment.setContent(updateCommentRequestDto.getContent());

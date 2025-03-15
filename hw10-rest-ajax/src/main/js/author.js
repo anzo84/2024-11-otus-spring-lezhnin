@@ -12,8 +12,9 @@ import './style.css';
 import 'admin-lte/dist/js/adminlte.min.js';
 import '@fortawesome/fontawesome-free/js/all.min.js';
 
-import updateAuthorRequest from "otus-book-library/src/model/UpdateAuthorRequest";
+import modifyAuthor from "otus-book-library/src/model/ModifyAuthor";
 import author from "otus-book-library/src/model/Author";
+import {createDeleteButton, createEditButton, showAlert} from "./include/common";
 
 const OtusBookLibraryApiClient = require('otus-book-library');
 const api = new OtusBookLibraryApiClient.AuthorsApi();
@@ -33,29 +34,8 @@ async function reloadAuthorList(tableBodyId, editDialogId) {
             let i = 1;
             authors.forEach(author => {
                 const newRow = $("<tr>");
-                const buttonEdit = $("<button>")
-                    .attr("id", "edit" + tableBodyId + i)
-                    .attr("role", "button")
-                    .attr("data-toggle", "modal")
-                    .attr("data-target", "#" + editDialogId)
-                    .attr("data-action", tableBody.data("edit-action"))
-                    .attr("data-title", tableBody.data("edit-title"))
-                    .attr("data-param", author.id)
-                    .attr("title", tableBody.data("edit-title"))
-                    .addClass("btn btn-primary")
-                    .append($("<span>")
-                        .addClass("fas")
-                        .addClass("fa-pen-to-square"));
-
-                const buttonDelete = $("<button>")
-                    .addClass("btn btn-danger ml-1")
-                    .attr("role", "button")
-                    .attr("title", tableBody.data("delete-title"))
-                    .attr("data-action", tableBody.data("delete-action"))
-                    .attr("data-param", author.id)
-                    .append($("<span>")
-                        .addClass("fas")
-                        .addClass("fa-trash-can"));
+                const buttonEdit = createEditButton(editDialogId, tableBody, author.id);
+                const buttonDelete = createDeleteButton(tableBody, author.id);
 
                 newRow.append(
                     $("<td>").text(i++),
@@ -94,23 +74,17 @@ $('body').on('click', 'button', function () {
             $('#authorId').val(id);
             $('#authorFullName').val(author.fullName);
         });
-    } else if (action === "newAuthorAction") {
-        $('#authorId').val(0);
-        $('#authorFullName').val("");
     } else if (action === "saveAuthorAction") {
         let id = Number.parseInt($('#authorId').val());
         let name = $('#authorFullName').val();
         const request = id === 0
             ? api.createAuthor(new author(name))
-            : api.updateAuthor(id, new updateAuthorRequest(name));
+            : api.updateAuthor(id, new modifyAuthor(name));
         request
             .then(() => {
                 reload();
                 $('#saveDialog').modal('hide');
             })
-            .catch(error => {
-                console.error("Ошибка при сохранении автора:", error);
-                alert(error);
-            });
+            .catch(error => showAlert(error));
     }
 });

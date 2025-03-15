@@ -1,9 +1,5 @@
 import 'popper.js';
 import $ from 'jquery';
-
-window.$ = $;
-window.jQuery = $;
-
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'admin-lte/dist/css/adminlte.min.css';
@@ -12,8 +8,12 @@ import './style.css';
 import 'admin-lte/dist/js/adminlte.min.js';
 import '@fortawesome/fontawesome-free/js/all.min.js';
 
-import updateGenreRequest from "otus-book-library/src/model/UpdateGenreRequest";
+import modifyGenre from "otus-book-library/src/model/ModifyGenre";
 import genre from "otus-book-library/src/model/Genre";
+import {createDeleteButton, createEditButton, showAlert} from "./include/common";
+
+window.$ = $;
+window.jQuery = $;
 
 const OtusBookLibraryApiClient = require('otus-book-library');
 const api = new OtusBookLibraryApiClient.GenresApi();
@@ -33,29 +33,8 @@ async function reloadGenreList(tableBodyId, editDialogId) {
             let i = 1;
             genres.forEach(genre => {
                 const newRow = $("<tr>");
-                const buttonEdit = $("<button>")
-                    .attr("id", "edit" + tableBodyId + i)
-                    .attr("role", "button")
-                    .attr("data-toggle", "modal")
-                    .attr("data-target", "#" + editDialogId)
-                    .attr("data-action", tableBody.data("edit-action"))
-                    .attr("data-title", tableBody.data("edit-title"))
-                    .attr("data-param", genre.id)
-                    .attr("title", tableBody.data("edit-title"))
-                    .addClass("btn btn-primary")
-                    .append($("<span>")
-                        .addClass("fas")
-                        .addClass("fa-pen-to-square"));
-
-                const buttonDelete = $("<button>")
-                    .addClass("btn btn-danger ml-1")
-                    .attr("role", "button")
-                    .attr("title", tableBody.data("delete-title"))
-                    .attr("data-action", tableBody.data("delete-action"))
-                    .attr("data-param", genre.id)
-                    .append($("<span>")
-                        .addClass("fas")
-                        .addClass("fa-trash-can"));
+                const buttonEdit = createEditButton(editDialogId, tableBody, genre.id);
+                const buttonDelete = createDeleteButton(tableBody, genre.id);
 
                 newRow.append(
                     $("<td>").text(i++),
@@ -94,23 +73,17 @@ $('body').on('click', 'button', function () {
             $('#genreId').val(id);
             $('#genreName').val(genre.name);
         });
-    } else if (action === "newGenreAction") {
-        $('#genreId').val(0);
-        $('#genreName').val("");
     } else if (action === "saveGenreAction") {
         let id = Number.parseInt($('#genreId').val());
         let name = $('#genreName').val();
-        const request = id === 0
+        const response = id === 0
             ? api.createGenre(new genre(name))
-            : api.updateGenre(id, new updateGenreRequest(name));
-        request
+            : api.updateGenre(id, new modifyGenre(name));
+        response
             .then(() => {
                 reload();
                 $('#saveDialog').modal('hide');
             })
-            .catch(error => {
-                console.error("Ошибка при сохранении жанра:", error);
-                alert(error);
-            });
+            .catch(error => showAlert(error));
     }
 });

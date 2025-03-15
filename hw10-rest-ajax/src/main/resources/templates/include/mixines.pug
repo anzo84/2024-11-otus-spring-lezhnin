@@ -30,7 +30,7 @@ mixin dashboardItem(titleId, description, fontawesomeName, backGroundClass, path
                 span= $.msg("common.goTo")
                 i.fas.fa-arrow-circle-right
 
-mixin greenBtn(dialogId, action, captionAndTitle, param)
+mixin greenBtn(dialogId, action, captionAndTitle)
     button.btn.btn-success.my-2(
         id=`actionBtn-${dialogId}`
         type="button"
@@ -38,7 +38,6 @@ mixin greenBtn(dialogId, action, captionAndTitle, param)
         data-target=`#${dialogId}`
         data-action=action
         data-title=captionAndTitle
-        data-param=param
     )
         span
             if block
@@ -87,6 +86,7 @@ mixin formDialog(dialogId, saveAction, closeTitle, saveTitle)
                 .modal-body
                     if block
                         form(role="form")
+                            +alert('alert', $.msg('common.serverError'))
                             block
                     else
                         p(id=`${dialogId}Content`) Empty dialog
@@ -95,17 +95,19 @@ mixin formDialog(dialogId, saveAction, closeTitle, saveTitle)
                     button(id=`${dialogId}Close` type="button" class="btn btn-primary" data-action=saveAction)= saveTitle
     script.
         $('#'+"#{dialogId}").on('show.bs.modal', function (e) {
-        let title = $("#"+e.relatedTarget.id).data("title");
-        $('#'+"#{dialogId}Label").text(title);
+            $(this).find("form").trigger("reset");
+            $(this).find(".alert").hide();
+            $(this).find("select").val(null).trigger('change');
+            $('#'+"#{dialogId}Label").text($(e.relatedTarget).data("title"));
         });
 
 mixin formHidden(inputId)
-    input(id=inputId type="hidden")
+    input(id=inputId type="hidden" value="0")
 
 mixin formField(inputTextId, title, placeHolder )
     .form-group
         label(for=inputTextId)= title
-        input.form-control(id=inputTextId type="text" placeholder=placeHolder required=true)
+        input.form-control(id=inputTextId type="text" placeholder=placeHolder value="")
 
 mixin fluidSection
     section.content
@@ -138,6 +140,9 @@ mixin gridPanel
         +cardRow
             if block
                 block
+
+mixin alert(alertId, defMessage)
+    .alert.alert-warning(id=alertId role="alert" data-def-message=defMessage)
 
 mixin menu
     aside.main-sidebar.sidebar-dark-primary.elevation-4(style="overflow-x:hidden;")

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.otus.hw.domain.exception.EntityNotFoundException;
 import ru.otus.hw.domain.model.Book;
 import ru.otus.hw.domain.model.Comment;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class CommentServiceImpl implements CommentService {
 
     private final BookRepository bookRepository;

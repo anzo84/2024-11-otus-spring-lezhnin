@@ -65,7 +65,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateAuthorRequest'
+              $ref: '#/components/schemas/ModifyAuthor'
       responses:
         200:
           description: Автор успешно сохранен
@@ -193,7 +193,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateGenreRequest'
+              $ref: '#/components/schemas/ModifyGenre'
       responses:
         200:
           description: Жанр успешно сохранен
@@ -273,6 +273,39 @@ paths:
           $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
+  /genres/by-ids:
+    get:
+      tags:
+        - Genres
+      summary: Получить список жанров по идентификаторам
+      description: Возвращает список жанров по переданным идентификаторам.
+      operationId: getGenresByIds
+      parameters:
+        - name: ids
+          in: query
+          description: Список идентификаторов жанров
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+          style: form
+      responses:
+        200:
+          description: Список жанров
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genre'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /books/{id}:
     get:
@@ -321,7 +354,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateBookRequest'
+              $ref: '#/components/schemas/ModifyBook'
       responses:
         200:
           description: Книга успешно сохранена
@@ -449,7 +482,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateCommentRequest'
+              $ref: '#/components/schemas/ModifyComment'
       responses:
         200:
           description: Комментарий успешно сохранен
@@ -599,7 +632,7 @@ components:
           example: Лев Толстой
       required:
         - fullName
-    UpdateAuthorRequest:
+    ModifyAuthor:
       type: object
       properties:
         fullName:
@@ -627,7 +660,7 @@ components:
           example: Фантастика
       required:
         - name
-    UpdateGenreRequest:
+    ModifyGenre:
       type: object
       properties:
         name:
@@ -664,7 +697,7 @@ components:
         - title
         - author
         - genres
-    UpdateBookRequest:
+    ModifyBook:
       type: object
       properties:
         title:
@@ -704,7 +737,7 @@ components:
       required:
         - content
         - book
-    UpdateCommentRequest:
+    ModifyComment:
       type: object
       properties:
         content:

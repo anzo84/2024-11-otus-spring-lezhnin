@@ -17,8 +17,9 @@ import 'admin-lte/dist/js/adminlte.min.js';
 import '@fortawesome/fontawesome-free/js/all.min.js';
 import './style.css';
 
-import updateBookRequest from "otus-book-library/src/model/UpdateBookRequest";
+import modifyBook from "otus-book-library/src/model/ModifyBook";
 import book from "otus-book-library/src/model/Book";
+import {createDeleteButton, createEditButton, showAlert} from "./include/common";
 
 const OtusBookLibraryApiClient = require('otus-book-library');
 const booksApi = new OtusBookLibraryApiClient.BooksApi();
@@ -40,29 +41,8 @@ async function reloadBookList(tableBodyId, editDialogId) {
             let i = 1;
             books.forEach(book => {
                 const newRow = $("<tr>");
-                const buttonEdit = $("<button>")
-                    .attr("id", "edit" + tableBodyId + i)
-                    .attr("role", "button")
-                    .attr("data-toggle", "modal")
-                    .attr("data-target", "#" + editDialogId)
-                    .attr("data-action", tableBody.data("edit-action"))
-                    .attr("data-title", tableBody.data("edit-title"))
-                    .attr("data-param", book.id)
-                    .attr("title", tableBody.data("edit-title"))
-                    .addClass("btn btn-primary")
-                    .append($("<span>")
-                        .addClass("fas")
-                        .addClass("fa-pen-to-square"));
-
-                const buttonDelete = $("<button>")
-                    .addClass("btn btn-danger ml-1")
-                    .attr("role", "button")
-                    .attr("title", tableBody.data("delete-title"))
-                    .attr("data-action", tableBody.data("delete-action"))
-                    .attr("data-param", book.id)
-                    .append($("<span>")
-                        .addClass("fas")
-                        .addClass("fa-trash-can"));
+                const buttonEdit = createEditButton(editDialogId, tableBody, book.id);
+                const buttonDelete = createDeleteButton(tableBody, book.id);
 
                 const genres = book.genres.map(genre => genre.name).join(', ');
 
@@ -143,9 +123,6 @@ $('body').on('click', 'button', function () {
             $('#bookAuthor').val(book.author.id).change();
             $("#bookGenres").val(book.genres.map(g => g.id)).change();
         });
-    } else if (action === "newBookAction") {
-        $("#bookId").val(0);
-        $("#bookTitle, #bookAuthor, #bookGenres").val("").change();
     } else if (action === "saveBookAction") {
         const id = Number.parseInt($('#bookId').val());
         const title = $('#bookTitle').val();
@@ -153,15 +130,12 @@ $('body').on('click', 'button', function () {
         const genres = $('#bookGenres').val().map(i => ({id: i, name: "_"}));
         const request = id === 0
             ? booksApi.createBook(new book(title, author, genres))
-            : booksApi.updateBook(id, new updateBookRequest(title, author, genres));
+            : booksApi.updateBook(id, new modifyBook(title, author, genres));
         request
             .then(() => {
                 reload();
                 $('#saveDialog').modal('hide');
             })
-            .catch(error => {
-                console.error("Ошибка при сохранении книги:", error);
-                alert(error);
-            });
+            .catch(error => showAlert(error));
     }
 });

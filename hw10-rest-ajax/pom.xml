@@ -283,7 +283,7 @@
                                 <useES6>true</useES6>
                                 <projectName>otus-book-library</projectName>
                                 <moduleName>OtusBookLibraryApiClient</moduleName>
-                                <skipDefaultUserAgent>true</skipDefaultUserAgent>
+                                <skipDefaultUserAgent>false</skipDefaultUserAgent>
                             </configOptions>
                         </configuration>
                     </execution>

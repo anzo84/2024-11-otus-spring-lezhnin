@@ -17,4 +17,6 @@ public interface GenreService {
     Genre save(@Valid Genre genre);
 
     void delete(Long id);
+
+    List<Genre> getGenresByIds(List<Long> ids);
 }
