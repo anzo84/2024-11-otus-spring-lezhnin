@@ -1,12 +1,10 @@
 import $ from 'jquery';
-import select2 from 'select2';
-select2($);
 import {commentsApi, booksApi} from './include/apiClient';
 import {reloadTable, showAlert} from "./include/common";
-import modifyComment from "otus-book-library/src/model/ModifyComment";
 
+import modifyComment from "otus-book-library/src/model/ModifyComment";
 import comment from "otus-book-library/src/model/Comment";
-window.$ = $;
+
 
 function loadBooks() {
     const bookSelect = $("#book");

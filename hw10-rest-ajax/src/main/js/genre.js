@@ -1,10 +1,9 @@
+import $ from 'jquery';
 import {genresApi} from './include/apiClient';
 import {reloadTable, showAlert} from "./include/common";
+
 import modifyGenre from "otus-book-library/src/model/ModifyGenre";
 import genre from "otus-book-library/src/model/Genre";
-import $ from 'jquery';
-
-window.$ = $;
 
 async function reloadGenreList(tableBodyId, editDialogId) {
     try {

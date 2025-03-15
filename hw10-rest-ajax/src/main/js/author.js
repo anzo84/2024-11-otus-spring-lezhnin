@@ -1,10 +1,9 @@
+import $ from 'jquery';
 import {authorsApi} from './include/apiClient';
 import {reloadTable, showAlert} from "./include/common";
+
 import modifyAuthor from "otus-book-library/src/model/ModifyAuthor";
 import author from "otus-book-library/src/model/Author";
-
-import $ from 'jquery';
-window.$ = $;
 
 async function reloadAuthorList(tableBodyId, editDialogId) {
     try {
