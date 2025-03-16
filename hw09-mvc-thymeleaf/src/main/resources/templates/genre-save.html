@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html layout:decorate="~{import/root-layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      lang="ru"
+      th:with="title=${genre.id == null}?#{genre.add}:#{genre.update}">
+<!-- @thymesVar id="genre" type="ru.otus.hw.domain.model.Genre"-->
+<!-- @thymesVar id="breadcrumbs" type="java.util.Map<String,String>"-->
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section th:replace="~{import/nav::contentHeaderBreadCrumb(${title}, ${breadcrumbs})}"></section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div th:if="${#fields.errors('genre.*').size() > 0}" class="alert alert-warning">
+                        <strong th:text="#{common.warning}"></strong>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('genre.*')}" th:text="${err}" />
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title" th:text="${genre.id == null}?#{genre.new}:#{genre.change}"></h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" method="post" th:action="@{/genre/save}" th:object="${genre}">
+                            <input th:field="*{id}" type="hidden"/>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="name" th:text="#{genre.genreName}"></label>
+                                    <input class="form-control" id="name"
+                                           th:placeholder="#{genre.enterName}"
+                                           type="text" th:field="*{name}" required>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <button class="btn btn-primary" type="submit" th:text="${genre.id == null}?#{common.add}:#{common.save}"></button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
