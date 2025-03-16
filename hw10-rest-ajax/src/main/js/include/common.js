@@ -34,7 +34,7 @@ export function showAlert(error) {
     alert.show().html(msg);
 }
 
-export function reloadTable(tableBodyId, editDialogId, data, columns) {
+export function loadTable(tableBodyId, editDialogId, data, columns) {
     const tableBody = $("#" + tableBodyId);
     if (Array.isArray(data) && data.length === 0) {
         $('#emptyInfo').show();
@@ -61,4 +61,22 @@ export function reloadTable(tableBodyId, editDialogId, data, columns) {
             tableBody.append(newRow);
         });
     }
+}
+
+export function loadOptions(element, promise, valueSelector, textSelector) {
+    promise.then(items => {
+        element.empty();
+        if (typeof element.data('not-selected') !== 'undefined') {
+            element.append($("<option>")
+                .attr("selected", true)
+                .val(null)
+                .text(element.data('not-selected')));
+        }
+        items.forEach(item => {
+            element.append($("<option>")
+                .val(valueSelector(item))
+                .text(textSelector(item)));
+        });
+        element.trigger("change");
+    });
 }

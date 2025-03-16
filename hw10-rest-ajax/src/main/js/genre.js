@@ -1,14 +1,14 @@
 import $ from 'jquery';
 import {genresApi} from './include/apiClient';
-import {reloadTable, showAlert} from "./include/common";
+import {loadTable, showAlert} from "./include/common";
 
 import modifyGenre from "otus-book-library/src/model/ModifyGenre";
 import genre from "otus-book-library/src/model/Genre";
 
-async function reloadGenreList(tableBodyId, editDialogId) {
+async function reloadGenresWithParams(tableBodyId, editDialogId) {
     try {
         const genres = await genresApi.getAllGenres();
-        reloadTable(tableBodyId, editDialogId, genres, [
+        loadTable(tableBodyId, editDialogId, genres, [
             genre => genre.name
         ]);
     } catch (err) {
@@ -16,12 +16,12 @@ async function reloadGenreList(tableBodyId, editDialogId) {
     }
 }
 
-function reload() {
-    reloadGenreList("genreList", "saveDialog").then();
+function reloadGenres() {
+    reloadGenresWithParams("genreList", "saveDialog").then();
 }
 
 $(document).ready(function () {
-    reload();
+    reloadGenres();
 });
 
 $('body').on('click', 'button', function () {
@@ -29,7 +29,7 @@ $('body').on('click', 'button', function () {
     if (action === "deleteGenreAction") {
         genresApi.deleteGenre(Number.parseInt($(this).data("param")))
             .then(() => {
-                reload();
+                reloadGenres();
             });
     } else if (action === "editGenreAction") {
         const id = Number.parseInt($(this).data("param"));
@@ -45,7 +45,7 @@ $('body').on('click', 'button', function () {
             : genresApi.updateGenre(id, new modifyGenre(name));
         response
             .then(() => {
-                reload();
+                reloadGenres();
                 $('#saveDialog').modal('hide');
             })
             .catch(error => showAlert(error));

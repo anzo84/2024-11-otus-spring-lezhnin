@@ -1,56 +1,14 @@
 import $ from 'jquery';
 import {commentsApi, booksApi} from './include/apiClient';
-import {reloadTable, showAlert} from "./include/common";
+import {loadOptions, loadTable, showAlert} from "./include/common";
 
 import modifyComment from "otus-book-library/src/model/ModifyComment";
 import comment from "otus-book-library/src/model/Comment";
 
-
-function loadBooks() {
-    const bookSelect = $("#book");
-
-    booksApi.getAllBooks().then(books => {
-        bookSelect
-            .empty()
-            .append($("<option>")
-                .attr("selected", true)
-                .val(0)
-                .text(bookSelect.data("not-selected")));
-
-        $('#emptyCommentsInfo').hide();
-        $('#commentList').parent().hide();
-        $('#actionBtn-saveDialog').hide();
-
-        if (Array.isArray(books) && books.length === 0) {
-            $('#emptyBooksInfo').show();
-            $('#selectBookForm').hide();
-        } else {
-            $('#emptyBooksInfo').hide();
-            $('#selectBookForm').show();
-            books.forEach(book => {
-                bookSelect
-                    .append($("<option>")
-                        .val(book.id)
-                        .text(`${book.title} (${book.author.fullName})`));
-            });
-        }
-    });
-
-    bookSelect.on("change", function () {
-        if (this.value === "0") {
-            $('#actionBtn-saveDialog, #emptyBooksInfo').hide();
-            $("#commentList").parent().hide();
-        } else {
-            $('#actionBtn-saveDialog').show();
-            reloadCommentList(this.value, "commentList", "saveDialog").then();
-        }
-    });
-}
-
-async function reloadCommentList(bookId, tableBodyId, editDialogId) {
+async function reloadCommentsWithParams(bookId, tableBodyId, editDialogId) {
     try {
         const comments = await commentsApi.getAllComments(bookId);
-        reloadTable(tableBodyId, editDialogId, comments, [
+        loadTable(tableBodyId, editDialogId, comments, [
             comment => comment.content
         ]);
     } catch (err) {
@@ -60,7 +18,23 @@ async function reloadCommentList(bookId, tableBodyId, editDialogId) {
 
 $(document).ready(function () {
     $(".select2").select2();
-    loadBooks();
+
+    const bookSelect = $("#book");
+    loadOptions(bookSelect, booksApi.getAllBooks(),
+        b => b.id, b => `${b.title} (${b.author.fullName})`);
+
+    bookSelect.on("change", function () {
+        const hasOptions = $(this).find('option').length > 1;
+        $('#emptyBooksInfo').toggle(!hasOptions);
+        $('#selectBookForm').toggle(hasOptions);
+        if (this.value === null || this.value === "") {
+            $('#actionBtn-saveDialog, #emptyBooksInfo').hide();
+            $("#commentList").parent().hide();
+        } else {
+            $('#actionBtn-saveDialog').show();
+            reloadCommentsWithParams(this.value, "commentList", "saveDialog").then();
+        }
+    });
 });
 
 $('body').on('click', 'button', function () {

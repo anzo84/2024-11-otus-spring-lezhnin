@@ -1,14 +1,14 @@
 import $ from 'jquery';
 import {genresApi, booksApi, authorsApi} from './include/apiClient';
-import {reloadTable, showAlert} from "./include/common";
+import {loadTable, showAlert, loadOptions} from "./include/common";
 
 import modifyBook from "otus-book-library/src/model/ModifyBook";
 import book from "otus-book-library/src/model/Book";
 
-async function reloadBookList(tableBodyId, editDialogId) {
+async function reloadBooksWithParams(tableBodyId, editDialogId) {
     try {
         const books = await booksApi.getAllBooks();
-        reloadTable(tableBodyId, editDialogId, books, [
+        loadTable(tableBodyId, editDialogId, books, [
             book => book.title,
             book => book.author.fullName,
             book => book.genres.map(genre => genre.name).join(', ')
@@ -18,48 +18,19 @@ async function reloadBookList(tableBodyId, editDialogId) {
     }
 }
 
-function reload() {
-    reloadBookList("bookList", "saveDialog").then();
-}
-
-function loadAuthors() {
-    authorsApi.getAllAuthors().then(authors => {
-        let bookAuthor = $("#bookAuthor");
-        bookAuthor
-            .empty()
-            .append($("<option>")
-                .attr("selected", true)
-                .val(null)
-                .text(bookAuthor.data("not-selected")));
-
-        authors.forEach(author => {
-            bookAuthor
-                .append($("<option>")
-                    .val(author.id)
-                    .text(author.fullName));
-        });
-    });
-}
-
-function loadGenres() {
-    let bookGenres = $('#bookGenres');
-    genresApi.getAllGenres().then(genres => {
-        genres.forEach(genre => {
-            bookGenres
-                .append($("<option>")
-                    .val(genre.id)
-                    .text(genre.name));
-        });
-    });
+function reloadBooks() {
+    reloadBooksWithParams("bookList", "saveDialog").then();
 }
 
 $(document).ready(function () {
     $(".select2").select2({
         dropdownParent: $('#saveDialog')
     });
-    reload();
-    loadAuthors();
-    loadGenres();
+    reloadBooks();
+    loadOptions($("#bookAuthor"), authorsApi.getAllAuthors(),
+            a => a.id, a => a.fullName);
+    loadOptions($("#bookGenres"), genresApi.getAllGenres(),
+            g => g.id, g => g.name);
 });
 
 $('body').on('click', 'button', function () {
@@ -67,7 +38,7 @@ $('body').on('click', 'button', function () {
     if (action === "deleteBookAction") {
         booksApi.deleteBook(Number.parseInt($(this).data("param")))
             .then(() => {
-                reload();
+                reloadBooks();
             });
     } else if (action === "editBookAction") {
         const id = Number.parseInt($(this).data("param"));
@@ -87,7 +58,7 @@ $('body').on('click', 'button', function () {
             : booksApi.updateBook(id, new modifyBook(title, author, genres));
         request
             .then(() => {
-                reload();
+                reloadBooks();
                 $('#saveDialog').modal('hide');
             })
             .catch(error => showAlert(error));

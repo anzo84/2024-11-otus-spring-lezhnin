@@ -1,14 +1,14 @@
 import $ from 'jquery';
 import {authorsApi} from './include/apiClient';
-import {reloadTable, showAlert} from "./include/common";
+import {loadTable, showAlert} from "./include/common";
 
 import modifyAuthor from "otus-book-library/src/model/ModifyAuthor";
 import author from "otus-book-library/src/model/Author";
 
-async function reloadAuthorList(tableBodyId, editDialogId) {
+async function reloadAuthorsWithParams(tableBodyId, editDialogId) {
     try {
         const authors = await authorsApi.getAllAuthors();
-        reloadTable(tableBodyId, editDialogId, authors, [
+        loadTable(tableBodyId, editDialogId, authors, [
             author => author.fullName
         ]);
     } catch (err) {
@@ -16,12 +16,12 @@ async function reloadAuthorList(tableBodyId, editDialogId) {
     }
 }
 
-function reload() {
-    reloadAuthorList("authorList", "saveDialog").then();
+function reloadAuthors() {
+    reloadAuthorsWithParams("authorList", "saveDialog").then();
 }
 
 $(document).ready(function () {
-    reload();
+    reloadAuthors();
 });
 
 $('body').on('click', 'button', function () {
@@ -29,7 +29,7 @@ $('body').on('click', 'button', function () {
     if (action === "deleteAuthorAction") {
         authorsApi.deleteAuthor(Number.parseInt($(this).data("param")))
             .then(() => {
-                reload();
+                reloadAuthors();
             });
     } else if (action === "editAuthorAction") {
         const id = Number.parseInt($(this).data("param"));
@@ -45,7 +45,7 @@ $('body').on('click', 'button', function () {
             : authorsApi.updateAuthor(id, new modifyAuthor(name));
         request
             .then(() => {
-                reload();
+                reloadAuthors();
                 $('#saveDialog').modal('hide');
             })
             .catch(error => showAlert(error));
