@@ -54,6 +54,6 @@ public class BookRestController implements BooksApi {
         book.setTitle(updateBookRequestDto.getTitle());
         book.setAuthor(updateBookRequestDto.getAuthor());
         book.setGenres(updateBookRequestDto.getGenres());
-        return  ResponseEntity.ok(mapper.toDto(service.save(mapper.map(book))));
+        return ResponseEntity.ok(mapper.toDto(service.save(mapper.map(book))));
     }
 }
