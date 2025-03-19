@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.3
 info:
   title: API для библиотеки
   description: API для управления авторами, жанрами, книгами, комментариями и метриками
@@ -632,6 +632,7 @@ components:
           example: Лев Толстой
       required:
         - fullName
+
     ModifyAuthor:
       type: object
       properties:
