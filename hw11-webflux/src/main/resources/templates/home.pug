@@ -1,0 +1,10 @@
+include include/mixines
+extends include/layout
+block content
+    script(src="/js/home.bundle.js")
+    +fluidSection
+        .row.py-3
+            +dashboardItem('genreCount', $.msg('genre.title'), 'fa-folder-tree', 'bg-info', '/genre')
+            +dashboardItem('authorCount', $.msg('author.title'), 'fa-people-group', 'bg-secondary', '/author')
+            +dashboardItem('bookCount', $.msg('book.title'), 'fa-book', 'bg-warning', '/book')
+            +dashboardItem('commentCount', $.msg('comment.title'), 'fa-comments', 'bg-primary', '/comment')

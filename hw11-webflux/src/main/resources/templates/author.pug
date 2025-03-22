@@ -1,0 +1,12 @@
+include include/mixines
+extends include/layout
+block content
+    script(src="/js/author.bundle.js")
+    +gridPanel
+        +greenBtn('saveDialog', 'newAuthorAction', $.msg("author.add"))
+        +empty('emptyInfo')= $.msg("author.empty")
+        +grid('authorList', $.msg("author.update"), $.msg("author.delete"), 'editAuthorAction', 'deleteAuthorAction')
+            +column100= $.msg("author.authorFullName")
+    +formDialog('saveDialog', 'saveAuthorAction', $.msg("common.close"), $.msg("common.save"))
+        +formHidden('authorId')
+        +formField('authorFullName', $.msg("author.authorFullName"), $.msg("author.enterFullName"))
