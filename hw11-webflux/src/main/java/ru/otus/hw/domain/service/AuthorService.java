@@ -1,20 +1,20 @@
 package ru.otus.hw.domain.service;
 
 import jakarta.validation.Valid;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.hw.domain.model.Author;
 
-import java.util.List;
-import java.util.Optional;
 
 public interface AuthorService {
 
-    Optional<Author> findById(long id);
+    Mono<Author> findById(long id);
 
-    List<Author> findAll();
+    Flux<Author> findAll();
 
-    Long count();
+    Mono<Long> count();
 
-    Author save(@Valid Author author);
+    Mono<Author> save(@Valid Mono<Author> authorMono);
 
-    void delete(Long id);
+    Mono<Void> delete(Long id);
 }

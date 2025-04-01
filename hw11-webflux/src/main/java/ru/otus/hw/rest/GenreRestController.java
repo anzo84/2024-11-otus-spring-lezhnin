@@ -1,10 +1,11 @@
 package ru.otus.hw.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.hw.domain.service.GenreService;
 import ru.otus.hw.rest.api.GenresApi;
 import ru.otus.hw.rest.mapper.GenreRestMapper;
@@ -12,7 +13,6 @@ import ru.otus.hw.rest.model.GenreDto;
 import ru.otus.hw.rest.model.ModifyGenreDto;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -24,38 +24,37 @@ public class GenreRestController implements GenresApi {
     private final GenreRestMapper mapper;
 
     @Override
-    public ResponseEntity<GenreDto> createGenre(GenreDto genre) {
-        return ResponseEntity.ok(mapper.toDto(service.save(mapper.map(genre))));
+    public Mono<GenreDto> createGenre(Mono<GenreDto> genreDto, ServerWebExchange exchange) {
+        return service.save(genreDto.map(mapper::map)).map(mapper::map);
     }
 
     @Override
-    public ResponseEntity<Void> deleteGenre(Long id) {
-        service.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public Mono<Void> deleteGenre(Long id, ServerWebExchange exchange) {
+        return service.delete(id);
     }
 
     @Override
-    public ResponseEntity<List<GenreDto>> getAllGenres() {
-        return ResponseEntity.ok(mapper.toDto(service.findAll()));
+    public Flux<GenreDto> getAllGenres(ServerWebExchange exchange) {
+        return service.findAll().map(mapper::map);
     }
 
     @Override
-    public ResponseEntity<GenreDto> getGenreById(Long id) {
-        Optional<ru.otus.hw.domain.model.Genre> genre = service.findById(Optional.ofNullable(id).orElse(0L));
-        return genre.map(value -> ResponseEntity.ok(mapper.toDto(value)))
-            .orElseGet(() -> ResponseEntity.notFound().build());
+    public Mono<GenreDto> getGenreById(Long id, ServerWebExchange exchange) {
+        return service.findById(id).map(mapper::map);
     }
 
     @Override
-    public ResponseEntity<List<GenreDto>> getGenresByIds(List<Long> ids) {
-        return GenresApi.super.getGenresByIds(ids);
+    public Flux<GenreDto> getGenresByIds(List<Long> ids, ServerWebExchange exchange) {
+        return service.getGenresByIds(ids).map(mapper::map);
     }
 
     @Override
-    public ResponseEntity<GenreDto> updateGenre(Long id, ModifyGenreDto updateGenreRequest) {
-        GenreDto genre = new GenreDto();
-        genre.setId(id);
-        genre.setName(updateGenreRequest.getName());
-        return ResponseEntity.ok(mapper.toDto(service.save(mapper.map(genre))));
+    public Mono<GenreDto> updateGenre(Long id, Mono<ModifyGenreDto> modifyGenreDto, ServerWebExchange exchange) {
+        return service.save(modifyGenreDto.map(dto -> {
+            GenreDto genre = new GenreDto();
+            genre.setId(id);
+            genre.setName(dto.getName());
+            return genre;
+        }).map(mapper::map)).map(mapper::map);
     }
 }

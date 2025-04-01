@@ -2,20 +2,19 @@ package ru.otus.hw.domain.service;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.hw.domain.model.Comment;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface CommentService {
 
-    List<Comment> findByBookId(long bookId);
+    Flux<Comment> findByBookId(long bookId);
 
-    Optional<Comment> findById(long id);
+    Mono<Comment> findById(long id);
 
-    Comment save(@Valid @NotNull(message = "{comment.notEmpty}") Comment comment);
+    Mono<Comment> save(@Valid @NotNull(message = "{comment.notEmpty}") Mono<Comment> commentMono);
 
-    void deleteComment(long id);
+    Mono<Void> delete(long id);
 
-    Long count();
+    Mono<Long> count();
 }

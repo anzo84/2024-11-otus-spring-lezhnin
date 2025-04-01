@@ -1,22 +1,23 @@
 package ru.otus.hw.domain.service;
 
 import jakarta.validation.Valid;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.hw.domain.model.Genre;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface GenreService {
 
-    Optional<Genre> findById(long id);
+    Mono<Genre> findById(long id);
 
-    List<Genre> findAll();
+    Flux<Genre> findAll();
 
-    Long count();
+    Mono<Long> count();
 
-    Genre save(@Valid Genre genre);
+    Mono<Genre> save(@Valid Mono<Genre> genreMono);
 
-    void delete(Long id);
+    Mono<Void> delete(Long id);
 
-    List<Genre> getGenresByIds(List<Long> ids);
+    Flux<Genre> getGenresByIds(List<Long> ids);
 }

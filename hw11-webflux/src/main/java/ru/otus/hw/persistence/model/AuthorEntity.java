@@ -1,31 +1,23 @@
 package ru.otus.hw.persistence.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "authors")
+
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
+@Table("authors")
 public class AuthorEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    @Column(name = "id")
-    private long id;
+    @Column("id")
+    private Long id;
 
-    @Column(name = "full_name")
+    @Column("full_name")
     private String fullName;
 }

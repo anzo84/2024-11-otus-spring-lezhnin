@@ -4,19 +4,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import org.springframework.validation.annotation.Validated;
-import ru.otus.hw.domain.exception.EntityNotFoundException;
-import ru.otus.hw.domain.model.Book;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.hw.domain.model.Comment;
 import ru.otus.hw.mapper.CommentMapper;
-import ru.otus.hw.persistence.model.BookEntity;
-import ru.otus.hw.persistence.model.CommentEntity;
 import ru.otus.hw.persistence.repository.BookRepository;
 import ru.otus.hw.persistence.repository.CommentRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,42 +22,47 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
-    private final CommentMapper commentMapper;
+    private final CommentMapper mapper;
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Comment> findByBookId(long bookId) {
-        return commentMapper.map(commentRepository.findByBookId(bookId));
-    }
+    private final TransactionalOperator transactionalOperator;
 
-    @Transactional(readOnly = true)
     @Override
-    public Optional<Comment> findById(long id) {
-        return commentRepository.findById(id).map(commentMapper::map);
-    }
-
-    @Transactional
-    @Override
-    public Comment save(@Valid @NotNull(message = "{comment.notEmpty}") Comment comment) {
-        long bookId = Optional.ofNullable(comment.getBook()).map(Book::getId)
-            .orElseThrow(() -> new IllegalArgumentException("Book id is null"));
-        BookEntity book = bookRepository.findById(bookId)
-            .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found", bookId));
-        var commentEntity = commentRepository.findById(Optional.ofNullable(comment.getId()).orElse(0L))
-            .orElse(new CommentEntity());
-        commentEntity.setBook(book);
-        commentEntity.setContent(comment.getContent());
-        return commentMapper.map(commentRepository.save(commentEntity));
-    }
-
-    @Transactional
-    @Override
-    public void deleteComment(long id) {
-        commentRepository.deleteById(id);
+    public Flux<Comment> findByBookId(long bookId) {
+        return commentRepository.findByBookId(bookId).map(mapper::map);
     }
 
     @Override
-    public Long count() {
+    public Mono<Comment> findById(long id) {
+        return commentRepository.findById(id).map(mapper::map);
+    }
+
+    @Override
+    public Mono<Comment> save(@Valid @NotNull(message = "{comment.notEmpty}") Mono<Comment> commentMono) {
+        /*  return commentMono.flatMap(comment -> Mono.justOrEmpty(
+            Optional.ofNullable(comment.getBook()).map(Book::getId))
+            .switchIfEmpty(Mono.error(new IllegalArgumentException("Book id is null")))
+            .flatMap(bookId -> bookRepository.findById(bookId)
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("Book with id %d not found", bookId))))
+            .flatMap(bookEntity -> commentRepository.findById(
+                Optional.ofNullable(comment.getId()).orElse(0L))
+                .defaultIfEmpty(new CommentEntity())
+                .flatMap(commentEntity -> {
+                    commentEntity.setBook(bookEntity);
+                    commentEntity.setContent(comment.getContent());
+                    return commentRepository.save(commentEntity)
+                        .map(mapper::map);
+                }))).as(transactionalOperator::transactional);*/
+        return commentMono;
+    }
+
+    @Override
+    public Mono<Void> delete(long id) {
+        return commentRepository.deleteById(id);
+    }
+
+    @Override
+    public Mono<Long> count() {
         return commentRepository.count();
     }
+
 }

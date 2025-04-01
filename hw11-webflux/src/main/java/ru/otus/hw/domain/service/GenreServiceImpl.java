@@ -1,60 +1,69 @@
 package ru.otus.hw.domain.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import org.springframework.validation.annotation.Validated;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.hw.domain.model.Genre;
 import ru.otus.hw.mapper.GenreMapper;
 import ru.otus.hw.persistence.model.GenreEntity;
 import ru.otus.hw.persistence.repository.GenreRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
 @Validated
+@RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
 
-    private final GenreRepository genreRepository;
+    private final GenreRepository repository;
 
-    private final GenreMapper genreMapper;
+    private final GenreMapper mapper;
+
+    private final TransactionalOperator transactionalOperator;
 
     @Override
-    public Optional<Genre> findById(long id) {
-        return genreRepository.findById(id).map(genreMapper::map);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<Genre> findAll() {
-        return genreMapper.map(genreRepository.findAll());
+    public Mono<Genre> findById(long id) {
+        return repository.findById(id).map(mapper::map);
     }
 
     @Override
-    public Long count() {
-        return genreRepository.count();
+    public Flux<Genre> findAll() {
+        return repository.findAll().map(mapper::map);
     }
 
     @Override
-    @Transactional
-    public Genre save(@Valid Genre genre) {
-        GenreEntity entity = genre.getId() == null ? new GenreEntity() :
-            genreRepository.findById(genre.getId()).orElse(new GenreEntity());
-        entity.setName(genre.getName());
-        return genreMapper.map(genreRepository.save(entity));
+    public Mono<Long> count() {
+        return repository.count();
     }
 
     @Override
-    @Transactional
-    public void delete(Long id) {
-        genreRepository.deleteById(id);
+    public Mono<Genre> save(Mono<Genre> genreMono) {
+        return genreMono.flatMap(genre ->
+            repository.findById(genre.getId())
+                .flatMap(existingEntity -> {
+                    existingEntity.setName(genre.getName());
+                    return repository.save(existingEntity);
+                })
+                .switchIfEmpty(Mono.defer(() -> {
+                    GenreEntity newEntity = new GenreEntity();
+                    newEntity.setName(genre.getName());
+                    return repository.save(newEntity);
+                }))
+                .map(mapper::map)
+        ).as(transactionalOperator::transactional);
     }
 
     @Override
-    public List<Genre> getGenresByIds(List<Long> ids) {
-        return genreMapper.map(genreRepository.findAllByIdIn(ids));
+    public Mono<Void> delete(Long id) {
+        return repository.deleteById(id);
     }
+
+    @Override
+    public Flux<Genre> getGenresByIds(List<Long> ids) {
+        return repository.findAllByIdIn(ids).map(mapper::map);
+    }
+
 }

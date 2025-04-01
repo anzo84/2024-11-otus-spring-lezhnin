@@ -1,19 +1,16 @@
 package ru.otus.hw.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.otus.hw.domain.model.Author;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.hw.domain.service.AuthorService;
 import ru.otus.hw.rest.api.AuthorsApi;
 import ru.otus.hw.rest.mapper.AuthorRestMapper;
 import ru.otus.hw.rest.model.AuthorDto;
 import ru.otus.hw.rest.model.ModifyAuthorDto;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -25,33 +22,32 @@ public class AuthorRestController implements AuthorsApi {
     private final AuthorRestMapper mapper;
 
     @Override
-    public ResponseEntity<AuthorDto> createAuthor(AuthorDto authorDto) {
-        return ResponseEntity.ok(mapper.toDto(service.save(mapper.map(authorDto))));
+    public Mono<AuthorDto> createAuthor(Mono<AuthorDto> authorDto, ServerWebExchange exchange) {
+        return service.save(authorDto.map(mapper::map)).map(mapper::map);
     }
 
     @Override
-    public ResponseEntity<Void> deleteAuthor(Long id) {
-        service.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public Mono<Void> deleteAuthor(Long id, ServerWebExchange exchange) {
+        return service.delete(id);
     }
 
     @Override
-    public ResponseEntity<List<AuthorDto>> getAllAuthors() {
-        return ResponseEntity.ok(mapper.toDto(service.findAll()));
+    public Flux<AuthorDto> getAllAuthors(ServerWebExchange exchange) {
+        return service.findAll().map(mapper::map);
     }
 
     @Override
-    public ResponseEntity<AuthorDto> getAuthorById(Long id) {
-        Optional<Author> author = service.findById(Optional.ofNullable(id).orElse(0L));
-        return author.map(value -> ResponseEntity.ok(mapper.toDto(value)))
-            .orElseGet(() -> ResponseEntity.notFound().build());
+    public Mono<AuthorDto> getAuthorById(Long id, ServerWebExchange exchange) {
+        return service.findById(id).map(mapper::map);
     }
 
     @Override
-    public ResponseEntity<AuthorDto> updateAuthor(Long id, ModifyAuthorDto updateAuthorRequestDto) {
-        AuthorDto authorDto = new AuthorDto();
-        authorDto.setId(id);
-        authorDto.setFullName(updateAuthorRequestDto.getFullName());
-        return ResponseEntity.ok(mapper.toDto(service.save(mapper.map(authorDto))));
+    public Mono<AuthorDto> updateAuthor(Long id, Mono<ModifyAuthorDto> modifyAuthorDto, ServerWebExchange exchange) {
+        return service.save(modifyAuthorDto.map(dto -> {
+            AuthorDto authorDto = new AuthorDto();
+            authorDto.setId(id);
+            authorDto.setFullName(dto.getFullName());
+            return authorDto;
+        }).map(mapper::map)).map(mapper::map);
     }
 }

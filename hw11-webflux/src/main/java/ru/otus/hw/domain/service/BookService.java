@@ -2,22 +2,46 @@ package ru.otus.hw.domain.service;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import ru.otus.hw.domain.exception.EntityNotFoundException;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.hw.domain.model.Book;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface BookService {
 
-    Optional<Book> findById(long id);
+    Mono<Book> findById(long id);
 
-    List<Book> findAll();
+    /**
+     * Возвращает все книги с полной информацией об авторах и жанрах.
+     * Жанры для каждой книги сортируются по названию.
+     *
+     * @return Flux всех книг
+     */
+    Flux<Book> findAll();
 
-    Book save(@Valid @NotNull(message = "{book.notEmpty}") Book book) throws EntityNotFoundException,
-        IllegalArgumentException;
+    /**
+     * Сохраняет книгу (создает новую или обновляет существующую).
+     * Включает валидацию данных и управление связями с автором и жанрами.
+     *
+     * @param bookMono Mono с данными книги для сохранения
+     * @return Mono с сохраненной книгой
+     * @throws IllegalArgumentException если данные книги невалидны
+     */
+    Mono<Book> save(@Valid @NotNull(message = "{book.notEmpty}") Mono<Book> bookMono);
 
-    void deleteById(long id);
+    /**
+     * Удаляет книгу по идентификатору.
+     * Автоматически удаляет все связанные с книгой жанры (cascade delete).
+     *
+     * @param id идентификатор книги
+     * @return Mono, завершающийся после удаления
+     */
+    Mono<Void> delete(long id);
 
-    Long count();
+    /**
+     * Возвращает общее количество книг.
+     *
+     * @return Mono с количеством книг
+     */
+    Mono<Long> count();
+
 }

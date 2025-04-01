@@ -1,18 +1,15 @@
 package ru.otus.hw.persistence.repository;
 
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.hw.persistence.model.CommentEntity;
 
-import java.util.List;
-import java.util.Optional;
 
-public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
+public interface CommentRepository extends R2dbcRepository<CommentEntity, Long> {
 
-    @EntityGraph(CommentEntity.COMMENT_BOOKS)
-    List<CommentEntity> findByBookId(long bookId);
+    Flux<CommentEntity> findByBookId(long bookId);
 
-    @EntityGraph(CommentEntity.COMMENT_BOOKS)
     @Override
-    Optional<CommentEntity> findById(Long id);
+    Mono<CommentEntity> findById(Long id);
 }

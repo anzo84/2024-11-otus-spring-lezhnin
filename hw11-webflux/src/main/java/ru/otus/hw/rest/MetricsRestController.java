@@ -1,18 +1,17 @@
 package ru.otus.hw.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.hw.domain.service.AuthorService;
 import ru.otus.hw.domain.service.BookService;
 import ru.otus.hw.domain.service.CommentService;
 import ru.otus.hw.domain.service.GenreService;
 import ru.otus.hw.rest.api.MetricsApi;
 import ru.otus.hw.rest.model.MetricDto;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -28,12 +27,18 @@ public class MetricsRestController implements MetricsApi {
     private final CommentService commentService;
 
     @Override
-    public ResponseEntity<List<MetricDto>> getMetrics() {
-        List<MetricDto> result = new ArrayList<>();
-        result.add(new MetricDto(MetricDto.NameEnum.AUTHOR_COUNT, authorService.count()));
-        result.add(new MetricDto(MetricDto.NameEnum.BOOK_COUNT, bookService.count()));
-        result.add(new MetricDto(MetricDto.NameEnum.GENRE_COUNT, genreService.count()));
-        result.add(new MetricDto(MetricDto.NameEnum.COMMENT_COUNT, commentService.count()));
-        return ResponseEntity.ok(result);
+    public Flux<MetricDto> getMetrics(ServerWebExchange exchange) {
+        Mono<MetricDto> genreCount = genreService.count()
+            .map(x -> new MetricDto(MetricDto.NameEnum.GENRE_COUNT, x));
+        Mono<MetricDto> authorCount = authorService.count()
+            .map(x -> new MetricDto(MetricDto.NameEnum.AUTHOR_COUNT, x));
+        Mono<MetricDto> bookCount = bookService.count()
+            .map(x -> new MetricDto(MetricDto.NameEnum.BOOK_COUNT, x));
+        Mono<MetricDto> commentCount = commentService.count()
+            .map(x -> new MetricDto(MetricDto.NameEnum.COMMENT_COUNT, x));
+
+        return Flux.merge(
+            genreCount, authorCount, bookCount, commentCount
+        );
     }
 }

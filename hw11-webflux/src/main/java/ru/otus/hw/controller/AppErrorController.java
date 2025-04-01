@@ -1,21 +1,12 @@
 package ru.otus.hw.controller;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.http.HttpStatus;
-//import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Optional;
 
 @Controller
 public class AppErrorController implements ErrorController {
 
-
+/*
     @RequestMapping("/error")
     public ModelAndView handleError(HttpServletRequest request, Model model) {
         Optional<String> statusCode = Optional.ofNullable(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE))
@@ -39,5 +30,5 @@ public class AppErrorController implements ErrorController {
             .ifPresent(x -> model.addAttribute("errorMessage", x));
 
         return new ModelAndView("error.pug", model.asMap());
-    }
+    }*/
 }

@@ -1,18 +1,16 @@
 package ru.otus.hw.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.hw.domain.service.CommentService;
 import ru.otus.hw.rest.api.CommentsApi;
 import ru.otus.hw.rest.mapper.CommentRestMapper;
 import ru.otus.hw.rest.model.CommentDto;
 import ru.otus.hw.rest.model.ModifyCommentDto;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -24,34 +22,33 @@ public class CommentRestController implements CommentsApi {
     private final CommentRestMapper mapper;
 
     @Override
-    public ResponseEntity<CommentDto> createComment(CommentDto commentDto) {
-        return ResponseEntity.ok(mapper.toDto(service.save(mapper.map(commentDto))));
+    public Mono<CommentDto> createComment(Mono<CommentDto> commentDto, ServerWebExchange exchange) {
+        return service.save(commentDto.map(mapper::map)).map(mapper::map);
     }
 
     @Override
-    public ResponseEntity<Void> deleteComment(Long id) {
-        service.deleteComment(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public Mono<Void> deleteComment(Long id, ServerWebExchange exchange) {
+        return service.delete(id);
     }
 
     @Override
-    public ResponseEntity<List<CommentDto>> getAllComments(Long bookId) {
-        return ResponseEntity.ok(mapper.toDto(service.findByBookId(bookId)));
+    public Flux<CommentDto> getAllComments(Long bookId, ServerWebExchange exchange) {
+        return service.findByBookId(bookId).map(mapper::map);
     }
 
     @Override
-    public ResponseEntity<CommentDto> getCommentById(Long id) {
-        Optional<ru.otus.hw.domain.model.Comment> comment = service.findById(Optional.ofNullable(id).orElse(0L));
-        return comment.map(value -> ResponseEntity.ok(mapper.toDto(value)))
-            .orElseGet(() -> ResponseEntity.notFound().build());
+    public Mono<CommentDto> getCommentById(Long id, ServerWebExchange exchange) {
+        return service.findById(id).map(mapper::map);
     }
 
     @Override
-    public ResponseEntity<CommentDto> updateComment(Long id, ModifyCommentDto updateCommentRequestDto) {
-        CommentDto comment = new CommentDto();
-        comment.setId(id);
-        comment.setContent(updateCommentRequestDto.getContent());
-        comment.setBook(updateCommentRequestDto.getBook());
-        return ResponseEntity.ok(mapper.toDto(service.save(mapper.map(comment))));
+    public Mono<CommentDto> updateComment(Long id, Mono<ModifyCommentDto> modifyCommentDto, ServerWebExchange exchange) {
+        return service.save(modifyCommentDto.map(dto -> {
+            CommentDto comment = new CommentDto();
+            comment.setId(id);
+            comment.setContent(dto.getContent());
+            comment.setBook(dto.getBook());
+            return comment;
+        }).map(mapper::map)).map(mapper::map);
     }
 }
