@@ -1,6 +1,7 @@
 package ru.otus.hw.persistence.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import lombok.AllArgsConstructor;
@@ -22,4 +23,7 @@ public class CommentEntity {
 
     @Column("book_id")
     private Long bookId;
+
+    @Transient
+    private BookEntity book;
 }

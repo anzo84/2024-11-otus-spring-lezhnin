@@ -135,7 +135,8 @@ class CommentServiceTest {
                     .extracting(Comment::getId, Comment::getContent)
                     .containsExactlyInAnyOrder(
                         tuple(1L, "Updated comment"),
-                        tuple(2L, "Comment 1_2")
+                        tuple(2L, "Comment 1_2"),
+                        tuple(4L, "Comment 1_3")
                     );
             })
             .verifyComplete();
@@ -153,7 +154,8 @@ class CommentServiceTest {
                 assertThat(comments)
                     .extracting(Comment::getId, Comment::getContent)
                     .containsExactly(
-                        tuple(2L, "Comment 1_2")
+                        tuple(2L, "Comment 1_2"),
+                        tuple(4L, "Comment 1_3")
                     );
             })
             .verifyComplete();
