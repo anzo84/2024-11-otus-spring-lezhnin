@@ -267,8 +267,8 @@
                             <inputSpec>${project.basedir}/src/main/resources/api/otus-book-library.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <output>${project.build.directory}/generated-sources</output>
-                            <apiPackage>ru.otus.hw.rest.api</apiPackage>
-                            <modelPackage>ru.otus.hw.rest.model</modelPackage>
+                            <apiPackage>ru.otus.hw11.rest.api</apiPackage>
+                            <modelPackage>ru.otus.hw11.rest.model</modelPackage>
                             <modelNameSuffix>Dto</modelNameSuffix>
                             <configOptions>
                                 <interfaceOnly>true</interfaceOnly>
