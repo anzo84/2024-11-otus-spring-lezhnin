@@ -1,9 +1,8 @@
 package ru.otus.hw.controller;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.stereotype.Controller;
 
-@Controller
+//@Controller
 public class AppErrorController implements ErrorController {
 
 /*
@@ -29,6 +28,6 @@ public class AppErrorController implements ErrorController {
             .map(Object::toString)
             .ifPresent(x -> model.addAttribute("errorMessage", x));
 
-        return new ModelAndView("error.pug", model.asMap());
+        return new ModelAndView("error.pug.txt", model.asMap());
     }*/
 }

@@ -5,16 +5,20 @@ server:
       enabled: false
 spring:
   r2dbc:
-    url: r2dbc:h2:mem:///testdb
+    url: r2dbc:h2:mem:///maindb
     username: sa
     password:
     pool:
       enabled: true
-  liquibase:
-    enabled: true
-    drop-first: true
+    properties:
+      MULTI_THREADED: TRUE
+      DB_CLOSE_ON_EXIT: FALSE
+r2dbc:
+  migrate:
+    resources:
+      - resourcesPaths:
+          - classpath:/db/migration/*.sql
 logging:
   level:
     root: info
     org.springframework.web: warn
-    liquibase: warn

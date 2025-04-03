@@ -1,24 +1,25 @@
 package ru.otus.hw.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 @ControllerAdvice
 @RequiredArgsConstructor
 public class GlobalModelAttributes {
 
-    /*
     private final MessageSource messageSource;
 
-    private final LocaleResolver localeResolver;
-
-    @ModelAttribute("requestURI")
-    public String contextPath(final HttpServletRequest request) {
-        return request.getRequestURI();
+    @ModelAttribute
+    public Mono<String> requestURI(ServerWebExchange exchange) {
+        return Mono.just(exchange.getRequest().getPath().toString());
     }
 
     @ModelAttribute("$")
-    public I18nResolver setLocale(final HttpServletRequest request) {
-        return new I18nResolver(messageSource, localeResolver.resolveLocale(request));
-    }*/
+    public I18nResolver i18nResolver(ServerWebExchange exchange) {
+        return new I18nResolver(messageSource, exchange.getLocaleContext().getLocale());
+    }
 }

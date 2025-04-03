@@ -1,40 +1,44 @@
 package ru.otus.hw.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import reactor.core.publisher.Mono;
 
 @Controller
-@RequiredArgsConstructor
 public class RoutingController {
 
-    @GetMapping("home")
-    public String homePage() {
-        return "home";
+    @GetMapping("/home")
+    public Mono<String> homePage() {
+        return Mono.just("home.pug");
     }
 
     @GetMapping("/")
-    public String rootPage() {
-        return "redirect:/home";
+    public Mono<String> rootPage() {
+        return Mono.just("home.pug");
     }
 
-    @GetMapping("genre")
-    public String genreList() {
-        return "genre";
+    @GetMapping("/genre")
+    public Mono<String> genreList() {
+        return Mono.just("genre.pug");
     }
 
-    @GetMapping("author")
-    public String authorList() {
-        return "author";
+    @GetMapping("/author")
+    public Mono<String> authorList() {
+        return Mono.just("author.pug");
     }
 
-    @GetMapping("book")
-    public String bookList() {
-        return "book";
+    @GetMapping("/book")
+    public Mono<String> bookList() {
+        return Mono.just("book.pug");
     }
 
-    @GetMapping("comment")
-    public String commentList() {
-        return "comment";
+    @GetMapping("/comment")
+    public Mono<String> commentList() {
+        return Mono.just("comment.pug");
+    }
+
+    @GetMapping("/test")
+    public Mono<String> hello() {
+        return Mono.just("test.pug");
     }
 }
