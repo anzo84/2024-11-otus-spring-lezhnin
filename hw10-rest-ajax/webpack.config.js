@@ -1,5 +1,5 @@
 const path = require('path');
-const webpack = require('webpack');
+const webpack = require('webpack'); // Добавьте эту строку
 
 module.exports = {
     entry: {
