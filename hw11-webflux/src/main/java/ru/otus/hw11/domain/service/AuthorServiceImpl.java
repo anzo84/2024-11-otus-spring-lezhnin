@@ -26,7 +26,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Mono<Author> findById(long id) {
-        return repository.findById(id).map(mapper::map);
+        return repository.findById(id)
+            .map(mapper::map);
     }
 
     @Override

@@ -2,7 +2,6 @@ package ru.otus.hw11.config;
 
 import de.neuland.pug4j.PugConfiguration;
 import de.neuland.pug4j.spring.template.SpringTemplateLoader;
-import de.neuland.pug4j.spring.view.PugViewResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

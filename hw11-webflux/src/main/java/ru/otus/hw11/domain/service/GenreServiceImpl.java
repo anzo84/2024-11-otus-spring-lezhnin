@@ -55,7 +55,8 @@ public class GenreServiceImpl implements GenreService {
                     return repository.save(newEntity);
                 }))
                 .map(mapper::map)
-        ).as(transactionalOperator::transactional);
+        )
+            .as(transactionalOperator::transactional);
     }
 
     @Override
