@@ -1,0 +1,30 @@
+include include/mixines
+extends include/layout
+block content
+    script(src="/js/book.bundle.js")
+    +gridPanel
+        +greenBtn('saveDialog', 'newBookAction', $.msg("book.add"))
+        +empty('emptyInfo')= $.msg("book.empty")
+        +grid('bookList', $.msg("book.update"), $.msg("book.delete"), 'editBookAction', 'deleteBookAction')
+            +column50= $.msg("book.bookTitle")
+            +column25= $.msg("book.author")
+            +column25= $.msg("book.genres")
+    +formDialog('saveDialog', 'saveBookAction', $.msg("common.close"), $.msg("common.save"))
+        +formHidden('bookId')
+        +formField('bookTitle', $.msg("book.bookTitle"), $.msg("book.enterTitle"))
+        .form-group
+            label(for="bookAuthor")= $.msg("book.author")
+            select.form-control.select2(
+                id="bookAuthor"
+                data-theme="bootstrap4"
+                required
+                data-not-selected=$.msg("common.notSelected"))
+        .form-group
+            label(for="bookGenres")= $.msg("book.genres")
+            select.form-control.select2(
+                id="bookGenres"
+                multiple="multiple"
+                required
+                data-theme="bootstrap4"
+                data-placeholder=$.msg("book.selectGenre")
+                data-allow-clear="true")

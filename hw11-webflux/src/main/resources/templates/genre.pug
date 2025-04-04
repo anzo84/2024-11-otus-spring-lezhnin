@@ -1,0 +1,12 @@
+include include/mixines
+extends include/layout
+block content
+    script(src="/js/genre.bundle.js")
+    +gridPanel
+        +greenBtn('saveDialog', 'newGenreAction', $.msg("genre.add"))
+        +empty('emptyInfo')= $.msg("genre.empty")
+        +grid('genreList', $.msg("genre.update"), $.msg("genre.delete"), 'editGenreAction', 'deleteGenreAction')
+            +column100= $.msg("genre.genreName")
+    +formDialog('saveDialog', 'saveGenreAction', $.msg("common.close"), $.msg("common.save"))
+        +formHidden('genreId')
+        +formField('genreName', $.msg("genre.genreName"), $.msg("genre.enterName"))
