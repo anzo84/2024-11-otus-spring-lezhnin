@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.otus.hw.config.SecurityConfiguration;
 import ru.otus.hw.domain.model.Author;
 import ru.otus.hw.domain.model.Book;
 import ru.otus.hw.domain.model.Genre;
@@ -30,6 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BookRestController.class)
 @ComponentScan(basePackages = "ru.otus.hw.rest.mapper")
+@WithMockUser
+@Import(SecurityConfiguration.class)
 class BookRestControllerTest {
 
     @Autowired

@@ -12,5 +12,4 @@ public interface AuthorMapper {
     Author map(AuthorEntity entity);
 
     List<Author> map(List<AuthorEntity> entities);
-
 }

@@ -32,3 +32,7 @@ logging:
     root: info
     org.springframework.web: trace
     liquibase: warn
+app:
+  default.user:
+    name: admin
+    password: 123456

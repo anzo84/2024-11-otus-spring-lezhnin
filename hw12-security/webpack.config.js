@@ -1,5 +1,5 @@
 const path = require('path');
-const webpack = require('webpack'); // Добавьте эту строку
+const webpack = require('webpack');
 
 module.exports = {
     entry: {
@@ -8,7 +8,8 @@ module.exports = {
         book: './src/main/js/book.js',
         genre: './src/main/js/genre.js',
         author: './src/main/js/author.js',
-        comment: './src/main/js/comment.js'
+        comment: './src/main/js/comment.js',
+        login: './src/main/js/login.js'
     },
     output: {
         filename: '[name].bundle.js',
