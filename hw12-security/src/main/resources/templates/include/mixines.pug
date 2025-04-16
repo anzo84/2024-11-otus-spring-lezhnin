@@ -1,0 +1,154 @@
+//-
+    Блок пункта меню
+    title - текст ссылки
+    path - путь страницы
+    imgClass - стиль изображения пункта меню
+mixin menuItem(title, path, imgClass)
+    - const active = requestURI===path
+    li.nav-item
+        a.nav-link(class=active ? "active" : "" href=path)
+            i.nav-icon.fas(class=imgClass)
+            p= title
+
+//-
+    Блок ячейка dashboard
+    title - Заголовок
+    description - Описание
+    fontawesomeName - fontawesome класс изображения
+    backGroundClass - bootstrap класс стиля карточек (bg-primary,bg-secondary,bg-success,bg-danger,bg-warning,bg-info,
+                                                      bg-light,bg-dark,bg-white)
+    path - Путь перехода
+mixin dashboardItem(titleId, description, fontawesomeName, backGroundClass, path)
+    .col-lg-3.col-6
+        .small-box(class=backGroundClass)
+            .inner
+                h3(id=titleId)
+                p= description
+            .icon
+                i.fas(class=fontawesomeName)
+            a.small-box-footer(href=path)
+                span= $.msg("common.goTo")
+                i.fas.fa-arrow-circle-right
+
+mixin greenBtn(dialogId, action, captionAndTitle)
+    button.btn.btn-success.my-2(
+        id=`actionBtn-${dialogId}`
+        type="button"
+        data-toggle="modal"
+        data-target=`#${dialogId}`
+        data-action=action
+        data-title=captionAndTitle
+    )
+        span
+            if block
+                block
+            else
+                = captionAndTitle
+//-
+    Вывод информации о пустом списке сущностей
+mixin empty(emptyId)
+    h5.py-3(id=emptyId)
+        if block
+            block
+        else
+            | EMPTY
+
+mixin cardRow
+    div.row.py-3
+        div.col-md-12
+            div.card
+                div.card-body
+                    if block
+                        block
+
+mixin grid(bodyId, editCaption, deleteCaption, editAction, deleteAction)
+    table.table.table-bordered
+        thead
+            tr
+                if block
+                    th(scope="col" style="width: 14px") #
+                    block
+                    th.w-auto(scope="col")
+        tbody(id=bodyId
+            data-edit-title=editCaption
+            data-delete-title=deleteCaption
+            data-edit-action=editAction
+            data-delete-action=deleteAction)
+
+mixin formDialog(dialogId, saveAction, closeTitle, saveTitle)
+    .modal.fade(id=dialogId tabindex="-1" aria-labelledby=`${dialogId}Label` aria-hidden="true")
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    h5.modal-title(id=`${dialogId}Label`) Modal dialog
+                    button(type="button" class="close" data-dismiss="modal" aria-label=closeTitle)
+                        span(aria-hidden=true) &times;
+                .modal-body
+                    if block
+                        form(role="form")
+                            +alert('alert', $.msg('common.serverError'))
+                            block
+                    else
+                        p(id=`${dialogId}Content`) Empty dialog
+                .modal-footer
+                    button(type="button" class="btn btn-secondary" data-dismiss="modal")= closeTitle
+                    button(id=`${dialogId}Close` type="button" class="btn btn-primary" data-action=saveAction)= saveTitle
+    script.
+        $('#'+"#{dialogId}").on('show.bs.modal', function (e) {
+            $(this).find("form").trigger("reset");
+            $(this).find("input[type=hidden]").val(0);
+            $(this).find(".alert").hide();
+            $(this).find("select").val(null).trigger('change');
+            $('#'+"#{dialogId}Label").text($(e.relatedTarget).data("title"));
+        });
+
+mixin formHidden(inputId)
+    input(id=inputId type="hidden" value="0")
+
+mixin formField(inputTextId, title, placeHolder )
+    .form-group
+        label(for=inputTextId)= title
+        input.form-control(id=inputTextId type="text" placeholder=placeHolder value="")
+
+mixin fluidSection
+    section.content
+        .container-fluid
+            if block
+                block
+
+mixin column100
+    th.w-100(scope="col")
+        if block
+            block
+
+mixin column75
+    th.w-75(scope="col")
+        if block
+            block
+
+mixin column50
+    th.w-50(scope="col")
+        if block
+            block
+
+mixin column25
+    th.w-25(scope="col")
+        if block
+            block
+
+mixin gridPanel
+    +fluidSection
+        +cardRow
+            if block
+                block
+
+mixin alert(alertId, defMessage)
+    .alert.alert-warning(id=alertId role="alert" data-def-message=defMessage)
+
+mixin menu
+    aside.main-sidebar.sidebar-dark-primary.elevation-4(style="overflow-x:hidden;")
+        .sidebar
+            nav.mt-2
+                ul.nav.nav-pills.nav-sidebar.flex-column(data-accordion="false", data-widget="treeview", role="menu")
+                    if block
+                        block

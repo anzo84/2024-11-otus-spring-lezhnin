@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "app.default.user.password",
+      "type": "java.lang.String",
+      "description": "Пароль пользователя по умолчанию."
+    },
+    {
+      "name": "app.default.user.name",
+      "type": "java.lang.String",
+      "description": "Имя пользователя по умолчанию."
+    }
+  ] }
