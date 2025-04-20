@@ -24,12 +24,13 @@ public class I18nConfiguration {
         messageSource.setCacheSeconds(30); //refresh cache once per 30 sec
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setFallbackToSystemLocale(false);
-        messageSource.setBasenames("classpath:i18n/common",
+        messageSource.setBasenames(
+            "classpath:i18n/common",
             "classpath:i18n/genre",
             "classpath:i18n/book",
-            "classpath:i18n/genre",
             "classpath:i18n/author",
-            "classpath:i18n/comment");
+            "classpath:i18n/comment",
+            "classpath:i18n/user");
         return messageSource;
     }
 

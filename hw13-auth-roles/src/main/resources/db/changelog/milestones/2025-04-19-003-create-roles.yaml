@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11
+      comment: Добавление таблицы ролей пользователей
+      author: anton.lezhnin@x5.ru
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: roles
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  generationType: always
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: roles__users_fk
+                    references: users (id)
+                    deleteCascade: true
+              - column:
+                  name: role_alias
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 12
+      author: anton.lezhnin@x5.ru
+      changes:
+        - addCheckConstraint:
+            tableName: roles
+            columnName: role_alias
+            constraintName: ck_roles__role_alias
+            constraintExpression: "role_alias IN ('ADMIN', 'AUTHOR', 'COMMENTATOR')"

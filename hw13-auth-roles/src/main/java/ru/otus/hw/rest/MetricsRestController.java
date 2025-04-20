@@ -8,6 +8,7 @@ import ru.otus.hw.domain.service.AuthorService;
 import ru.otus.hw.domain.service.BookService;
 import ru.otus.hw.domain.service.CommentService;
 import ru.otus.hw.domain.service.GenreService;
+import ru.otus.hw.domain.service.UserService;
 import ru.otus.hw.rest.api.MetricsApi;
 import ru.otus.hw.rest.model.MetricDto;
 
@@ -27,6 +28,8 @@ public class MetricsRestController implements MetricsApi {
 
     private final CommentService commentService;
 
+    private final UserService userService;
+
     @Override
     public ResponseEntity<List<MetricDto>> getMetrics() {
         List<MetricDto> result = new ArrayList<>();
@@ -34,6 +37,7 @@ public class MetricsRestController implements MetricsApi {
         result.add(new MetricDto(MetricDto.NameEnum.BOOK_COUNT, bookService.count()));
         result.add(new MetricDto(MetricDto.NameEnum.GENRE_COUNT, genreService.count()));
         result.add(new MetricDto(MetricDto.NameEnum.COMMENT_COUNT, commentService.count()));
+        result.add(new MetricDto(MetricDto.NameEnum.USER_COUNT, userService.count()));
         return ResponseEntity.ok(result);
     }
 }
