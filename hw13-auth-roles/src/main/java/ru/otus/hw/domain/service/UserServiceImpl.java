@@ -54,12 +54,13 @@ public class UserServiceImpl implements UserService {
             userRepository.findById(user.getId()).orElse(new UserEntity());
         entity.setUsername(user.getUsername());
         entity.setPassword(user.getPassword());
-        entity.setRoles(user.getRoles().stream().map(role -> {
+        entity.getRoles().clear();
+        user.getRoles().forEach(role -> {
             RoleEntity roleEntity = new RoleEntity();
             roleEntity.setUser(entity);
             roleEntity.setAlias(userMapper.map(role));
-            return roleEntity;
-        }).collect(Collectors.toList()));
+            entity.getRoles().add(roleEntity);
+        });
         return userMapper.map(userRepository.save(entity));
     }
 

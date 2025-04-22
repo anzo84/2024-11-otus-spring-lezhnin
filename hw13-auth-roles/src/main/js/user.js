@@ -8,9 +8,16 @@ import User from "otus-book-library/src/model/User";
 async function reloadUsersWithParams(tableBodyId, editDialogId) {
     try {
         const users = await usersApi.getAllUsers();
+        const roles = await usersApi.getAllRoles();
+
+        const rolesMap = roles.reduce((map, item)=>{
+            map.set(item.role, item.description);
+            return map;
+        }, new Map());
+
         loadTable(tableBodyId, editDialogId, users, [
             user => user.username,
-            user => user.roles.join(', ')
+            user => user.roles.map(item=> rolesMap.get(item)).join(', ')
         ]);
     } catch (err) {
         console.error("Ошибка:", err);
@@ -40,7 +47,6 @@ $('body').on('click', 'button', function () {
     } else if (action === "editUserAction") {
         const id = Number.parseInt($(this).data("param"));
         usersApi.getUserById(id).then(user => {
-            console.log("user="+user)
             $('#userId').val(user.id);
             $('#userName').val(user.username);
             $('#userPassword').val(user.password);

@@ -32,12 +32,4 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
-  - changeSet:
-      id: 12
-      author: anton.lezhnin@x5.ru
-      changes:
-        - addCheckConstraint:
-            tableName: roles
-            columnName: role_alias
-            constraintName: ck_roles__role_alias
-            constraintExpression: "role_alias IN ('ADMIN', 'AUTHOR', 'COMMENTATOR')"
+                    checkConstraint: "role_alias IN ('ADMIN', 'AUTHOR', 'COMMENTATOR')"

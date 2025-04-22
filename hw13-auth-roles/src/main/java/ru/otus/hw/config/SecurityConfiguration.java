@@ -25,6 +25,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/genre/**", "/api/genres/**").authenticated()
                 .requestMatchers("/book/**", "/api/books/**").authenticated()
                 .requestMatchers("/comment/**", "/api/comments/**").authenticated()
+                .requestMatchers("/user/**", "/api/users/**").authenticated()
                 .requestMatchers("/", "/home/**", "/api/metrics/**").authenticated()
             )
             .formLogin(formLogin -> formLogin
@@ -37,7 +38,6 @@ public class SecurityConfiguration {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
             );
-
         return http.build();
     }
 
