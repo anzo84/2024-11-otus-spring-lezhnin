@@ -1,6 +1,7 @@
 package ru.otus.hw.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +10,7 @@ import ru.otus.hw.domain.service.UserService;
 import ru.otus.hw.rest.api.UsersApi;
 import ru.otus.hw.rest.mapper.UserRestMapper;
 import ru.otus.hw.rest.model.ModifyUserDto;
+import ru.otus.hw.rest.model.RoleDescriptionDto;
 import ru.otus.hw.rest.model.UserDto;
 
 import java.util.List;
@@ -32,6 +34,11 @@ public class UserRestController implements UsersApi {
     public ResponseEntity<Void> deleteUser(Long id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<RoleDescriptionDto>> getAllRoles() {
+        return ResponseEntity.ok(mapper.mapList(service.getRoleDescriptions(LocaleContextHolder.getLocale())));
     }
 
     @Override

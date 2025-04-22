@@ -705,6 +705,25 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
 
+  /users/roles:
+    get:
+      tags:
+        - Users
+      summary: Получить список описания ролей
+      description: Возвращает список описания ролей
+      operationId: getAllRoles
+      responses:
+        200:
+          description: Список ролей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleDescription'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
   /metrics:
     get:
       tags:
@@ -968,6 +987,18 @@ components:
         - COMMENTATOR
       description: Роль пользователя
       example: "AUTHOR"
+
+    RoleDescription:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Описание роли
+          minLength: 1
+          maxLength: 255
+          example: "Администратор"
+        role:
+          $ref: '#/components/schemas/Role'
 
     Error:
       type: object

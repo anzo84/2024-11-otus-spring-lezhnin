@@ -105,10 +105,15 @@ mixin formDialog(dialogId, saveAction, closeTitle, saveTitle)
 mixin formHidden(inputId)
     input(id=inputId type="hidden" value="0")
 
-mixin formField(inputTextId, title, placeHolder )
+mixin formField(inputTextId, title, placeHolder)
     .form-group
         label(for=inputTextId)= title
         input.form-control(id=inputTextId type="text" placeholder=placeHolder value="")
+
+mixin formPassword(inputPasswordId, title, placeHolder)
+    .form-group
+        label(for=inputTextId)= title
+        input.form-control(id=inputPasswordId type="password" placeholder=placeHolder value="")
 
 mixin fluidSection
     section.content
@@ -152,3 +157,23 @@ mixin menu
                 ul.nav.nav-pills.nav-sidebar.flex-column(data-accordion="false", data-widget="treeview", role="menu")
                     if block
                         block
+
+mixin formMultipleSelect(multipleSelectId, title, placeHolder)
+    .form-group
+        label(for=multipleSelectId)=title
+        select.form-control.select2(
+            id=multipleSelectId
+            multiple="multiple"
+            required
+            data-theme="bootstrap4"
+            data-placeholder=placeHolder
+            data-allow-clear="true")
+
+mixin formSelect(selectId, title, dataNotSelected)
+    .form-group
+        label(for=selectId)=title
+        select.form-control.select2(
+            id=selectId
+            data-theme="bootstrap4"
+            required
+            data-not-selected=dataNotSelected)

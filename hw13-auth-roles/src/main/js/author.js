@@ -2,8 +2,8 @@ import $ from 'jquery';
 import {authorsApi} from './include/apiClient';
 import {loadTable, showAlert} from "./include/common";
 
-import modifyAuthor from "otus-book-library/src/model/ModifyAuthor";
-import author from "otus-book-library/src/model/Author";
+import ModifyAuthor from "otus-book-library/src/model/ModifyAuthor";
+import Author from "otus-book-library/src/model/Author";
 
 async function reloadAuthorsWithParams(tableBodyId, editDialogId) {
     try {
@@ -41,8 +41,8 @@ $('body').on('click', 'button', function () {
         let id = Number.parseInt($('#authorId').val());
         let name = $('#authorFullName').val();
         const request = id === 0
-            ? authorsApi.createAuthor(new author(name))
-            : authorsApi.updateAuthor(id, new modifyAuthor(name));
+            ? authorsApi.createAuthor(new Author(name))
+            : authorsApi.updateAuthor(id, new ModifyAuthor(name));
         request
             .then(() => {
                 reloadAuthors();

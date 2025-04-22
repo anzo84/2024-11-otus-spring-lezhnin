@@ -20,3 +20,4 @@ export const genresApi = new OtusBookLibraryApiClient.GenresApi();
 export const authorsApi = new OtusBookLibraryApiClient.AuthorsApi();
 export const commentsApi = new OtusBookLibraryApiClient.CommentsApi();
 export const metricsApi = new OtusBookLibraryApiClient.MetricsApi();
+export const usersApi = new OtusBookLibraryApiClient.UsersApi();

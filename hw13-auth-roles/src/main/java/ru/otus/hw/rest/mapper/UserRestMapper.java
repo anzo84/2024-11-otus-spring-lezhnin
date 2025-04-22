@@ -2,6 +2,8 @@ package ru.otus.hw.rest.mapper;
 
 import org.mapstruct.Mapper;
 import ru.otus.hw.domain.model.Role;
+import ru.otus.hw.domain.model.RoleDescription;
+import ru.otus.hw.rest.model.RoleDescriptionDto;
 import ru.otus.hw.rest.model.RoleDto;
 import ru.otus.hw.rest.model.UserDto;
 
@@ -19,5 +21,8 @@ public interface UserRestMapper {
 
     Role map(RoleDto roleDto);
 
-    List<Role> fromtList(List<RoleDto> roleDtos);
+    RoleDescriptionDto map(RoleDescription role);
+
+    List<RoleDescriptionDto> mapList(List<RoleDescription> roles);
+
 }

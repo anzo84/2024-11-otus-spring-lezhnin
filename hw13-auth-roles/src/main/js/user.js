@@ -1,17 +1,16 @@
 import $ from 'jquery';
-import {genresApi, usersApi, authorsApi} from './include/apiClient';
+import {usersApi} from './include/apiClient';
 import {loadTable, showAlert, loadOptions} from "./include/common";
 
-import modifyUser from "otus-user-library/src/model/ModifyUser";
-import user from "otus-user-library/src/model/User";
+import ModifyUser from "otus-book-library/src/model/ModifyUser";
+import User from "otus-book-library/src/model/User";
 
 async function reloadUsersWithParams(tableBodyId, editDialogId) {
     try {
         const users = await usersApi.getAllUsers();
         loadTable(tableBodyId, editDialogId, users, [
-            user => user.title,
-            user => user.author.fullName,
-            user => user.genres.map(genre => genre.name).join(', ')
+            user => user.username,
+            user => user.roles.join(', ')
         ]);
     } catch (err) {
         console.error("Ошибка:", err);
@@ -27,10 +26,8 @@ $(document).ready(function () {
         dropdownParent: $('#saveDialog')
     });
     reloadUsers();
-    loadOptions($("#userAuthor"), authorsApi.getAllAuthors(),
-            a => a.id, a => a.fullName);
-    loadOptions($("#userGenres"), genresApi.getAllGenres(),
-            g => g.id, g => g.name);
+    loadOptions($("#userRoles"), usersApi.getAllRoles(),
+            r => r.role, r => r.description);
 });
 
 $('body').on('click', 'button', function () {
@@ -43,19 +40,20 @@ $('body').on('click', 'button', function () {
     } else if (action === "editUserAction") {
         const id = Number.parseInt($(this).data("param"));
         usersApi.getUserById(id).then(user => {
+            console.log("user="+user)
             $('#userId').val(user.id);
-            $('#userTitle').val(user.title);
-            $('#userAuthor').val(user.author.id).change();
-            $("#userGenres").val(user.genres.map(g => g.id)).change();
+            $('#userName').val(user.username);
+            $('#userPassword').val(user.password);
+            $('#userRoles').val(user.roles).change();
         });
     } else if (action === "saveUserAction") {
         const id = Number.parseInt($('#userId').val());
-        const title = $('#userTitle').val();
-        const author = {"id": $('#userAuthor').val(), "fullName": "_"};
-        const genres = $('#userGenres').val().map(i => ({id: i, name: "_"}));
+        const userName = $('#userName').val();
+        const userPassword = $('#userPassword').val();
+        const roles = $('#userRoles').val();
         const request = id === 0
-            ? usersApi.createUser(new user(title, author, genres))
-            : usersApi.updateUser(id, new modifyUser(title, author, genres));
+            ? usersApi.createUser(new User(userName, userPassword, roles))
+            : usersApi.updateUser(id, new ModifyUser(userName, userPassword, roles));
         request
             .then(() => {
                 reloadUsers();

@@ -2,8 +2,8 @@ import $ from 'jquery';
 import {genresApi} from './include/apiClient';
 import {loadTable, showAlert} from "./include/common";
 
-import modifyGenre from "otus-book-library/src/model/ModifyGenre";
-import genre from "otus-book-library/src/model/Genre";
+import ModifyGenre from "otus-book-library/src/model/ModifyGenre";
+import Genre from "otus-book-library/src/model/Genre";
 
 async function reloadGenresWithParams(tableBodyId, editDialogId) {
     try {
@@ -41,8 +41,8 @@ $('body').on('click', 'button', function () {
         let id = Number.parseInt($('#genreId').val());
         let name = $('#genreName').val();
         const response = id === 0
-            ? genresApi.createGenre(new genre(name))
-            : genresApi.updateGenre(id, new modifyGenre(name));
+            ? genresApi.createGenre(new Genre(name))
+            : genresApi.updateGenre(id, new ModifyGenre(name));
         response
             .then(() => {
                 reloadGenres();

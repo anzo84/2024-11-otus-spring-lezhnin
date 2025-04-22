@@ -2,8 +2,8 @@ import $ from 'jquery';
 import {genresApi, booksApi, authorsApi} from './include/apiClient';
 import {loadTable, showAlert, loadOptions} from "./include/common";
 
-import modifyBook from "otus-book-library/src/model/ModifyBook";
-import book from "otus-book-library/src/model/Book";
+import ModifyBook from "otus-book-library/src/model/ModifyBook";
+import Book from "otus-book-library/src/model/Book";
 
 async function reloadBooksWithParams(tableBodyId, editDialogId) {
     try {
@@ -54,8 +54,8 @@ $('body').on('click', 'button', function () {
         const author = {"id": $('#bookAuthor').val(), "fullName": "_"};
         const genres = $('#bookGenres').val().map(i => ({id: i, name: "_"}));
         const request = id === 0
-            ? booksApi.createBook(new book(title, author, genres))
-            : booksApi.updateBook(id, new modifyBook(title, author, genres));
+            ? booksApi.createBook(new Book(title, author, genres))
+            : booksApi.updateBook(id, new ModifyBook(title, author, genres));
         request
             .then(() => {
                 reloadBooks();

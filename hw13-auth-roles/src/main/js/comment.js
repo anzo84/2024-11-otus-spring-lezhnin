@@ -2,8 +2,8 @@ import $ from 'jquery';
 import {commentsApi, booksApi} from './include/apiClient';
 import {loadOptions, loadTable, showAlert} from "./include/common";
 
-import modifyComment from "otus-book-library/src/model/ModifyComment";
-import comment from "otus-book-library/src/model/Comment";
+import ModifyComment from "otus-book-library/src/model/ModifyComment";
+import Comment from "otus-book-library/src/model/Comment";
 
 async function reloadCommentsWithParams(bookId, tableBodyId, editDialogId) {
     try {
@@ -55,8 +55,8 @@ $('body').on('click', 'button', function () {
         const content = $('#commentContent').val();
         booksApi.getBookById($("#book").val()).then(book => {
             const request = id === 0
-                ? commentsApi.createComment(new comment(content, book))
-                : commentsApi.updateComment(id, new modifyComment(content, book));
+                ? commentsApi.createComment(new Comment(content, book))
+                : commentsApi.updateComment(id, new ModifyComment(content, book));
             request
                 .then(() => {
                     $("#book").change();

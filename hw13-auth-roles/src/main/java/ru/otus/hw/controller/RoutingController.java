@@ -47,4 +47,9 @@ public class RoutingController {
     public String commentList() {
         return "comment";
     }
+
+    @GetMapping("user")
+    public String userList() {
+        return "user";
+    }
 }

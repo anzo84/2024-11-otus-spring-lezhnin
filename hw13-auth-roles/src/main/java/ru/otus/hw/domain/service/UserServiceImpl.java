@@ -2,16 +2,22 @@ package ru.otus.hw.domain.service;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.servlet.LocaleResolver;
+import ru.otus.hw.domain.model.Role;
+import ru.otus.hw.domain.model.RoleDescription;
 import ru.otus.hw.domain.model.User;
 import ru.otus.hw.mapper.UserMapper;
 import ru.otus.hw.persistence.model.RoleEntity;
 import ru.otus.hw.persistence.model.UserEntity;
 import ru.otus.hw.persistence.repository.UserRepository;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final UserMapper userMapper;
+
+    private final MessageSource messageSource;
 
     @Override
     public Optional<User> findById(long id) {
@@ -58,5 +66,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public List<RoleDescription> getRoleDescriptions(Locale locale) {
+        return Arrays.stream(Role.values()).map(role -> {
+            RoleDescription roleDescription = new RoleDescription();
+            roleDescription.setRole(role);
+            String msgName = "role." + role.name().toLowerCase();
+            roleDescription.setDescription(messageSource.getMessage(msgName, null, locale));
+            return roleDescription;
+        }).collect(Collectors.toList());
     }
 }
