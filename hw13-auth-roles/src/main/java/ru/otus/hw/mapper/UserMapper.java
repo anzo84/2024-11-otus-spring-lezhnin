@@ -1,6 +1,7 @@
 package ru.otus.hw.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import ru.otus.hw.domain.model.Role;
 import ru.otus.hw.domain.model.User;
 import ru.otus.hw.persistence.model.RoleAlias;
@@ -12,6 +13,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
+    @Mapping(target = "password", ignore = true)
     User map(UserEntity entity);
 
     List<User> map(List<UserEntity> entities);

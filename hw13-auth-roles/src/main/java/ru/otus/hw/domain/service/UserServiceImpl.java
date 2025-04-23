@@ -3,10 +3,10 @@ package ru.otus.hw.domain.service;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.servlet.LocaleResolver;
 import ru.otus.hw.domain.model.Role;
 import ru.otus.hw.domain.model.RoleDescription;
 import ru.otus.hw.domain.model.User;
@@ -32,6 +32,8 @@ public class UserServiceImpl implements UserService {
 
     private final MessageSource messageSource;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public Optional<User> findById(long id) {
         return userRepository.findById(id).map(userMapper::map);
@@ -53,7 +55,9 @@ public class UserServiceImpl implements UserService {
         UserEntity entity = user.getId() == null ? new UserEntity() :
             userRepository.findById(user.getId()).orElse(new UserEntity());
         entity.setUsername(user.getUsername());
-        entity.setPassword(user.getPassword());
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            entity.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         entity.getRoles().clear();
         user.getRoles().forEach(role -> {
             RoleEntity roleEntity = new RoleEntity();

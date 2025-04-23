@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import ru.otus.hw.persistence.model.RoleAlias;
+import ru.otus.hw.persistence.model.RoleEntity;
 import ru.otus.hw.persistence.model.UserEntity;
 import ru.otus.hw.persistence.repository.UserRepository;
 
@@ -34,6 +36,10 @@ public class DefaultUserCreator {
             UserEntity user = new UserEntity();
             user.setUsername(username);
             user.setPassword(passwordEncoder.encode(password));
+            RoleEntity role = new RoleEntity();
+            role.setUser(user);
+            role.setAlias(RoleAlias.ADMINISTRATOR);
+            user.getRoles().add(role);
             userRepository.save(user);
         }
     }
