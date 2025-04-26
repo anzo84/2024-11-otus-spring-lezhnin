@@ -47,17 +47,19 @@ export function loadTable(tableBodyId, editDialogId, data, columns) {
         let i = 1;
         data.forEach(item => {
             const newRow = $("<tr>");
-            const buttonEdit = createEditButton(editDialogId, tableBody, item.id);
-            const buttonDelete = createDeleteButton(tableBody, item.id);
+
+            const editAllow = !(tableBody.data("edit-action") === undefined || tableBody.data("edit-action") === "");
+            const deleteAllow = !(tableBody.data("delete-action") === undefined || tableBody.data("delete-action") === "");
+            const buttonEdit = editAllow ? createEditButton(editDialogId, tableBody, item.id) : null;
+            const buttonDelete = deleteAllow ? createDeleteButton(tableBody, item.id) : null;
 
             const cells = columns.map(column => $("<td>").text(column(item)));
-
             const buttonCell = $("<td>")
                 .addClass("text-nowrap p-1")
-                .append(buttonEdit.data("action").length > 0 ? buttonEdit : null)
-                .append(buttonDelete.data("action").length > 0 ? buttonDelete : null)
+                .append(buttonEdit)
+                .append(buttonDelete);
 
-            if ((buttonEdit.data("action").length + buttonDelete.data("action").length) > 0) {
+            if (editAllow || deleteAllow) {
                 cells.push(buttonCell);
             }
             newRow.append($("<td>").text(i++)).append(...cells);

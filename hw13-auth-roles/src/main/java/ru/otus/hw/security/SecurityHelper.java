@@ -22,10 +22,6 @@ public class SecurityHelper {
         return hasAnyRole(role);
     }
 
-    public String hasRole(Role role, String allowValue) {
-        return hasRole(role) ? allowValue : "";
-    }
-
     public boolean hasAnyRole(Role... role) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {

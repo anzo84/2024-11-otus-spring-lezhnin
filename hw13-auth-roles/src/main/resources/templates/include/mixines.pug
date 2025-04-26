@@ -62,12 +62,16 @@ mixin cardRow
                         block
 
 mixin grid(bodyId, editCaption, deleteCaption, editAction, deleteAction)
+    -var hasEdit = editAction !== null && editAction.trim() !== ''
+    -var hasDelete = deleteAction !== null && deleteAction.trim() !== ''
+    -var showActions = hasEdit || hasDelete
     table.table.table-bordered
         thead
             tr
                 if block
                     th(scope="col" style="width: 14px") #
                     block
+                if showActions
                     th.w-auto(scope="col")
         tbody(id=bodyId
             data-edit-title=editCaption
