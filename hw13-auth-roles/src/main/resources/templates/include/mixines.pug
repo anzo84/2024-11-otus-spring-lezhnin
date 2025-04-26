@@ -150,9 +150,14 @@ mixin gridPanel
 mixin alert(alertId, defMessage)
     .alert.alert-warning(id=alertId role="alert" data-def-message=defMessage)
 
-mixin menu
+mixin menu(userName, imgPath)
     aside.main-sidebar.sidebar-dark-primary.elevation-4(style="overflow-x:hidden;")
         .sidebar
+            .user-panel.mt-3.pb-3.mb-3.d-flex
+                .image
+                    img.img-circle.elevation-2(src=imgPath alt=userName)
+                .info
+                    a.d-block(href="#")= userName
             nav.mt-2
                 ul.nav.nav-pills.nav-sidebar.flex-column(data-accordion="false", data-widget="treeview", role="menu")
                     if block

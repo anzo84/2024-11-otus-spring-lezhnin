@@ -51,12 +51,15 @@ export function loadTable(tableBodyId, editDialogId, data, columns) {
             const buttonDelete = createDeleteButton(tableBody, item.id);
 
             const cells = columns.map(column => $("<td>").text(column(item)));
-            cells.push(
-                $("<td>")
-                    .addClass("text-nowrap p-1")
-                    .append(buttonEdit)
-                    .append(buttonDelete)
-            );
+
+            const buttonCell = $("<td>")
+                .addClass("text-nowrap p-1")
+                .append(buttonEdit.data("action").length > 0 ? buttonEdit : null)
+                .append(buttonDelete.data("action").length > 0 ? buttonDelete : null)
+
+            if ((buttonEdit.data("action").length + buttonDelete.data("action").length) > 0) {
+                cells.push(buttonCell);
+            }
             newRow.append($("<td>").text(i++)).append(...cells);
             tableBody.append(newRow);
         });

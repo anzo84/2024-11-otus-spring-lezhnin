@@ -3,6 +3,7 @@ package ru.otus.hw.domain.service;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Validated
+@PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).ADMINISTRATOR)")
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -42,7 +44,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<User> findAll() {
-        return userMapper.map(userRepository.findAll());
+        return userRepository.findAll().stream().map(userMapper::map).collect(Collectors.toList());
     }
 
     @Override

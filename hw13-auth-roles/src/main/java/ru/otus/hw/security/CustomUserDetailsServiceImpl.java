@@ -5,18 +5,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.otus.hw.mapper.UserMapper;
 import ru.otus.hw.persistence.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository repository;
+
+    private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findByUsername(username)
-            .map(user -> new CustomUserDetails(user.getUsername(), user.getPassword()))
+            .map(userMapper::mapWithPassword)
+            .map(user -> new CustomUserDetails(user.getUsername(), user.getPassword(), user.getRoles()))
             .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 }

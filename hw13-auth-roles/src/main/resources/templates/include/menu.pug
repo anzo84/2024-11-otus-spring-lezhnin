@@ -1,9 +1,12 @@
 include mixines
-+menu
++menu(SH.getAuthentication().getPrincipal().getUsername(), "/img/user.png")
     +menuItem($.msg('common.home'), '/home', 'fa-house')
-    +menuItem($.msg('genre.title'), '/genre', 'fa-folder-tree')
-    +menuItem($.msg('author.title'), '/author', 'fa-people-group')
-    +menuItem($.msg('book.title'), '/book', 'fa-book')
-    +menuItem($.msg('comment.title'), '/comment', 'fa-comments')
-    +menuItem($.msg('user.title'), '/user', 'fa-users')
+    if SH.hasRole("ADMINISTRATOR")
+        +menuItem($.msg('user.title'), '/user', 'fa-users')
+    if SH.hasRole("AUTHOR")
+        +menuItem($.msg('author.title'), '/author', 'fa-people-group')
+        +menuItem($.msg('genre.title'), '/genre', 'fa-folder-tree')
+        +menuItem($.msg('book.title'), '/book', 'fa-book')
+    if SH.hasRole("COMMENTATOR")
+        +menuItem($.msg('comment.title'), '/comment', 'fa-comments')
     +menuItem($.msg('common.logout'), '/logout', 'fa-door-open')

@@ -5,7 +5,11 @@ block content
     +gridPanel
         +greenBtn('saveDialog', 'newGenreAction', $.msg("genre.add"))
         +empty('emptyInfo')= $.msg("genre.empty")
-        +grid('genreList', $.msg("genre.update"), $.msg("genre.delete"), 'editGenreAction', 'deleteGenreAction')
+        +grid('genreList',
+            $.msg("genre.update"),
+            $.msg("genre.delete"),
+            SH.hasRole("AUTHOR","editGenreAction"),
+            SH.hasRole("AUTHOR","deleteGenreAction"))
             +column100= $.msg("genre.genreName")
     +formDialog('saveDialog', 'saveGenreAction', $.msg("common.close"), $.msg("common.save"))
         +formHidden('genreId')

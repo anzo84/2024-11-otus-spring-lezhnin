@@ -1,9 +1,9 @@
 package ru.otus.hw.security;
 
-
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.otus.hw.domain.model.Role;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,9 +15,11 @@ public class CustomUserDetails implements UserDetails {
 
     private final String password;
 
+    private final List<Role> roles;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return roles;
     }
 
     @Override

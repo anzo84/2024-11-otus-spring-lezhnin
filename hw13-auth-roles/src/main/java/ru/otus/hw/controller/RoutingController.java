@@ -5,10 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.otus.hw.domain.model.Role;
+import ru.otus.hw.security.SecurityHelper;
 
 @Controller
 @RequiredArgsConstructor
 public class RoutingController {
+
+    private final SecurityHelper securityHelper;
 
     @GetMapping("login")
     public String loginPage(@RequestParam(value = "error", required = false) String error, Model model) {
@@ -25,31 +29,35 @@ public class RoutingController {
 
     @GetMapping("/")
     public String rootPage() {
-        return "redirect:/home";
+        return redirectHome();
     }
 
     @GetMapping("genre")
     public String genreList() {
-        return "genre";
+        return securityHelper.hasRole(Role.AUTHOR) ? "genre" : redirectHome();
     }
 
     @GetMapping("author")
     public String authorList() {
-        return "author";
+        return securityHelper.hasRole(Role.AUTHOR) ? "author" : redirectHome();
     }
 
     @GetMapping("book")
     public String bookList() {
-        return "book";
+        return securityHelper.hasRole(Role.AUTHOR) ? "book" : redirectHome();
     }
 
     @GetMapping("comment")
     public String commentList() {
-        return "comment";
+        return securityHelper.hasRole(Role.COMMENTATOR) ? "comment" : redirectHome();
     }
 
     @GetMapping("user")
     public String userList() {
-        return "user";
+        return securityHelper.hasRole(Role.ADMINISTRATOR) ? "user" : redirectHome();
+    }
+
+    private String redirectHome() {
+        return "redirect:/home";
     }
 }

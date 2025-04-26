@@ -2,6 +2,7 @@ package ru.otus.hw.domain.service;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -23,23 +24,27 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorMapper authorMapper;
 
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
     public Optional<Author> findById(long id) {
         return authorRepository.findById(id).map(authorMapper::map);
     }
 
     @Transactional(readOnly = true)
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
     public List<Author> findAll() {
         return authorMapper.map(authorRepository.findAll());
     }
 
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
     public Long count() {
         return authorRepository.count();
     }
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).AUTHOR)")
     public Author save(@Valid Author author) {
         AuthorEntity entity = author.getId() == null ? new AuthorEntity() :
             authorRepository.findById(author.getId()).orElse(new AuthorEntity());
@@ -49,6 +54,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).ADMINISTRATOR)")
     public void delete(Long id) {
         authorRepository.deleteById(id);
     }

@@ -8,15 +8,13 @@ import ru.otus.hw.persistence.model.RoleAlias;
 import ru.otus.hw.persistence.model.RoleEntity;
 import ru.otus.hw.persistence.model.UserEntity;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
     @Mapping(target = "password", ignore = true)
     User map(UserEntity entity);
 
-    List<User> map(List<UserEntity> entities);
+    User mapWithPassword(UserEntity entity);
 
     Role map(RoleAlias roleAlias);
 

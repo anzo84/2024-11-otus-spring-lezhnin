@@ -8,7 +8,7 @@ block content
         +empty('emptyBooksInfo')= $.msg("comment.bookListEmpty")
         +empty('emptyCommentsInfo')= $.msg("comment.empty")
         +greenBtn('saveDialog', 'newCommentAction', $.msg("comment.add"))
-        +grid('commentList', $.msg("comment.update"), $.msg("comment.delete"), 'editCommentAction', 'deleteCommentAction')
+        +grid('commentList', $.msg("comment.update"), $.msg("comment.delete"), 'editCommentAction', SH.hasRole("AUTHOR","deleteCommentAction"))
             +column100= $.msg("comment.content")
     +formDialog('saveDialog', 'saveCommentAction', $.msg("common.close"), $.msg("common.save"))
         +formHidden('commentId')

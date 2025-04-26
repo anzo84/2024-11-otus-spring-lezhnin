@@ -3,6 +3,7 @@ package ru.otus.hw.domain.service;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -31,18 +32,21 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional(readOnly = true)
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
     public List<Comment> findByBookId(long bookId) {
         return commentMapper.map(commentRepository.findByBookId(bookId));
     }
 
     @Transactional(readOnly = true)
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
     public Optional<Comment> findById(long id) {
         return commentRepository.findById(id).map(commentMapper::map);
     }
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
     public Comment save(@Valid @NotNull(message = "{comment.notEmpty}") Comment comment) {
         long bookId = Optional.ofNullable(comment.getBook()).map(Book::getId)
             .orElseThrow(() -> new IllegalArgumentException("Book id is null"));
@@ -57,11 +61,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).AUTHOR)")
     public void deleteComment(long id) {
         commentRepository.deleteById(id);
     }
 
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
     public Long count() {
         return commentRepository.count();
     }

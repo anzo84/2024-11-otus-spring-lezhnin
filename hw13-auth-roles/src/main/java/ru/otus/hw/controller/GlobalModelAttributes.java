@@ -6,6 +6,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.LocaleResolver;
+import ru.otus.hw.security.SecurityHelper;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -15,6 +16,8 @@ public class GlobalModelAttributes {
 
     private final LocaleResolver localeResolver;
 
+    private final SecurityHelper securityHelper;
+
     @ModelAttribute("requestURI")
     public String contextPath(final HttpServletRequest request) {
         return request.getRequestURI();
@@ -23,5 +26,10 @@ public class GlobalModelAttributes {
     @ModelAttribute("$")
     public I18nResolver setLocale(final HttpServletRequest request) {
         return new I18nResolver(messageSource, localeResolver.resolveLocale(request));
+    }
+
+    @ModelAttribute("SH")
+    public SecurityHelper getSecurityHelper() {
+        return securityHelper;
     }
 }

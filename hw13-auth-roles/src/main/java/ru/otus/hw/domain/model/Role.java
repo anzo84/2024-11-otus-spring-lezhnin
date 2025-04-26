@@ -6,9 +6,9 @@ import org.springframework.security.core.GrantedAuthority;
 @RequiredArgsConstructor
 public enum Role implements GrantedAuthority {
 
-    ADMINISTRATOR("ADMINISTRATOR"),
-    AUTHOR("AUTHOR"),
-    COMMENTATOR("COMMENTATOR");
+    ADMINISTRATOR("ROLE_ADMINISTRATOR"),
+    AUTHOR("ROLE_AUTHOR"),
+    COMMENTATOR("ROLE_COMMENTATOR");
 
     private final String roleAlias;
 

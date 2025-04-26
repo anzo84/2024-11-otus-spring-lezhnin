@@ -2,6 +2,7 @@ package ru.otus.hw.domain.service;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,18 +38,21 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
     public Optional<Book> findById(long id) {
         return bookRepository.findById(id).map(bookMapper::map);
     }
 
     @Transactional(readOnly = true)
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
     public List<Book> findAll() {
         return bookMapper.map(bookRepository.findAll());
     }
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).AUTHOR)")
     public Book save(@Valid @NotNull(message = "{book.notEmpty}") Book book) throws EntityNotFoundException,
         IllegalArgumentException {
         if (isEmpty(book.getGenres())) {
@@ -74,11 +78,13 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).AUTHOR)")
     public void deleteById(long id) {
         bookRepository.deleteById(id);
     }
 
     @Override
+    @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
     public Long count() {
         return bookRepository.count();
     }
