@@ -20,6 +20,7 @@ import ru.otus.hw.rest.model.AuthorDto;
 import ru.otus.hw.rest.model.BookDto;
 import ru.otus.hw.rest.model.GenreDto;
 import ru.otus.hw.rest.model.ModifyBookDto;
+import ru.otus.hw.security.SecurityHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,8 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BookRestController.class)
 @ComponentScan(basePackages = "ru.otus.hw.rest.mapper")
-@WithMockUser
-@Import(SecurityConfiguration.class)
+@Import({SecurityConfiguration.class, SecurityHelper.class})
 class BookRestControllerTest {
 
     @Autowired
@@ -48,6 +48,7 @@ class BookRestControllerTest {
 
     @Test
     @DisplayName("POST /api/books - создание книги")
+    @WithMockUser(roles = "AUTHOR")
     void shouldCreateBookAndReturnOk() throws Exception {
 
         AuthorDto authorDto = new AuthorDto();
@@ -91,6 +92,7 @@ class BookRestControllerTest {
 
     @Test
     @DisplayName("DELETE /api/books/{id} - удаление книги")
+    @WithMockUser(roles = "AUTHOR")
     void shouldDeleteBookAndReturnOk() throws Exception {
         Long id = 1L;
 
@@ -102,6 +104,7 @@ class BookRestControllerTest {
 
     @Test
     @DisplayName("GET /api/books - получение всех книг")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldGetAllBooksAndReturnOk() throws Exception {
         Book book = new Book();
         book.setId(1L);
@@ -118,6 +121,7 @@ class BookRestControllerTest {
 
     @Test
     @DisplayName("GET /api/books/{id} - получение книги по ID (найден)")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldGetBookByIdAndReturnOkWhenBookExists() throws Exception {
         Long id = 1L;
         Book book = new Book();
@@ -134,6 +138,7 @@ class BookRestControllerTest {
 
     @Test
     @DisplayName("GET /api/books/{id} - получение книги по ID (не найден)")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldReturnNotFoundWhenBookDoesNotExist() throws Exception {
         Long id = 1L;
         given(bookService.findById(id)).willReturn(Optional.empty());
@@ -144,6 +149,7 @@ class BookRestControllerTest {
 
     @Test
     @DisplayName("PUT /api/books/{id} - обновление книги")
+    @WithMockUser(roles = "AUTHOR")
     void shouldUpdateBookAndReturnOk() throws Exception {
 
         AuthorDto authorDto = new AuthorDto();

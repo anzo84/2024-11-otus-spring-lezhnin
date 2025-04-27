@@ -54,6 +54,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(@Valid User user) {
+        if (Optional.ofNullable(user.getRoles()).map(List::size).orElse(0) == 0) {
+            throw new IllegalArgumentException("User roles must not be empty");
+        }
+
         UserEntity entity = user.getId() == null ? new UserEntity() :
             userRepository.findById(user.getId()).orElse(new UserEntity());
         entity.setUsername(user.getUsername());

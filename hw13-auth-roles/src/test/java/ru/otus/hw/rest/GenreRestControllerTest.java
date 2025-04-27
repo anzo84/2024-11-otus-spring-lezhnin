@@ -16,6 +16,7 @@ import ru.otus.hw.domain.model.Genre;
 import ru.otus.hw.domain.service.GenreService;
 import ru.otus.hw.rest.model.GenreDto;
 import ru.otus.hw.rest.model.ModifyGenreDto;
+import ru.otus.hw.security.SecurityHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,8 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(GenreRestController.class)
 @ComponentScan(basePackages = "ru.otus.hw.rest.mapper")
-@Import(SecurityConfiguration.class)
-@WithMockUser
+@Import({SecurityConfiguration.class, SecurityHelper.class})
 class GenreRestControllerTest {
 
     @Autowired
@@ -44,6 +44,7 @@ class GenreRestControllerTest {
 
     @Test
     @DisplayName("POST /api/genres - создание жанра")
+    @WithMockUser(roles = "AUTHOR")
     void shouldCreateGenreAndReturnOk() throws Exception {
         GenreDto genreDto = new GenreDto();
         genreDto.setId(1L);
@@ -65,6 +66,7 @@ class GenreRestControllerTest {
 
     @Test
     @DisplayName("DELETE /api/genres/{id} - удаление жанра")
+    @WithMockUser(roles = "AUTHOR")
     void shouldDeleteGenreAndReturnOk() throws Exception {
         Long id = 1L;
 
@@ -76,6 +78,7 @@ class GenreRestControllerTest {
 
     @Test
     @DisplayName("GET /api/genres - получение всех жанров")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldGetAllGenresAndReturnOk() throws Exception {
         Genre genre = new Genre();
         genre.setId(1L);
@@ -92,6 +95,7 @@ class GenreRestControllerTest {
 
     @Test
     @DisplayName("GET /api/genres/{id} - получение жанра по ID (найден)")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldGetGenreByIdAndReturnOkWhenGenreExists() throws Exception {
         Long id = 1L;
         Genre genre = new Genre();
@@ -108,6 +112,7 @@ class GenreRestControllerTest {
 
     @Test
     @DisplayName("GET /api/genres/{id} - получение жанра по ID (не найден)")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldReturnNotFoundWhenGenreDoesNotExist() throws Exception {
         Long id = 1L;
         given(genreService.findById(id)).willReturn(Optional.empty());
@@ -118,6 +123,7 @@ class GenreRestControllerTest {
 
     @Test
     @DisplayName("PUT /api/genres/{id} - обновление жанра")
+    @WithMockUser(roles = "AUTHOR")
     void shouldUpdateGenreAndReturnOk() throws Exception {
         Long id = 1L;
         ModifyGenreDto updateGenreRequestDto = new ModifyGenreDto();

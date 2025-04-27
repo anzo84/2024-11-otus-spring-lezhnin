@@ -17,6 +17,7 @@ import ru.otus.hw.domain.model.Author;
 import ru.otus.hw.domain.service.AuthorService;
 import ru.otus.hw.rest.model.AuthorDto;
 import ru.otus.hw.rest.model.ModifyAuthorDto;
+import ru.otus.hw.security.SecurityHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,8 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(AuthorRestController.class)
 @ComponentScan(basePackages = "ru.otus.hw.rest.mapper")
-@Import(SecurityConfiguration.class)
-@WithMockUser
+@Import({SecurityConfiguration.class, SecurityHelper.class})
 class AuthorRestControllerTest {
 
     @Autowired
@@ -45,6 +45,7 @@ class AuthorRestControllerTest {
 
     @Test
     @DisplayName("POST /api/authors - создание автора")
+    @WithMockUser(roles = "AUTHOR")
     void shouldCreateAuthorAndReturnOk() throws Exception {
         AuthorDto authorDto = new AuthorDto();
         authorDto.setId(1L);
@@ -66,6 +67,7 @@ class AuthorRestControllerTest {
 
     @Test
     @DisplayName("DELETE /api/authors/{id} - удаление автора")
+    @WithMockUser(roles = "ADMINISTRATOR")
     void shouldDeleteAuthorAndReturnOk() throws Exception {
         Long id = 1L;
 
@@ -77,6 +79,7 @@ class AuthorRestControllerTest {
 
     @Test
     @DisplayName("GET /api/authors - получение всех авторов")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldGetAllAuthorsAndReturnOk() throws Exception {
         Author author = new Author();
         author.setId(1L);
@@ -93,6 +96,7 @@ class AuthorRestControllerTest {
 
     @Test
     @DisplayName("GET /api/authors/{id} - получение автора по ID (найден)")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldGetAuthorByIdAndReturnOkWhenAuthorExists() throws Exception {
         Long id = 1L;
         Author author = new Author();
@@ -109,6 +113,7 @@ class AuthorRestControllerTest {
 
     @Test
     @DisplayName("GET /api/authors/{id} - получение автора по ID (не найден)")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldReturnNotFoundWhenAuthorDoesNotExist() throws Exception {
         Long id = 1L;
         given(authorService.findById(id)).willReturn(Optional.empty());
@@ -119,6 +124,7 @@ class AuthorRestControllerTest {
 
     @Test
     @DisplayName("PUT /api/authors/{id} - обновление автора")
+    @WithMockUser(roles = "AUTHOR")
     void shouldUpdateAuthorAndReturnOk() throws Exception {
         Long id = 1L;
         ModifyAuthorDto updateAuthorRequestDto = new ModifyAuthorDto();

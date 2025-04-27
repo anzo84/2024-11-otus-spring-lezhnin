@@ -30,4 +30,16 @@ create table comments (
    primary key (id)
 );
 
+create table users (
+    id bigserial,
+    username varchar(255) not null,
+    password varchar(255) not null,
+    primary key (id)
+);
 
+create table roles (
+    id bigserial,
+    user_id bigint not null references users(id) on delete cascade,
+    role_alias varchar(50) not null check (role_alias in ('ROLE_ADMINISTRATOR', 'ROLE_AUTHOR', 'ROLE_COMMENTATOR')),
+    primary key (id)
+);

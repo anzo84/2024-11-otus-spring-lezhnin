@@ -17,3 +17,6 @@ insert into comments(content, book_id)
 values ( 'Comment 1_1', 1 ),
        ( 'Comment 1_2', 1 ),
        ( 'Comment 2_1', 2 );
+
+insert into users(username, password) values ( 'admin', '123456' );
+insert into roles(user_id, role_alias) values ( 1, 'ROLE_ADMINISTRATOR' );

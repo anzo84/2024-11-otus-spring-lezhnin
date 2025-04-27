@@ -3,6 +3,8 @@ package ru.otus.hw.persistence.model;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @RequiredArgsConstructor
 @Getter
 public enum RoleAlias {
@@ -12,4 +14,11 @@ public enum RoleAlias {
     COMMENTATOR("ROLE_COMMENTATOR");
 
     private final String roleName;
+
+    public static RoleAlias fromDbValue(String dbValue) {
+        return Arrays.stream(values())
+            .filter(role -> role.roleName.equals(dbValue))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Unknown DB value: " + dbValue));
+    }
 }

@@ -1,6 +1,7 @@
 package ru.otus.hw.persistence.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,7 +38,7 @@ public class RoleEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = RoleAliasConverter.class)
     @Column(name = "role_alias")
     @NotNull
     private RoleAlias alias;

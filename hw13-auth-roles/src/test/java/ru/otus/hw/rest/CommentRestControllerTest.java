@@ -16,6 +16,7 @@ import ru.otus.hw.domain.model.Comment;
 import ru.otus.hw.domain.service.CommentService;
 import ru.otus.hw.rest.model.CommentDto;
 import ru.otus.hw.rest.model.ModifyCommentDto;
+import ru.otus.hw.security.SecurityHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,8 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(CommentRestController.class)
 @ComponentScan(basePackages = "ru.otus.hw.rest.mapper")
-@Import(SecurityConfiguration.class)
-@WithMockUser
+@Import({SecurityConfiguration.class, SecurityHelper.class})
 class CommentRestControllerTest {
 
     @Autowired
@@ -44,6 +44,7 @@ class CommentRestControllerTest {
 
     @Test
     @DisplayName("POST /api/comments - создание комментария")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldCreateCommentAndReturnOk() throws Exception {
         CommentDto commentDto = new CommentDto();
         commentDto.setId(1L);
@@ -66,6 +67,7 @@ class CommentRestControllerTest {
 
     @Test
     @DisplayName("DELETE /api/comments/{id} - удаление комментария")
+    @WithMockUser(roles = "AUTHOR")
     void shouldDeleteCommentAndReturnOk() throws Exception {
         Long id = 1L;
 
@@ -77,6 +79,7 @@ class CommentRestControllerTest {
 
     @Test
     @DisplayName("GET /api/comments - получение всех комментариев для книги")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldGetAllCommentsAndReturnOk() throws Exception {
         Long bookId = 1L;
         Comment comment = new Comment();
@@ -94,6 +97,7 @@ class CommentRestControllerTest {
 
     @Test
     @DisplayName("GET /api/comments/{id} - получение комментария по ID (найден)")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldGetCommentByIdAndReturnOkWhenCommentExists() throws Exception {
         Long id = 1L;
         Comment comment = new Comment();
@@ -110,6 +114,7 @@ class CommentRestControllerTest {
 
     @Test
     @DisplayName("GET /api/comments/{id} - получение комментария по ID (не найден)")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldReturnNotFoundWhenCommentDoesNotExist() throws Exception {
         Long id = 1L;
         given(commentService.findById(id)).willReturn(Optional.empty());
@@ -120,6 +125,7 @@ class CommentRestControllerTest {
 
     @Test
     @DisplayName("PUT /api/comments/{id} - обновление комментария")
+    @WithMockUser(roles = "COMMENTATOR")
     void shouldUpdateCommentAndReturnOk() throws Exception {
         Long id = 1L;
         ModifyCommentDto updateCommentRequestDto = new ModifyCommentDto();
