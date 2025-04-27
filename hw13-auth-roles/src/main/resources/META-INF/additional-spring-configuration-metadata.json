@@ -1,13 +1,33 @@
 {
   "properties": [
     {
-      "name": "app.default.user.password",
+      "name": "app.default.users.administrator.password",
       "type": "java.lang.String",
-      "description": "Пароль пользователя по умолчанию."
+      "description": "Пароль администратора по умолчанию"
     },
     {
-      "name": "app.default.user.name",
+      "name": "app.default.users.administrator.name",
       "type": "java.lang.String",
-      "description": "Имя пользователя по умолчанию."
+      "description": "Имя администратора по умолчанию"
+    },
+    {
+      "name": "app.default.users.author.name",
+      "type": "java.lang.String",
+      "description": "Имя автора по умолчанию"
+    },
+    {
+      "name": "app.default.users.author.password",
+      "type": "java.lang.String",
+      "description": "Пароль автора по умолчанию"
+    },
+    {
+      "name": "app.default.users.commentator.name",
+      "type": "java.lang.String",
+      "description": "Имя комментатора по умолчанию"
+    },
+    {
+      "name": "app.default.users.commentator.password",
+      "type": "java.lang.String",
+      "description": "Пароль комментатора по умолчанию"
     }
   ] }

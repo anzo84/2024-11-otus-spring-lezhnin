@@ -33,6 +33,13 @@ logging:
     org.springframework.web: trace
     liquibase: warn
 app:
-  default.user:
-    name: admin
-    password: 123456
+  default.users:
+    administrator:
+      name: admin
+      password: 123456
+    author:
+      name: author
+      password: 123456
+    commentator:
+      name: commentator
+      password: 123456

@@ -19,28 +19,47 @@ public class DefaultUserCreator {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${app.default.user.name:admin}")
-    private String username;
+    @Value("${app.default.users.administrator.name:admin}")
+    private String adminUsername;
 
-    @Value("${app.default.user.password:123456}")
-    private String password;
+    @Value("${app.default.users.administrator.password:123456}")
+    private String adminPassword;
+
+    @Value("${app.default.users.author.name:author}")
+    private String authorUsername;
+
+    @Value("${app.default.users.author.password:123456}")
+    private String authorPassword;
+
+    @Value("${app.default.users.commentator.name:commentator}")
+    private String commentatorUsername;
+
+    @Value("${app.default.users.commentator.password:123456}")
+    private String commentatorPassword;
 
     @PostConstruct
     public void init() {
-        createDefaultUser();
+        createDefaultUsers();
     }
 
     @Scheduled(initialDelay = 60 * 1000, fixedRate = 60 * 1000)
-    public void createDefaultUser() {
+    public void createDefaultUsers() {
         if (userRepository.count() == 0) {
-            UserEntity user = new UserEntity();
-            user.setUsername(username);
-            user.setPassword(passwordEncoder.encode(password));
-            RoleEntity role = new RoleEntity();
-            role.setUser(user);
-            role.setAlias(RoleAlias.ADMINISTRATOR);
-            user.getRoles().add(role);
-            userRepository.save(user);
+            createUser(adminUsername, adminPassword, RoleAlias.ADMINISTRATOR);
+            createUser(authorUsername, authorPassword, RoleAlias.AUTHOR);
+            createUser(commentatorUsername, commentatorPassword, RoleAlias.COMMENTATOR);
         }
+    }
+
+    private void createUser(String username, String password, RoleAlias alias) {
+        UserEntity user = new UserEntity();
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(password));
+
+        RoleEntity role = new RoleEntity();
+        role.setUser(user);
+        role.setAlias(alias);
+        user.getRoles().add(role);
+        userRepository.save(user);
     }
 }
