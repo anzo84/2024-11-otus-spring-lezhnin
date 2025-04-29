@@ -23,19 +23,32 @@ import java.util.stream.Collectors;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
+    private static final String[] ANONYMOUS_MATCHERS = new String[]{
+        "/login"
+    };
+
+    private static final String[] PERMIT_ALL_MATCHERS = new String[]{
+        "/css/**", "/js/**", "/img/**", "/actuator/**"
+    };
+
+    private static final String[] AUTHENTICATED_MATCHERS = new String[]{
+        "/author/**", "/api/authors/**",
+        "/genre/**", "/api/genres/**",
+        "/book/**", "/api/books/**",
+        "/comment/**", "/api/comments/**",
+        "/user/**", "/api/users/**",
+        "/", "/home/**", "/api/metrics/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers("/login").anonymous()
-                .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                .requestMatchers("/author/**", "/api/authors/**").authenticated()
-                .requestMatchers("/genre/**", "/api/genres/**").authenticated()
-                .requestMatchers("/book/**", "/api/books/**").authenticated()
-                .requestMatchers("/comment/**", "/api/comments/**").authenticated()
-                .requestMatchers("/user/**", "/api/users/**").authenticated()
-                .requestMatchers("/", "/home/**", "/api/metrics/**").authenticated()
+                .requestMatchers(ANONYMOUS_MATCHERS).anonymous()
+                .requestMatchers(PERMIT_ALL_MATCHERS).permitAll()
+                .requestMatchers(AUTHENTICATED_MATCHERS).authenticated()
+                .requestMatchers("/datarest/**").hasRole("ADMINISTRATOR")
             )
             .formLogin(formLogin -> formLogin
                 .loginPage("/login")

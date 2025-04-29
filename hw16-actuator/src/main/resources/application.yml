@@ -27,6 +27,20 @@ spring:
   liquibase:
     enabled: true
     drop-first: true
+  data:
+    rest:
+      base-path: /datarest
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
 logging:
   level:
     root: info
