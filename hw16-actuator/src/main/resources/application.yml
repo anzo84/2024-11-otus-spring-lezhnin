@@ -46,6 +46,10 @@ logging:
     root: info
     org.springframework.web: trace
     liquibase: warn
+  file:
+    name: logs/app.log  # Путь к файлу логов
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 app:
   default.users:
     administrator:
