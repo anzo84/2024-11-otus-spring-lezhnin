@@ -25,5 +25,6 @@
         <module>hw12-security</module>
         <module>hw13-auth-roles</module>
         <module>hw16-actuator</module>
+        <module>hw17-docker</module>
     </modules>
 </project>
