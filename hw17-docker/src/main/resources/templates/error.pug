@@ -1,0 +1,12 @@
+include include/mixines
+extends include/layout
+block content
+    script(src="/js/error.bundle.js")
+    section.content
+        .error-page
+            h2.headline.text-warning= statusCode
+            .error-content
+                h3
+                    i.fas.fa-exclamation-triangle.text-warning
+                    span= $.msg('common.errorTitle')
+                p= errorMessage
