@@ -24,5 +24,6 @@
         <module>hw11-webflux</module>
         <module>hw12-security</module>
         <module>hw13-auth-roles</module>
+        <module>hw16-actuator</module>
     </modules>
 </project>
