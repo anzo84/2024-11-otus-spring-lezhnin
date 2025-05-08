@@ -1,0 +1,371 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      comment: Заполнение данными
+      author: anton.lezhnin@x5.ru
+      changes:
+        - insert:
+            tableName: receipts
+            columns:
+              - column:
+                  name: datetime
+                  valueComputed: CURRENT_TIMESTAMP
+        - insert:
+            tableName: receipts
+            columns:
+              - column:
+                  name: datetime
+                  valueComputed: CURRENT_TIMESTAMP - INTERVAL '1' DAY
+        - insert:
+            tableName: receipts
+            columns:
+              - column:
+                  name: datetime
+                  valueComputed: CURRENT_TIMESTAMP - INTERVAL '2' DAY
+        - insert:
+            tableName: receipts
+            columns:
+              - column:
+                  name: datetime
+                  valueComputed: CURRENT_TIMESTAMP - INTERVAL '3' DAY
+        - insert:
+            tableName: receipts
+            columns:
+              - column:
+                  name: datetime
+                  valueComputed: CURRENT_TIMESTAMP - INTERVAL '4' DAY
+
+        # Позиции для первого чека (3 позиции)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Ноутбук"
+              - column:
+                  name: uom
+                  value: "шт"
+              - column:
+                  name: quantity
+                  value: "1"
+              - column:
+                  name: price
+                  value: "120000.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 0)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Мышь"
+              - column:
+                  name: uom
+                  value: "шт"
+              - column:
+                  name: quantity
+                  value: "1"
+              - column:
+                  name: price
+                  value: "2500.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 0)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Коврик для мыши"
+              - column:
+                  name: uom
+                  value: "шт"
+              - column:
+                  name: quantity
+                  value: "1"
+              - column:
+                  name: price
+                  value: "1500.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 0)
+
+        # Позиции для второго чека (4 позиции)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Хлеб"
+              - column:
+                  name: uom
+                  value: "шт"
+              - column:
+                  name: quantity
+                  value: "2"
+              - column:
+                  name: price
+                  value: "50.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 1)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Молоко"
+              - column:
+                  name: uom
+                  value: "л"
+              - column:
+                  name: quantity
+                  value: "1"
+              - column:
+                  name: price
+                  value: "80.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 1)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Яйца"
+              - column:
+                  name: uom
+                  value: "дес"
+              - column:
+                  name: quantity
+                  value: "1"
+              - column:
+                  name: price
+                  value: "120.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 1)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Сыр"
+              - column:
+                  name: uom
+                  value: "кг"
+              - column:
+                  name: quantity
+                  value: "0.3"
+              - column:
+                  name: price
+                  value: "600.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 1)
+
+        # Позиции для третьего чека (5 позиций)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Гвозди"
+              - column:
+                  name: uom
+                  value: "кг"
+              - column:
+                  name: quantity
+                  value: "0.5"
+              - column:
+                  name: price
+                  value: "300.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 2)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Доска"
+              - column:
+                  name: uom
+                  value: "шт"
+              - column:
+                  name: quantity
+                  value: "3"
+              - column:
+                  name: price
+                  value: "500.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 2)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Краска"
+              - column:
+                  name: uom
+                  value: "банка"
+              - column:
+                  name: quantity
+                  value: "2"
+              - column:
+                  name: price
+                  value: "700.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 2)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Кисть"
+              - column:
+                  name: uom
+                  value: "шт"
+              - column:
+                  name: quantity
+                  value: "3"
+              - column:
+                  name: price
+                  value: "150.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 2)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Шурупы"
+              - column:
+                  name: uom
+                  value: "уп"
+              - column:
+                  name: quantity
+                  value: "1"
+              - column:
+                  name: price
+                  value: "250.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 2)
+
+        # Позиции для четвертого и пятого чеков (по 3 позиции каждый)
+        # Четвертый чек
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Кофе"
+              - column:
+                  name: uom
+                  value: "кг"
+              - column:
+                  name: quantity
+                  value: "0.2"
+              - column:
+                  name: price
+                  value: "1200.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 3)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Чай"
+              - column:
+                  name: uom
+                  value: "уп"
+              - column:
+                  name: quantity
+                  value: "2"
+              - column:
+                  name: price
+                  value: "300.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 3)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Печенье"
+              - column:
+                  name: uom
+                  value: "уп"
+              - column:
+                  name: quantity
+                  value: "3"
+              - column:
+                  name: price
+                  value: "150.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 3)
+
+        # Пятый чек
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Вода"
+              - column:
+                  name: uom
+                  value: "бут"
+              - column:
+                  name: quantity
+                  value: "6"
+              - column:
+                  name: price
+                  value: "80.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 4)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Сок"
+              - column:
+                  name: uom
+                  value: "бут"
+              - column:
+                  name: quantity
+                  value: "2"
+              - column:
+                  name: price
+                  value: "120.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 4)
+        - insert:
+            tableName: positions
+            columns:
+              - column:
+                  name: product_name
+                  value: "Шоколад"
+              - column:
+                  name: uom
+                  value: "шт"
+              - column:
+                  name: quantity
+                  value: "5"
+              - column:
+                  name: price
+                  value: "90.00"
+              - column:
+                  name: receipt_id
+                  valueComputed: (SELECT id FROM receipts ORDER BY id LIMIT 1 OFFSET 4)

@@ -1,0 +1,66 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      comment: Создание таблиц заказов и позиций
+      author: anton.lezhnin@x5.ru
+      changes:
+        - createTable:
+            tableName: receipts
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: datetime
+                  type: timestamp
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: positions
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: product_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: uom
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: decimal(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: decimal(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: receipt_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_position_receipt
+                    references: receipts(id)
+
+        - addForeignKeyConstraint:
+            baseTableName: positions
+            baseColumnNames: receipt_id
+            constraintName: fk_position_receipt
+            referencedTableName: receipts
+            referencedColumnNames: id
