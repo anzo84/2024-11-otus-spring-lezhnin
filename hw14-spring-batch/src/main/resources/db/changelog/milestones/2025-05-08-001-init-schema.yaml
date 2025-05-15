@@ -57,10 +57,3 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_position_receipt
                     references: receipts(id)
-
-        - addForeignKeyConstraint:
-            baseTableName: positions
-            baseColumnNames: receipt_id
-            constraintName: fk_position_receipt
-            referencedTableName: receipts
-            referencedColumnNames: id
