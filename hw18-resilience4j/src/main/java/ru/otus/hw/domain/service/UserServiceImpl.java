@@ -1,5 +1,7 @@
 package ru.otus.hw.domain.service;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -26,6 +28,8 @@ import java.util.stream.Collectors;
 @Service
 @Validated
 @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).ADMINISTRATOR)")
+@RateLimiter(name = "defaultRateLimiter")
+@CircuitBreaker(name = "defaultCircuitBreaker")
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;

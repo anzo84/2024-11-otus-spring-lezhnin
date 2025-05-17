@@ -1,5 +1,7 @@
 package ru.otus.hw.domain.service;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +28,8 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 @RequiredArgsConstructor
 @Service
 @Validated
+@RateLimiter(name = "defaultRateLimiter")
+@CircuitBreaker(name = "defaultCircuitBreaker")
 public class BookServiceImpl implements BookService {
 
     private final BookMapper bookMapper;

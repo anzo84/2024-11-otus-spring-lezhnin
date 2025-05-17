@@ -1,5 +1,7 @@
 package ru.otus.hw.domain.service;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Validated
+@RateLimiter(name = "defaultRateLimiter")
+@CircuitBreaker(name = "defaultCircuitBreaker")
 public class CommentServiceImpl implements CommentService {
 
     private final BookRepository bookRepository;

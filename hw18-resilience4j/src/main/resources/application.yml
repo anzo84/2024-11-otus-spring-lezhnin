@@ -30,6 +30,9 @@ spring:
   data:
     rest:
       base-path: /datarest
+  cloud:
+    compatibility-verifier:
+      enabled: false
 management:
   endpoints:
     web:
@@ -41,6 +44,8 @@ management:
   health:
     defaults:
       enabled: true
+    diskspace:
+      enabled: true
 logging:
   level:
     root: info
@@ -50,6 +55,27 @@ logging:
     name: logs/app.log  # Путь к файлу логов
   pattern:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+resilience4j:
+  ratelimiter:
+    instances:
+      defaultRateLimiter:
+        timeout-duration: 1s
+        limit-for-period: 10
+        limit-refresh-period: 1s
+        register-health-indicator: true
+    metrics:
+      enabled: true
+  circuitbreaker:
+    instances:
+      defaultCircuitBreaker:
+        sliding-window-type: time_based
+        sliding-window-size: 1
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+        register-health-indicator: true
+    metrics:
+      enabled: true
 app:
   default.users:
     administrator:

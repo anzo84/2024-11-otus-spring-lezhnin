@@ -1,5 +1,7 @@
 package ru.otus.hw.domain.service;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +27,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
+    @RateLimiter(name = "defaultRateLimiter")
+    @CircuitBreaker(name = "defaultCircuitBreaker")
     public Optional<Author> findById(long id) {
         return authorRepository.findById(id).map(authorMapper::map);
     }
@@ -32,12 +36,16 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional(readOnly = true)
     @Override
     @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
+    @RateLimiter(name = "defaultRateLimiter")
+    @CircuitBreaker(name = "defaultCircuitBreaker")
     public List<Author> findAll() {
         return authorMapper.map(authorRepository.findAll());
     }
 
     @Override
     @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).COMMENTATOR)")
+    @RateLimiter(name = "defaultRateLimiter")
+    @CircuitBreaker(name = "defaultCircuitBreaker")
     public Long count() {
         return authorRepository.count();
     }
@@ -45,6 +53,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional
     @Override
     @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).AUTHOR)")
+    @RateLimiter(name = "defaultRateLimiter")
+    @CircuitBreaker(name = "defaultCircuitBreaker")
     public Author save(@Valid Author author) {
         AuthorEntity entity = author.getId() == null ? new AuthorEntity() :
             authorRepository.findById(author.getId()).orElse(new AuthorEntity());
@@ -55,6 +65,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional
     @Override
     @PreAuthorize("hasRole(T(ru.otus.hw.domain.model.Role).ADMINISTRATOR)")
+    @RateLimiter(name = "defaultRateLimiter")
+    @CircuitBreaker(name = "defaultCircuitBreaker")
     public void delete(Long id) {
         authorRepository.deleteById(id);
     }
