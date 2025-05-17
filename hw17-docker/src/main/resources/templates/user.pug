@@ -1,0 +1,15 @@
+include include/mixines
+extends include/layout
+block content
+    script(src="/js/user.bundle.js")
+    +gridPanel
+        +greenBtn('saveDialog', 'newUserAction', $.msg("user.add"))
+        +empty('emptyInfo')= $.msg("user.empty")
+        +grid('userList', $.msg("user.update"), $.msg("user.delete"), 'editUserAction', 'deleteUserAction')
+            +column50= $.msg("user.userName")
+            +column50= $.msg("user.roles")
+    +formDialog('saveDialog', 'saveUserAction', $.msg("common.close"), $.msg("common.save"))
+        +formHidden('userId')
+        +formField('userName', $.msg("user.userName"), $.msg("user.enterUserName"))
+        +formPassword('userPassword', $.msg("user.userPassword"), $.msg("user.enterPassword"))
+        +formMultipleSelect('userRoles', $.msg("user.roles"), $.msg("user.selectRoles"))

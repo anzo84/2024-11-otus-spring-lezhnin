@@ -26,5 +26,6 @@
         <module>hw13-auth-roles</module>
         <module>hw14-spring-batch</module>
         <module>hw16-actuator</module>
+        <module>hw17-docker</module>
     </modules>
 </project>

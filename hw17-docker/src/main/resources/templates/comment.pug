@@ -1,0 +1,16 @@
+include include/mixines
+extends include/layout
+-var deleteCommentAction = SH.hasRole("AUTHOR") ? "deleteCommentAction" : ""
+block content
+    script(src="/js/comment.bundle.js")
+    +gridPanel
+        form(role="form" id="selectBookForm")
+            +formSelect('book', $.msg("comment.selectBook"), $.msg("common.notSelected"))
+        +empty('emptyBooksInfo')= $.msg("comment.bookListEmpty")
+        +empty('emptyCommentsInfo')= $.msg("comment.empty")
+        +greenBtn('saveDialog', 'newCommentAction', $.msg("comment.add"))
+        +grid('commentList', $.msg("comment.update"), $.msg("comment.delete"), 'editCommentAction', deleteCommentAction)
+            +column100= $.msg("comment.content")
+    +formDialog('saveDialog', 'saveCommentAction', $.msg("common.close"), $.msg("common.save"))
+        +formHidden('commentId')
+        +formField('commentContent', $.msg("comment.content"), $.msg("comment.enterContent"))
