@@ -1,5 +1,7 @@
 package ru.otus.hw.domain.service;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 @Validated
+@RateLimiter(name = "defaultRateLimiter")
+@CircuitBreaker(name = "defaultCircuitBreaker")
 public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository genreRepository;
