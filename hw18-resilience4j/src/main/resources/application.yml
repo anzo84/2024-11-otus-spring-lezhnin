@@ -1,0 +1,89 @@
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:maindb;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+    database: h2
+  h2:
+    console:
+      enabled: true
+      path: /h2
+      settings.trace: false
+      settings.web-allow-others: false
+  liquibase:
+    enabled: true
+    drop-first: true
+  data:
+    rest:
+      base-path: /datarest
+  cloud:
+    compatibility-verifier:
+      enabled: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+    diskspace:
+      enabled: true
+logging:
+  level:
+    root: info
+    org.springframework.web: trace
+    liquibase: warn
+  file:
+    name: logs/app.log  # Путь к файлу логов
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+resilience4j:
+  ratelimiter:
+    instances:
+      defaultRateLimiter:
+        timeout-duration: 1s
+        limit-for-period: 10
+        limit-refresh-period: 1s
+        register-health-indicator: true
+    metrics:
+      enabled: true
+  circuitbreaker:
+    instances:
+      defaultCircuitBreaker:
+        sliding-window-type: time_based
+        sliding-window-size: 1
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+        register-health-indicator: true
+    metrics:
+      enabled: true
+app:
+  default.users:
+    administrator:
+      name: admin
+      password: 123456
+    author:
+      name: author
+      password: 123456
+    commentator:
+      name: commentator
+      password: 123456

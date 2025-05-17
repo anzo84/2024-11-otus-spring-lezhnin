@@ -1,0 +1,32 @@
+doctype html
+html(lang="ru")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(content="IE=edge", http-equiv="X-UA-Compatible")
+        title= $.msg('common.title')
+        script(src="/js/login.bundle.js")
+    body.hold-transition.login-page
+        .login-box
+            .card
+                .card-header.text-center
+                    h5= $.msg('common.title')
+                .card-body.login-card-body
+                    if errorExist
+                        p.login-box-msg.alert.alert-warning= $.msg('common.loginError')
+                    p.login-box-msg= $.msg('common.enterLoginAndPassword')
+                    form(method="post" action="/login")
+                        .input-group.mb-3
+                            input.form-control(name="username" placeholder=$.msg('common.enterLogin') type="text")
+                            .input-group-append
+                                .input-group-text
+                                    span.fas.fa-user-circle
+                        .input-group.mb-3
+                            input.form-control(name="password" placeholder=$.msg('common.enterPassword') type="password")
+                            .input-group-append
+                                .input-group-text
+                                    span.fas.fa-lock
+                        .row
+                            .col-8
+                            .col-4
+                                button.btn.btn-primary.btn-block(type="submit")= $.msg('common.enter')
