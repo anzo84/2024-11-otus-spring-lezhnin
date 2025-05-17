@@ -25,6 +25,7 @@
         <module>hw12-security</module>
         <module>hw13-auth-roles</module>
         <module>hw14-spring-batch</module>
+        <module>hw15-spring-integration</module>
         <module>hw16-actuator</module>
         <module>hw17-docker</module>
     </modules>
